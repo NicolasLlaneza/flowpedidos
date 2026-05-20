@@ -1,0 +1,87 @@
+{
+  "id": 3000000000000012,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-05-11T14:27:24.000-03:00",
+  "date_closed": "2026-05-11T15:28:27.000-03:00",
+  "last_updated": "2026-05-13T23:33:44.000-03:00",
+  "expiration_date": null,
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA5131540861",
+        "title": "Neumático Michelin Energy XM2 175/70 R13",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "MCH-EXM2-175-70-R13",
+        "warranty": null
+      },
+      "quantity": 1,
+      "unit_price": 62973.47,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 6927.08
+    }
+  ],
+  "total_amount": 62973.47,
+  "paid_amount": 62973.47,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400793571,
+    "nickname": "FRUIZ_80",
+    "email": "florencia.ruiz@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5551959",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Florencia",
+    "last_name": "Ruiz",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "35356096"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8954795720,
+      "transaction_amount": 62973.47,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-05-11T15:28:27.000-03:00",
+      "payment_method_id": "account_money",
+      "payment_type": "account_money",
+      "installments": 6
+    }
+  ],
+  "shipping": {
+    "id": 41637189310,
+    "status": "ready_to_ship",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": null,
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "La Plata"
+      },
+      "state": {
+        "name": "Buenos Aires"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "B1900"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

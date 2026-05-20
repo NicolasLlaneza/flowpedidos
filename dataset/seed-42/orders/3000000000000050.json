@@ -1,0 +1,87 @@
+{
+  "id": 3000000000000050,
+  "status": "invalid_unknown_X",
+  "status_detail": null,
+  "date_created": "2026-05-14T10:01:57.000-03:00",
+  "date_closed": "2026-05-14T10:23:11.000-03:00",
+  "last_updated": "2026-05-17T08:05:45.000-03:00",
+  "expiration_date": null,
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA3972057215",
+        "title": "Neumático Fate Maxisport 195/65 R15 — Carcasa reforzada para condiciones severas de uso, garantía extendida del fabricante, válida en todo el territorio nacional, ideal para vehículos de gama media-alta",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "FAT-MXS-195-65-R15",
+        "warranty": "Garantía del vendedor: 6 meses"
+      },
+      "quantity": 2,
+      "unit_price": 60836.53,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 6692.02
+    }
+  ],
+  "total_amount": 121673.06,
+  "paid_amount": 0,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400297532,
+    "nickname": "CTORRES_11",
+    "email": "camila.torres@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5551463",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Camila",
+    "last_name": "Torres",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "43866949"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8970196863,
+      "transaction_amount": 121673.06,
+      "currency_id": "ARS",
+      "status": "unknown",
+      "date_approved": null,
+      "payment_method_id": "debvisa",
+      "payment_type": "debit_card",
+      "installments": 6
+    }
+  ],
+  "shipping": {
+    "id": 42037672996,
+    "status": "pending",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": null,
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Córdoba"
+      },
+      "state": {
+        "name": "Córdoba"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "X5000"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

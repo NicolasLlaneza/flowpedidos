@@ -1,0 +1,102 @@
+{
+  "id": 3000000000000027,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-04-29T04:23:52.000-03:00",
+  "date_closed": "2026-04-29T05:29:55.000-03:00",
+  "last_updated": "2026-05-02T09:07:38.000-03:00",
+  "expiration_date": null,
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA4903971002",
+        "title": "Neumático Goodyear Eagle F1 245/40 R18",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "GDY-EF1-245-40-R18",
+        "warranty": "Garantía del vendedor: 6 meses"
+      },
+      "quantity": 2,
+      "unit_price": 191818.52,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 21100.04
+    },
+    {
+      "item": {
+        "id": "MLA2521203225",
+        "title": "Neumático Michelin Primacy 4 225/45 R17",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "MCH-PRI4-225-45-R17",
+        "warranty": "Garantía del vendedor: 6 meses"
+      },
+      "quantity": 6,
+      "unit_price": 167176.51,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 16567.04
+    }
+  ],
+  "total_amount": 1386696.1,
+  "paid_amount": 1386696.1,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400529349,
+    "nickname": "PGARCÍA_99",
+    "email": "pablo.garcía@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5551726",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Pablo",
+    "last_name": "García",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "26491320"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8977157285,
+      "transaction_amount": 1386696.1,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-04-29T05:29:55.000-03:00",
+      "payment_method_id": "debvisa",
+      "payment_type": "debit_card",
+      "installments": 1
+    }
+  ],
+  "shipping": {
+    "id": 41260400572,
+    "status": "shipped",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": "AR186008196MLA",
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Guaymallén"
+      },
+      "state": {
+        "name": "Mendoza"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "M5519"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

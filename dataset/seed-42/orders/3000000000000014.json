@@ -1,0 +1,87 @@
+{
+  "id": 3000000000000014,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-05-10T11:10:51.000-03:00",
+  "date_closed": "2026-05-10T12:51:00.000-03:00",
+  "last_updated": "2026-05-13T05:15:03.000-03:00",
+  "expiration_date": null,
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA9789816022",
+        "title": "Neumático Continental PowerContact 185/65 R15",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "CON-PWC-185-65-R15",
+        "warranty": null
+      },
+      "quantity": 1,
+      "unit_price": 79220.03,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 8714.2
+    }
+  ],
+  "total_amount": 79220.03,
+  "paid_amount": 79220.03,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400078087,
+    "nickname": "MHERRERA_18",
+    "email": "martina.herrera@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5550595",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Martina",
+    "last_name": "Herrera",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "38442810"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8994429743,
+      "transaction_amount": 79220.03,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-05-10T12:51:00.000-03:00",
+      "payment_method_id": "visa",
+      "payment_type": "credit_card",
+      "installments": 12
+    }
+  ],
+  "shipping": {
+    "id": 41466253427,
+    "status": "ready_to_ship",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": null,
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Godoy Cruz"
+      },
+      "state": {
+        "name": "Mendoza"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "M5501"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

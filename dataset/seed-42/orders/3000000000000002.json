@@ -1,0 +1,87 @@
+{
+  "id": 3000000000000002,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-05-05T22:35:00.000-03:00",
+  "date_closed": "2026-05-05T23:14:01.000-03:00",
+  "last_updated": "2026-05-07T05:13:16.000-03:00",
+  "expiration_date": null,
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA1244112483",
+        "title": "Neumático Continental ContiPremium 205/60 R16",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "CON-CPC-205-60-R16",
+        "warranty": null
+      },
+      "quantity": 4,
+      "unit_price": 108258.39,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 11908.42
+    }
+  ],
+  "total_amount": 433033.56,
+  "paid_amount": 433033.56,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400592324,
+    "nickname": "MGÓMEZ_12",
+    "email": "maría.gómez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5552669",
+      "extension": null,
+      "verified": false
+    },
+    "first_name": "María",
+    "last_name": "Gómez",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "28713780"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8905139274,
+      "transaction_amount": 433033.56,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-05-05T23:14:01.000-03:00",
+      "payment_method_id": "visa",
+      "payment_type": "credit_card",
+      "installments": 3
+    }
+  ],
+  "shipping": {
+    "id": 41796729513,
+    "status": "ready_to_ship",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": null,
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Mendoza"
+      },
+      "state": {
+        "name": "Mendoza"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "M5500"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

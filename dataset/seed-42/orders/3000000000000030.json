@@ -1,0 +1,87 @@
+{
+  "id": 3000000000000030,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-05-08T12:47:41.000-03:00",
+  "date_closed": "2026-05-08T13:22:55.000-03:00",
+  "last_updated": "2026-05-13T06:41:47.000-03:00",
+  "expiration_date": null,
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA9511509805",
+        "title": "Neumático Fate Maxisport 195/65 R15",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "FAT-MXS-195-65-R15",
+        "warranty": null
+      },
+      "quantity": 2,
+      "unit_price": 58806,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 6468.66
+    }
+  ],
+  "total_amount": 117612,
+  "paid_amount": 117612,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400021249,
+    "nickname": "CTORRES_68",
+    "email": "camila.torres@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5556034",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Camila",
+    "last_name": "Torres",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "30012118"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8931589154,
+      "transaction_amount": 117612,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-05-08T13:22:55.000-03:00",
+      "payment_method_id": "account_money",
+      "payment_type": "account_money",
+      "installments": 3
+    }
+  ],
+  "shipping": {
+    "id": 41564525446,
+    "status": "shipped",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": "AR501364359MLA",
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Rosario"
+      },
+      "state": {
+        "name": "Santa Fe"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "S2000"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

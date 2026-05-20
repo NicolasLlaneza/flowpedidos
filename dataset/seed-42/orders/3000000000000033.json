@@ -1,0 +1,88 @@
+{
+  "id": 3000000000000033,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-05-18T05:10:19.000-03:00",
+  "date_closed": "2026-05-18T06:13:31.000-03:00",
+  "last_updated": "2026-05-21T05:59:50.000-03:00",
+  "expiration_date": null,
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA2564495072",
+        "title": "Neumático Hankook Kinergy 175/65 R14",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "HNK-KIN-175-65-R14",
+        "warranty": null
+      },
+      "quantity": 4,
+      "unit_price": 60319.78,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 6635.18
+    }
+  ],
+  "total_amount": 241279.12,
+  "paid_amount": 241279.12,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400752052,
+    "nickname": "TÁLVAREZ_94",
+    "email": "tomás.álvarez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5554052",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Tomás",
+    "last_name": "Álvarez",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "28247624"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8952586651,
+      "transaction_amount": 241279.12,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-05-18T06:13:31.000-03:00",
+      "payment_method_id": "pagofacil",
+      "payment_type": "ticket",
+      "installments": 6
+    }
+  ],
+  "shipping": {
+    "id": 41724385178,
+    "status": "delivered",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": "AR910713175MLA",
+    "date_delivered": "2026-05-21T05:59:50.000-03:00",
+    "receiver_address": {
+      "city": {
+        "name": "Buenos Aires"
+      },
+      "state": {
+        "name": "CABA"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "C1425"
+    }
+  },
+  "tags": [
+    "paid",
+    "delivered"
+  ]
+}

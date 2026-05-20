@@ -1,0 +1,87 @@
+{
+  "id": 3000000000000024,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-05-06T17:48:07.000-03:00",
+  "date_closed": "2026-05-06T19:37:28.000-03:00",
+  "last_updated": "2026-05-07T03:05:34.000-03:00",
+  "expiration_date": null,
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA6355641823",
+        "title": "Neumático Pirelli P7 205/55 R16",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "PIR-P7-205-55-R16",
+        "warranty": "Garantía del vendedor: 6 meses"
+      },
+      "quantity": 2,
+      "unit_price": 102871.22,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 11315.83
+    }
+  ],
+  "total_amount": 205742.44,
+  "paid_amount": 205742.44,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400567439,
+    "nickname": "LFERNÁNDEZ_54",
+    "email": "lucía.fernández@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5554420",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Lucía",
+    "last_name": "Fernández",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "40076141"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8948679838,
+      "transaction_amount": 205742.44,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-05-06T19:37:28.000-03:00",
+      "payment_method_id": "account_money",
+      "payment_type": "account_money",
+      "installments": 6
+    }
+  ],
+  "shipping": {
+    "id": 41755157492,
+    "status": "shipped",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": "AR649102945MLA",
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Mendoza"
+      },
+      "state": {
+        "name": "Mendoza"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "M5500"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

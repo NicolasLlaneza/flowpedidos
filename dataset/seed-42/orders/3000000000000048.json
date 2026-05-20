@@ -1,0 +1,71 @@
+{
+  "id": 3000000000000048,
+  "status": "partially_refunded",
+  "status_detail": null,
+  "date_created": "2026-05-05T03:04:04.000-03:00",
+  "date_closed": "2026-05-05T03:38:07.000-03:00",
+  "last_updated": "2026-05-10T23:53:40.000-03:00",
+  "expiration_date": null,
+  "order_items": [],
+  "total_amount": 0,
+  "paid_amount": 0,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400493635,
+    "nickname": "VSÁNCHEZ_87",
+    "email": "valentina.sánchez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5559118",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Valentina",
+    "last_name": "Sánchez",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "42088234"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8972308545,
+      "transaction_amount": 0,
+      "currency_id": "ARS",
+      "status": "refunded",
+      "date_approved": null,
+      "payment_method_id": "pagofacil",
+      "payment_type": "ticket",
+      "installments": 12
+    }
+  ],
+  "shipping": {
+    "id": 41442652099,
+    "status": "shipped",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": null,
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Rosario"
+      },
+      "state": {
+        "name": "Santa Fe"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "S2000"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

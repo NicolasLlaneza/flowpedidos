@@ -1,0 +1,87 @@
+{
+  "id": 3000000000000004,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-05-16T18:06:16.000-03:00",
+  "date_closed": "2026-05-16T19:14:14.000-03:00",
+  "last_updated": "2026-05-21T09:10:18.000-03:00",
+  "expiration_date": null,
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA2616604471",
+        "title": "Neumático Bridgestone Ecopia EP150 185/65 R14",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "BST-EP150-185-65-R14",
+        "warranty": "Garantía del vendedor: 6 meses"
+      },
+      "quantity": 2,
+      "unit_price": 74131.71,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 8154.49
+    }
+  ],
+  "total_amount": 148263.42,
+  "paid_amount": 148263.42,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400611922,
+    "nickname": "LFERNÁNDEZ_90",
+    "email": "lucía.fernández@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5550775",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Lucía",
+    "last_name": "Fernández",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "43697355"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8957845302,
+      "transaction_amount": 148263.42,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-05-16T19:14:14.000-03:00",
+      "payment_method_id": "mastercard",
+      "payment_type": "credit_card",
+      "installments": 3
+    }
+  ],
+  "shipping": {
+    "id": 41796239104,
+    "status": "ready_to_ship",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": null,
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Guaymallén"
+      },
+      "state": {
+        "name": "Mendoza"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "M5519"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

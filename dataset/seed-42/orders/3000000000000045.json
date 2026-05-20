@@ -1,0 +1,99 @@
+{
+  "id": 3000000000000045,
+  "status": "cancelled",
+  "status_detail": "buyer_canceled",
+  "date_created": "2026-04-27T13:47:47.000-03:00",
+  "date_closed": "2026-04-27T14:57:27.000-03:00",
+  "last_updated": "2026-04-30T22:15:21.000-03:00",
+  "expiration_date": null,
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA3740959641",
+        "title": "Neumático Goodyear Eagle F1 245/40 R18",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "GDY-EF1-245-40-R18",
+        "warranty": null
+      },
+      "quantity": 2,
+      "unit_price": 169879.94,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 18686.79
+    },
+    {
+      "item": {
+        "id": "MLA964251113",
+        "title": "Revisión y ajuste de presión",
+        "category_id": "MLA417283",
+        "seller_custom_field": "SVC-PRES"
+      },
+      "quantity": 1,
+      "unit_price": 5964.77,
+      "currency_id": "ARS",
+      "sale_fee": 656.12
+    }
+  ],
+  "total_amount": 345724.65,
+  "paid_amount": 0,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400085989,
+    "nickname": "DRODRÍGUEZ_88",
+    "email": "diego.rodríguez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5552861",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Diego",
+    "last_name": "Rodríguez",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "44927403"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8935358211,
+      "transaction_amount": 345724.65,
+      "currency_id": "ARS",
+      "status": "cancelled",
+      "date_approved": null,
+      "payment_method_id": "account_money",
+      "payment_type": "account_money",
+      "installments": 3
+    }
+  ],
+  "shipping": {
+    "id": 41675735237,
+    "status": "cancelled",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": null,
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Maipú"
+      },
+      "state": {
+        "name": "Mendoza"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "M5515"
+    }
+  },
+  "tags": [
+    "cancelled"
+  ]
+}

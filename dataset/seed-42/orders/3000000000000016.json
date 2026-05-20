@@ -1,0 +1,87 @@
+{
+  "id": 3000000000000016,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-05-05T11:24:15.000-03:00",
+  "date_closed": "2026-05-05T12:40:19.000-03:00",
+  "last_updated": "2026-05-09T09:13:02.000-03:00",
+  "expiration_date": null,
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA2357740571",
+        "title": "Neumático Hankook Kinergy 175/65 R14",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "HNK-KIN-175-65-R14",
+        "warranty": null
+      },
+      "quantity": 4,
+      "unit_price": 62447.35,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 6869.21
+    }
+  ],
+  "total_amount": 249789.4,
+  "paid_amount": 249789.4,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400413245,
+    "nickname": "ACASTRO_40",
+    "email": "agustina.castro@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5555328",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Agustina",
+    "last_name": "Castro",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "37357243"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8971482971,
+      "transaction_amount": 249789.4,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-05-05T12:40:19.000-03:00",
+      "payment_method_id": "account_money",
+      "payment_type": "account_money",
+      "installments": 1
+    }
+  ],
+  "shipping": {
+    "id": 42046731694,
+    "status": "ready_to_ship",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": null,
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "San Juan"
+      },
+      "state": {
+        "name": "San Juan"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "J5400"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

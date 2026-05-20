@@ -1,0 +1,99 @@
+{
+  "id": 3000000000000044,
+  "status": "cancelled",
+  "status_detail": "buyer_canceled",
+  "date_created": "2026-04-24T08:10:13.000-03:00",
+  "date_closed": "2026-04-24T08:54:52.000-03:00",
+  "last_updated": "2026-04-27T01:05:01.000-03:00",
+  "expiration_date": null,
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA7467725999",
+        "title": "Neumático Pirelli P7 205/55 R16",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "PIR-P7-205-55-R16",
+        "warranty": "Garantía del vendedor: 6 meses"
+      },
+      "quantity": 4,
+      "unit_price": 106896.3,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 11758.59
+    },
+    {
+      "item": {
+        "id": "MLA939216768",
+        "title": "Servicio de alineación y balanceo (4 ruedas)",
+        "category_id": "MLA417283",
+        "seller_custom_field": "SVC-ALI-BAL-4"
+      },
+      "quantity": 1,
+      "unit_price": 20873.54,
+      "currency_id": "ARS",
+      "sale_fee": 2296.09
+    }
+  ],
+  "total_amount": 448458.74,
+  "paid_amount": 0,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400512426,
+    "nickname": "LFERNÁNDEZ_92",
+    "email": "lucía.fernández@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5554073",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Lucía",
+    "last_name": "Fernández",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "41382785"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8928779231,
+      "transaction_amount": 448458.74,
+      "currency_id": "ARS",
+      "status": "cancelled",
+      "date_approved": null,
+      "payment_method_id": "visa",
+      "payment_type": "credit_card",
+      "installments": 12
+    }
+  ],
+  "shipping": {
+    "id": 42160514861,
+    "status": "cancelled",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": null,
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Buenos Aires"
+      },
+      "state": {
+        "name": "CABA"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "C1425"
+    }
+  },
+  "tags": [
+    "cancelled"
+  ]
+}

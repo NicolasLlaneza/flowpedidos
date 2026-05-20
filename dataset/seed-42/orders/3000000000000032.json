@@ -1,0 +1,88 @@
+{
+  "id": 3000000000000032,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-05-06T22:25:04.000-03:00",
+  "date_closed": "2026-05-06T22:36:06.000-03:00",
+  "last_updated": "2026-05-07T22:31:49.000-03:00",
+  "expiration_date": null,
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA4061836551",
+        "title": "Neumático Bridgestone Ecopia EP150 185/65 R14",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "BST-EP150-185-65-R14",
+        "warranty": null
+      },
+      "quantity": 4,
+      "unit_price": 72413.33,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 7965.47
+    }
+  ],
+  "total_amount": 289653.32,
+  "paid_amount": 289653.32,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400459506,
+    "nickname": "FRUIZ_72",
+    "email": "florencia.ruiz@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5551365",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Florencia",
+    "last_name": "Ruiz",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "29303790"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8988468343,
+      "transaction_amount": 289653.32,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-05-06T22:36:06.000-03:00",
+      "payment_method_id": "mastercard",
+      "payment_type": "credit_card",
+      "installments": 12
+    }
+  ],
+  "shipping": {
+    "id": 42152852238,
+    "status": "delivered",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": "AR519202578MLA",
+    "date_delivered": "2026-05-07T22:31:49.000-03:00",
+    "receiver_address": {
+      "city": {
+        "name": "Mendoza"
+      },
+      "state": {
+        "name": "Mendoza"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "M5500"
+    }
+  },
+  "tags": [
+    "paid",
+    "delivered"
+  ]
+}
