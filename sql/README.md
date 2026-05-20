@@ -56,13 +56,35 @@ Insert-only. Una fila por evento del pipeline.
 5. **CHECK constraints sobre status y channel**: el modelo canónico define qué valores son válidos; cualquier valor fuera de la lista es bug del adaptador, no dato.
 6. **`audit_log` sin FK obligatoria a orders**: hay eventos pre-order (webhook recibido con JSON inválido) que igual deben loguearse.
 
+## Roles y permisos (02_roles.sql)
+
+Dos usuarios postgres con propósitos distintos:
+
+| Usuario | Rol | Para qué |
+|---|---|---|
+| `n8n`     | superuser   | n8n interno: guarda sus workflows, credenciales encriptadas y ejecuciones en `public.*` |
+| `tfi_app` | restringido | El pipeline lo usa para CRUD sobre `tfi.*`; sin permisos sobre `public`, sin DDL |
+
+`tfi_app` aplica el principio de mínimo privilegio del cap 5.7:
+- `GRANT USAGE` solo sobre schema `tfi`
+- `SELECT, INSERT, UPDATE, DELETE` sobre tablas existentes
+- `USAGE, SELECT` sobre secuencias (para `audit_log.bigserial`)
+- **No puede** DROP, TRUNCATE, ALTER ni acceder a `public`
+- `ALTER DEFAULT PRIVILEGES` propaga estos permisos a tablas futuras
+
+Configurar la credencial en n8n con `host=postgres`, `database=tfi`, `user=tfi_app`, password desde `.env`.
+
 ## Cómo aplicar (en arranque limpio)
 
-El bind mount `./sql:/docker-entrypoint-initdb.d` carga este archivo automáticamente la primera vez que postgres inicializa su volumen.
+El bind mount `./sql:/docker-entrypoint-initdb.d` carga ambos archivos automáticamente la primera vez que postgres inicializa su volumen. El script `02_roles.sql` requiere que la variable `tfi.app_password` esté seteada — en arranque limpio, postgres no la tiene, así que conviene aplicarla manualmente la primera vez:
 
-Si el volumen ya existía cuando se agregó el schema:
 ```bash
+# 1. Schema base
 docker compose exec -T postgres psql -U n8n -d tfi < sql/01_schema.sql
+
+# 2. Roles (inyectando el password desde .env)
+(echo "SET tfi.app_password = '${TFI_APP_PASSWORD}';"; cat sql/02_roles.sql) | \
+    docker compose exec -T postgres psql -U n8n -d tfi -v ON_ERROR_STOP=1
 ```
 
 ## Smoke test ejecutado
