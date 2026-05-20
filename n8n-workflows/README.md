@@ -60,8 +60,9 @@ Cuando el workflow esté funcionando, exportarlo a `workflow.json` y guardarlo a
 |---|---|---|
 | `Validate webhook`     | `lib/validate-webhook.js`     | Run Once for All Items |
 | `Normalize ML order`   | `lib/normalize-ml-order.js`   | Run Once for All Items |
-| `Build LLM prompt`     | (a escribir en Fase 3)        | Run Once for Each Item |
-| `Parse LLM response`   | (a escribir en Fase 3)        | Run Once for Each Item |
+| `Build LLM prompt`     | `lib/build-llm-prompt.js`     | Run Once for Each Item |
+| `Parse LLM response`   | `lib/parse-llm-response.js`   | Run Once for Each Item |
+| `Fallback template`    | `lib/fallback-template.js`    | Run Once for Each Item |
 
 ### Nodos de Postgres
 Credencial a usar: **`tfi_app`** (no el superuser n8n).
@@ -95,13 +96,31 @@ Configurar una vez en Settings → Credentials → New → Postgres:
 3. **Manejo de errores**: cada rama de error termina en un nodo de audit + respond. No dejar errores sin loguear.
 4. **Configuración general del workflow**: Settings → Save data of execution → siempre, para que `audit_log` quede sincronizado con las ejecuciones de n8n.
 
+## Detalles de los Code nodes LLM
+
+### `build-llm-prompt.js`
+**Punto crítico de seudonimización**: este archivo es el único lugar donde se decide qué información llega al servicio externo. Tiene un guard interno (`pii_keys`) que lanza error si detecta nombres de campo de PII en el contexto generado. Cualquier nuevo campo que se agregue al contexto debe revisarse contra esta lista.
+
+### `parse-llm-response.js`
+- Soporta respuestas tanto de OpenAI como de Anthropic (estructuras nativas)
+- Calcula `cost_usd` con pricing por modelo (constante `PRICING` — actualizable)
+- Aplica validaciones: JSON válido, shape correcta, longitud razonable, `confidence ≥ 0.3`
+- Si todo OK → camino feliz, ruta a INSERT de ai_notification
+- Si algo falla → marca `use_fallback=true` y un IF node siguiente rutea a `fallback-template.js`
+- Aún en fallback **se cobra** lo gastado en tokens — queda registrado en el `audit_log`
+
+### `fallback-template.js`
+- Plantillas estáticas por estado (los 9 estados del CHECK constraint de orders)
+- Output con la misma shape que el path feliz, así el INSERT a `ai_notifications` es uniforme
+- Genera `audit_event` con `event_type='fallback_triggered'`
+
 ## Para Fase 4 (resiliencia)
 
 Cuando agreguemos manejo de errores y reintentos:
 - Configurar `Retry On Fail` en los nodos críticos (HTTP, OpenAI)
 - Implementar backoff exponencial vía un Wait node con expresión
 - Agregar `Error Trigger` workflow paralelo para fallas no recuperables
-- Rama de fallback a plantilla en `Parse LLM response`
+- La rama de fallback ya está prevista en `parse-llm-response.js` + `fallback-template.js`
 
 ## Para Fase 6 (comparación de modelos)
 
