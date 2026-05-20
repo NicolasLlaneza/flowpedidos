@@ -1,0 +1,38 @@
+# Secrets and local config
+.env
+.env.local
+*.key
+*.pem
+
+# Docker volumes (gestionados por Docker, no por Git)
+volumes/
+
+# n8n local data si se usa bind mount
+.n8n/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Datos sensibles del experimento
+dataset/real/
+dataset/*.private.*
+
+# Python (por si después agregamos scripts)
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node (por si agregamos scripts JS)
+node_modules/
