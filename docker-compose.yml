@@ -67,6 +67,23 @@ services:
     networks:
       - tfi-net
 
+  mock-marketplace:
+    image: nginx:alpine
+    container_name: tfi-mock-marketplace
+    restart: unless-stopped
+    volumes:
+      - ./mocks/data:/usr/share/nginx/html:ro
+      - ./mocks/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "3001:80"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost/healthz || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      - tfi-net
+
 volumes:
   postgres_data:
     name: tfi_postgres_data

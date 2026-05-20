@@ -1,0 +1,76 @@
+{
+  "id": 2000003508052235,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-05-20T13:15:42.000-03:00",
+  "date_closed": "2026-05-20T13:18:11.000-03:00",
+  "last_updated": "2026-05-20T13:18:11.000-03:00",
+  "expiration_date": null,
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA1234567890",
+        "title": "Neumático Pirelli Cinturato P1 195/65 R15",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "PIR-CP1-195-65-R15",
+        "warranty": "Garantía del vendedor: 6 meses"
+      },
+      "quantity": 2,
+      "unit_price": 75500.00,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 8305.00
+    }
+  ],
+  "total_amount": 151000.00,
+  "paid_amount": 151000.00,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 465432437,
+    "nickname": "JPEREZ_AR",
+    "email": "juan.perez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5551234",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Juan",
+    "last_name": "Pérez",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "30123456"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8912345678,
+      "transaction_amount": 151000.00,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-05-20T13:18:09.000-03:00",
+      "payment_method_id": "visa",
+      "payment_type": "credit_card",
+      "installments": 3
+    }
+  ],
+  "shipping": {
+    "id": 41234567890,
+    "status": "ready_to_ship",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "receiver_address": {
+      "city": { "name": "Mendoza" },
+      "state": { "name": "Mendoza" },
+      "country": { "id": "AR", "name": "Argentina" },
+      "zip_code": "M5500"
+    }
+  },
+  "tags": ["paid", "not_delivered"]
+}

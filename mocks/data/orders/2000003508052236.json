@@ -1,0 +1,82 @@
+{
+  "id": 2000003508052236,
+  "status": "shipped",
+  "status_detail": null,
+  "date_created": "2026-05-19T10:42:11.000-03:00",
+  "date_closed": "2026-05-19T10:44:55.000-03:00",
+  "last_updated": "2026-05-20T09:12:30.000-03:00",
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA2345678901",
+        "title": "Neumático Bridgestone Turanza T005 205/55 R16",
+        "category_id": "MLA1747",
+        "seller_custom_field": "BST-T005-205-55-R16"
+      },
+      "quantity": 4,
+      "unit_price": 98200.50,
+      "currency_id": "ARS",
+      "sale_fee": 21604.00
+    },
+    {
+      "item": {
+        "id": "MLA9876543210",
+        "title": "Servicio de alineación y balanceo (4 ruedas)",
+        "category_id": "MLA417283",
+        "seller_custom_field": "SVC-ALI-BAL-4"
+      },
+      "quantity": 1,
+      "unit_price": 18500.00,
+      "currency_id": "ARS",
+      "sale_fee": 2035.00
+    }
+  ],
+  "total_amount": 411302.00,
+  "paid_amount": 411302.00,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 887766554,
+    "nickname": "MGOMEZ",
+    "email": "maria.gomez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5559876",
+      "verified": true
+    },
+    "first_name": "María",
+    "last_name": "Gómez",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "28765432"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8912345679,
+      "transaction_amount": 411302.00,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-05-19T10:44:52.000-03:00",
+      "payment_method_id": "account_money",
+      "payment_type": "account_money",
+      "installments": 1
+    }
+  ],
+  "shipping": {
+    "id": 41234567891,
+    "status": "shipped",
+    "shipping_mode": "me2",
+    "tracking_number": "AR987654321MLA",
+    "receiver_address": {
+      "city": { "name": "Godoy Cruz" },
+      "state": { "name": "Mendoza" },
+      "country": { "id": "AR", "name": "Argentina" },
+      "zip_code": "M5501"
+    }
+  },
+  "tags": ["paid"]
+}

@@ -1,0 +1,63 @@
+{
+  "id": 2000003508052237,
+  "status": "cancelled",
+  "status_detail": "buyer_canceled",
+  "date_created": "2026-05-18T16:22:01.000-03:00",
+  "date_closed": "2026-05-18T17:08:44.000-03:00",
+  "last_updated": "2026-05-18T17:08:44.000-03:00",
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA3456789012",
+        "title": "Neumático Michelin Primacy 4 225/45 R17",
+        "category_id": "MLA1747",
+        "seller_custom_field": "MCH-PRI4-225-45-R17"
+      },
+      "quantity": 1,
+      "unit_price": 142000.00,
+      "currency_id": "ARS",
+      "sale_fee": 15620.00
+    }
+  ],
+  "total_amount": 142000.00,
+  "paid_amount": 0,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 998877665,
+    "nickname": "CLOPEZ_MZA",
+    "email": "carlos.lopez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5552468",
+      "verified": false
+    },
+    "first_name": "Carlos",
+    "last_name": "López",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "35987654"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8912345680,
+      "transaction_amount": 142000.00,
+      "currency_id": "ARS",
+      "status": "cancelled",
+      "date_approved": null,
+      "payment_method_id": "visa",
+      "payment_type": "credit_card",
+      "installments": 6
+    }
+  ],
+  "shipping": {
+    "id": 41234567892,
+    "status": "cancelled",
+    "shipping_mode": "me2"
+  },
+  "tags": ["cancelled"]
+}
