@@ -96,6 +96,16 @@ const server = http.createServer(async (req, res) => {
             return res.end(html);
         }
 
+        // --- Static: app.js ---
+        if (req.method === 'GET' && url.pathname === '/app.js') {
+            const js = fs.readFileSync(path.join(__dirname, 'public', 'app.js'));
+            res.writeHead(200, {
+                'Content-Type': 'application/javascript; charset=utf-8',
+                'Cache-Control': 'no-store, no-cache, must-revalidate',
+            });
+            return res.end(js);
+        }
+
         // --- API: estado ---
         if (req.method === 'GET' && url.pathname === '/api/state') {
             const client = await pool.connect();
