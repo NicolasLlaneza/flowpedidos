@@ -42,3 +42,7 @@ demo/node_modules/
 
 # Fixtures del dataset copiados al mock por reset.mjs (runtime)
 mocks/data/orders/30*.json
+
+# Material de presentación/tesis (no es parte del funcionamiento de la app)
+docs/
+video/
