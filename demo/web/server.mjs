@@ -60,6 +60,11 @@ const server = http.createServer(async (req, res) => {
             return file(res, path.join(__dirname, 'public', 'index.html'), 'text/html; charset=utf-8');
         if (req.method === 'GET' && p === '/app.js')
             return file(res, path.join(__dirname, 'public', 'app.js'), 'application/javascript; charset=utf-8');
+        // Estáticos .html adicionales (ej: whatsapp-mock.html)
+        if (req.method === 'GET' && /^\/[a-z0-9_-]+\.html$/i.test(p)) {
+            const fp = path.join(__dirname, 'public', p.slice(1));
+            if (fs.existsSync(fp)) return file(res, fp, 'text/html; charset=utf-8');
+        }
 
         if (req.method === 'GET' && p === '/api/kpis') {
             const c = await pool.connect();
