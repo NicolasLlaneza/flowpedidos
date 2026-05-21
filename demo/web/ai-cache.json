@@ -2,35 +2,13 @@
   "mercadolibre:3000000000000001": {
     "provider": "openai",
     "model": "gpt-4o-mini",
-    "message_text": "Tu pedido del Neumático Bridgestone Ecopia EP150 185/65 R14 ha sido recibido y ya está pago. Te mantendremos informado sobre el estado de tu envío. Gracias por elegirnos.",
+    "message_text": "Tu pedido del Neumático Bridgestone Ecopia EP150 185/65 R14 ha sido recibido y ya está pago. Te mantendremos informado sobre el próximo paso. Gracias por elegirnos.",
     "tone": "informativo",
-    "confidence": 1,
+    "confidence": 0.9,
     "prompt_tokens": 251,
-    "completion_tokens": 58,
-    "cost_usd": 0.000072,
-    "latency_ms": 2233
-  },
-  "whatsapp:3000000000000003": {
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "message_text": "Tu pedido de un Neumático Bridgestone Ecopia EP150 185/65 R14 ha sido recibido y ya está pago. Estamos procesando tu compra y te mantendremos informado sobre el estado de tu envío.",
-    "tone": "informativo",
-    "confidence": 1,
-    "prompt_tokens": 253,
-    "completion_tokens": 60,
-    "cost_usd": 0.000074,
-    "latency_ms": 1608
-  },
-  "woocommerce:3000000000000010": {
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "message_text": "Tu pedido de un Neumático Bridgestone Turanza T005 205/55 R16 ha sido recibido y está pago. Estamos procesando tu solicitud. Gracias por elegirnos.",
-    "tone": "informativo",
-    "confidence": 1,
-    "prompt_tokens": 252,
-    "completion_tokens": 52,
-    "cost_usd": 0.000069,
-    "latency_ms": 1240
+    "completion_tokens": 56,
+    "cost_usd": 0.000071,
+    "latency_ms": 1788
   },
   "whatsapp:3000000000000002": {
     "provider": "openai",
@@ -41,18 +19,18 @@
     "prompt_tokens": 250,
     "completion_tokens": 57,
     "cost_usd": 0.000072,
-    "latency_ms": 2199
+    "latency_ms": 1534
   },
   "woocommerce:3000000000000003": {
     "provider": "openai",
     "model": "gpt-4o-mini",
-    "message_text": "Tu pedido de un Neumático Bridgestone Ecopia EP150 185/65 R14 ha sido recibido y ya está pago. Te mantendremos informado sobre el estado de tu envío. Gracias por confiar en nosotros.",
+    "message_text": "Tu pedido de un Neumático Bridgestone Ecopia EP150 185/65 R14 ha sido recibido y ya está pago. Estamos procesando tu compra y te mantendremos informado sobre el estado de tu envío.",
     "tone": "informativo",
     "confidence": 1,
     "prompt_tokens": 253,
     "completion_tokens": 60,
     "cost_usd": 0.000074,
-    "latency_ms": 1575
+    "latency_ms": 1574
   },
   "tienda_nube:3000000000000004": {
     "provider": "openai",
@@ -63,215 +41,215 @@
     "prompt_tokens": 252,
     "completion_tokens": 52,
     "cost_usd": 0.000069,
-    "latency_ms": 2726
+    "latency_ms": 1208
   },
-  "mercadolibre:3000000000000005": {
+  "mercadolibre:3000000000000007": {
     "provider": "openai",
     "model": "gpt-4o-mini",
-    "message_text": "Tu pedido de 1 Neumático Michelin Energy XM2 175/70 R13 ha sido recibido y está en estado de pago. Te mantendremos informado sobre el siguiente paso. Gracias por tu compra.",
+    "message_text": "Tu pedido del Neumático Bridgestone Ecopia EP150 185/65 R14 ha sido recibido y ya está pago. Te mantendremos informado sobre su estado. Gracias por tu compra.",
     "tone": "informativo",
     "confidence": 1,
-    "prompt_tokens": 248,
-    "completion_tokens": 57,
-    "cost_usd": 0.000071,
-    "latency_ms": 1593
-  },
-  "whatsapp:3000000000000006": {
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "message_text": "Tu pedido de un Neumático Bridgestone Turanza T005 205/55 R16 ha sido recibido y está pago. Te mantendremos informado sobre el estado de tu envío. Gracias por confiar en nosotros.",
-    "tone": "informativo",
-    "confidence": 1,
-    "prompt_tokens": 254,
-    "completion_tokens": 59,
-    "cost_usd": 0.000073,
-    "latency_ms": 1169
-  },
-  "woocommerce:3000000000000007": {
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "message_text": "Tu pedido del neumático Bridgestone Ecopia EP150 185/65 R14 ha sido recibido y ya está pago. Te mantendremos informado sobre su estado. Gracias por tu compra.",
-    "tone": "informativo",
-    "confidence": 1,
-    "prompt_tokens": 252,
-    "completion_tokens": 54,
-    "cost_usd": 0.00007,
-    "latency_ms": 1192
-  },
-  "tienda_nube:3000000000000008": {
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "message_text": "Tu pedido del Neumático Goodyear Eagle F1 245/40 R18 ha sido recibido y está en estado de pago. Te mantendremos informado sobre su progreso. Gracias por tu compra.",
-    "tone": "informativo",
-    "confidence": 1,
-    "prompt_tokens": 250,
-    "completion_tokens": 56,
-    "cost_usd": 0.000071,
-    "latency_ms": 1471
-  },
-  "mercadolibre:3000000000000009": {
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "message_text": "Gracias por tu compra del Neumático Continental ContiPremium 205/60 R16. Tu pedido ha sido recibido y está en estado de pago. Te mantendremos informado sobre el próximo paso.",
-    "tone": "informativo",
-    "confidence": 1,
-    "prompt_tokens": 247,
-    "completion_tokens": 55,
-    "cost_usd": 0.00007,
-    "latency_ms": 1533
-  },
-  "whatsapp:3000000000000010": {
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "message_text": "Tu pedido del neumático Bridgestone Turanza T005 205/55 R16 ha sido recibido y está en estado de pago. Te mantendremos informado sobre el próximo paso. Gracias por elegirnos.",
-    "tone": "informativo",
-    "confidence": 1,
-    "prompt_tokens": 254,
-    "completion_tokens": 57,
-    "cost_usd": 0.000072,
-    "latency_ms": 1207
-  },
-  "woocommerce:3000000000000011": {
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "message_text": "Tu pedido de un Neumático Pirelli Cinturato P1 195/65 R15 ha sido recibido y está pago. Estamos preparando tu envío. Gracias por tu compra.",
-    "tone": "informativo",
-    "confidence": 0.9,
-    "prompt_tokens": 254,
-    "completion_tokens": 53,
-    "cost_usd": 0.00007,
-    "latency_ms": 1733
-  },
-  "tienda_nube:3000000000000012": {
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "message_text": "Tu pedido de un Neumático Michelin Energy XM2 175/70 R13 ha sido recibido y ya está pago. Estamos procesando tu orden y te mantendremos informado sobre su estado.",
-    "tone": "informativo",
-    "confidence": 1,
-    "prompt_tokens": 248,
-    "completion_tokens": 54,
-    "cost_usd": 0.00007,
-    "latency_ms": 1312
-  },
-  "mercadolibre:3000000000000013": {
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "message_text": "Tu pedido de un Neumático Pirelli P7 205/55 R16 ha sido recibido y ya está pago. Te mantendremos informado sobre el estado de tu envío. Gracias por elegirnos.",
-    "tone": "informativo",
-    "confidence": 1,
-    "prompt_tokens": 252,
-    "completion_tokens": 57,
-    "cost_usd": 0.000072,
-    "latency_ms": 1735
-  },
-  "whatsapp:3000000000000014": {
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "message_text": "Tu pedido del Neumático Continental PowerContact 185/65 R15 ha sido recibido y está pago. Estamos procesando tu orden y te mantendremos informado sobre su estado. Gracias por elegirnos.",
-    "tone": "informativo",
-    "confidence": 0.9,
     "prompt_tokens": 251,
-    "completion_tokens": 56,
+    "completion_tokens": 55,
     "cost_usd": 0.000071,
-    "latency_ms": 1357
+    "latency_ms": 1311
   },
-  "woocommerce:3000000000000015": {
+  "whatsapp:3000000000000009": {
     "provider": "openai",
     "model": "gpt-4o-mini",
-    "message_text": "Tu pedido del Neumático Continental ContiPremium 205/60 R16 ha sido recibido y está pago. Estamos procesando tu orden y te mantendremos informado sobre su estado. Gracias por elegirnos.",
-    "tone": "informativo",
-    "confidence": 0.9,
-    "prompt_tokens": 250,
-    "completion_tokens": 57,
-    "cost_usd": 0.000072,
-    "latency_ms": 1273
-  },
-  "tienda_nube:3000000000000016": {
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "message_text": "Tu pedido de un Neumático Hankook Kinergy 175/65 R14 ha sido recibido y ya está pago. Estamos procesando tu orden y te mantendremos informado sobre su estado.",
-    "tone": "informativo",
-    "confidence": 1,
-    "prompt_tokens": 248,
-    "completion_tokens": 54,
-    "cost_usd": 0.00007,
-    "latency_ms": 1458
-  },
-  "mercadolibre:3000000000000017": {
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "message_text": "Tu pedido de un Neumático Michelin Energy XM2 175/70 R13 ha sido recibido y está en estado de pago. Te mantendremos informado sobre el avance de tu pedido. Gracias por elegirnos.",
+    "message_text": "Tu pedido de un Neumático Continental ContiPremium 205/60 R16 ha sido recibido y está pago. Estamos procesando tu orden y te mantendremos informado sobre su estado. Gracias por elegirnos.",
     "tone": "informativo",
     "confidence": 0.9,
     "prompt_tokens": 249,
     "completion_tokens": 58,
     "cost_usd": 0.000072,
-    "latency_ms": 3561
+    "latency_ms": 2170
   },
-  "whatsapp:3000000000000018": {
+  "woocommerce:3000000000000011": {
     "provider": "openai",
     "model": "gpt-4o-mini",
-    "message_text": "Tu pedido del neumático Michelin Primacy 4 225/45 R17 ha sido recibido y está en estado de pago. Estamos trabajando para procesarlo lo antes posible. Gracias por tu compra.",
+    "message_text": "Tu pedido de un Neumático Pirelli Cinturato P1 195/65 R15 ha sido recibido y está pago. Te mantendremos informado sobre su estado. Gracias por elegirnos.",
     "tone": "informativo",
     "confidence": 1,
-    "prompt_tokens": 251,
-    "completion_tokens": 54,
-    "cost_usd": 0.00007,
-    "latency_ms": 1398
+    "prompt_tokens": 254,
+    "completion_tokens": 57,
+    "cost_usd": 0.000072,
+    "latency_ms": 1486
   },
-  "woocommerce:3000000000000019": {
+  "tienda_nube:3000000000000014": {
     "provider": "openai",
     "model": "gpt-4o-mini",
-    "message_text": "Tu pedido de 1 Neumático Fate Maxisport 195/65 R15 ha sido recibido y ya está pago. Te mantendremos informado sobre el próximo paso. Gracias por elegirnos.",
-    "tone": "informativo",
-    "confidence": 0.9,
-    "prompt_tokens": 252,
-    "completion_tokens": 55,
-    "cost_usd": 0.000071,
-    "latency_ms": 1263
-  },
-  "mercadolibre:3000000000000021": {
-    "provider": "openai",
-    "model": "gpt-4o-mini",
-    "message_text": "Tu pedido del neumático Hankook Kinergy 175/65 R14 ha sido recibido y ya está pago. Estamos procesando tu orden y te mantendremos informado sobre su estado. Gracias por elegirnos.",
+    "message_text": "Tu pedido del Neumático Continental PowerContact 185/65 R15 ha sido recibido y está pagado. Estamos procesando tu orden y te mantendremos informado sobre su estado. Gracias por elegirnos.",
     "tone": "informativo",
     "confidence": 0.9,
     "prompt_tokens": 250,
     "completion_tokens": 57,
     "cost_usd": 0.000072,
-    "latency_ms": 1633
+    "latency_ms": 1610
   },
-  "whatsapp:3000000000000022": {
+  "mercadolibre:3000000000000021": {
     "provider": "openai",
     "model": "gpt-4o-mini",
-    "message_text": "Tu pedido de un Neumático Continental ContiPremium 205/60 R16 ha sido recibido y está pago. Estamos procesando tu orden y te mantendremos informado sobre su estado.",
+    "message_text": "Tu pedido con el neumático Hankook Kinergy 175/65 R14 ya ha sido despachado. Te avisaremos cuando esté en camino hacia tu dirección. Gracias por tu compra.",
     "tone": "informativo",
     "confidence": 1,
-    "prompt_tokens": 249,
+    "prompt_tokens": 250,
     "completion_tokens": 53,
     "cost_usd": 0.000069,
-    "latency_ms": 1689
+    "latency_ms": 1448
   },
-  "woocommerce:3000000000000023": {
+  "whatsapp:3000000000000023": {
     "provider": "openai",
     "model": "gpt-4o-mini",
-    "message_text": "Tu pedido del Neumático Goodyear EfficientGrip 195/55 R15 ha sido recibido y está pago. Estamos procesando tu compra y te mantendremos informado sobre el estado de tu envío. Gracias por elegirnos.",
+    "message_text": "Tu pedido con el neumático Goodyear EfficientGrip 195/55 R15 ya fue despachado. Estará en camino hacia vos. Gracias por tu compra.",
+    "tone": "informativo",
+    "confidence": 1,
+    "prompt_tokens": 251,
+    "completion_tokens": 49,
+    "cost_usd": 0.000067,
+    "latency_ms": 1814
+  },
+  "woocommerce:3000000000000025": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "message_text": "Tu pedido con el Neumático Pirelli P7 205/55 R16 ya fue despachado. Te agradecemos por tu compra y quedamos a disposición para cualquier consulta.",
+    "tone": "informativo",
+    "confidence": 1,
+    "prompt_tokens": 250,
+    "completion_tokens": 53,
+    "cost_usd": 0.000069,
+    "latency_ms": 1497
+  },
+  "tienda_nube:3000000000000027": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "message_text": "Tu pedido con los neumáticos Michelin Primacy 4 ya fue enviado. Te avisaremos cuando llegue a su destino. Gracias por tu compra.",
+    "tone": "informativo",
+    "confidence": 0.9,
+    "prompt_tokens": 251,
+    "completion_tokens": 43,
+    "cost_usd": 0.000063,
+    "latency_ms": 1405
+  },
+  "mercadolibre:3000000000000030": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "message_text": "Tu pedido con el Neumático Fate Maxisport 195/65 R15 ha sido enviado. Te mantendremos informado sobre su progreso. Gracias por elegirnos.",
+    "tone": "informativo",
+    "confidence": 1,
+    "prompt_tokens": 250,
+    "completion_tokens": 49,
+    "cost_usd": 0.000067,
+    "latency_ms": 1599
+  },
+  "whatsapp:3000000000000031": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "message_text": "Tu pedido con el neumático Michelin Energy XM2 175/70 R13 ha sido entregado. Esperamos que estés satisfecho con tu compra. Si necesitás algo más, no dudes en contactarnos.",
+    "tone": "informativo",
+    "confidence": 1,
+    "prompt_tokens": 250,
+    "completion_tokens": 57,
+    "cost_usd": 0.000072,
+    "latency_ms": 1441
+  },
+  "woocommerce:3000000000000032": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "message_text": "Tu pedido con el Neumático Bridgestone Ecopia EP150 185/65 R14 ha sido entregado. Agradecemos tu compra y esperamos que disfrutes del producto. Si tenés alguna consulta, no dudes en contactarnos.",
+    "tone": "cordial",
+    "confidence": 1,
+    "prompt_tokens": 252,
+    "completion_tokens": 64,
+    "cost_usd": 0.000076,
+    "latency_ms": 1723
+  },
+  "tienda_nube:3000000000000035": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "message_text": "Tu pedido con el Neumático Continental PowerContact 185/65 R15 ha sido entregado. Gracias por confiar en nosotros. Si tenés alguna consulta, no dudes en contactarnos.",
+    "tone": "cordial",
+    "confidence": 1,
+    "prompt_tokens": 248,
+    "completion_tokens": 53,
+    "cost_usd": 0.000069,
+    "latency_ms": 1431
+  },
+  "mercadolibre:3000000000000038": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "message_text": "Tu pedido ha sido entregado. Recibiste 2 neumáticos Bridgestone Turanza T005 205/55 R16. Gracias por tu compra y esperamos que disfrutes de tu producto.",
+    "tone": "celebratorio",
+    "confidence": 1,
+    "prompt_tokens": 253,
+    "completion_tokens": 56,
+    "cost_usd": 0.000072,
+    "latency_ms": 1625
+  },
+  "whatsapp:3000000000000039": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "message_text": "Hola, tu pedido de 2 neumáticos Pirelli P7 205/55 R16 está en estado de espera de pago. Si tenés alguna consulta, no dudes en contactarnos.",
+    "tone": "informativo",
+    "confidence": 1,
+    "prompt_tokens": 251,
+    "completion_tokens": 54,
+    "cost_usd": 0.00007,
+    "latency_ms": 1791
+  },
+  "woocommerce:3000000000000040": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "message_text": "Tu pedido de 2 Neumáticos Fate Maxisport 195/65 R15 está pendiente de pago. Una vez que se complete, podremos continuar con el proceso. Si tenés alguna consulta, no dudes en contactarnos.",
     "tone": "informativo",
     "confidence": 0.9,
     "prompt_tokens": 251,
     "completion_tokens": 61,
     "cost_usd": 0.000074,
-    "latency_ms": 1650
+    "latency_ms": 1571
   },
-  "tienda_nube:3000000000000024": {
+  "tienda_nube:3000000000000043": {
     "provider": "openai",
     "model": "gpt-4o-mini",
-    "message_text": "Tu pedido del Neumático Pirelli P7 205/55 R16 ha sido recibido y está en estado de pago. Estamos procesando tu compra y te mantendremos informado sobre su avance.",
-    "tone": "informativo",
+    "message_text": "Lamentamos informarte que tu pedido ha sido cancelado. Si tenés alguna consulta o necesitás asistencia, no dudes en contactarnos. Estamos aquí para ayudarte.",
+    "tone": "disculpa",
     "confidence": 0.9,
-    "prompt_tokens": 250,
-    "completion_tokens": 56,
+    "prompt_tokens": 248,
+    "completion_tokens": 49,
+    "cost_usd": 0.000067,
+    "latency_ms": 1351
+  },
+  "mercadolibre:3000000000000045": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "message_text": "Lamentamos informarte que tu pedido de 2 neumáticos Goodyear Eagle F1 245/40 R18 ha sido cancelado. Si necesitás más información o asistencia, no dudes en contactarnos. Agradecemos tu comprensión.",
+    "tone": "disculpa",
+    "confidence": 0.9,
+    "prompt_tokens": 253,
+    "completion_tokens": 65,
+    "cost_usd": 0.000077,
+    "latency_ms": 1796
+  },
+  "whatsapp:3000000000000047": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "message_text": "Tu pedido de Revisión y ajuste de presión ha sido reembolsado. El total de 5364.27 ARS ha sido acreditado. Si tenés alguna consulta, no dudes en contactarnos.",
+    "tone": "informativo",
+    "confidence": 1,
+    "prompt_tokens": 244,
+    "completion_tokens": 57,
     "cost_usd": 0.000071,
-    "latency_ms": 2333
+    "latency_ms": 1397
+  },
+  "woocommerce:3000000000000049": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "message_text": "Lamentamos informarte que ha ocurrido un error con tu pedido del Neumático Continental ContiPremium. Te contactaremos a la brevedad para resolver la situación. Agradecemos tu comprensión.",
+    "tone": "disculpa",
+    "confidence": 0.9,
+    "prompt_tokens": 284,
+    "completion_tokens": 56,
+    "cost_usd": 0.000076,
+    "latency_ms": 1507
   }
 }

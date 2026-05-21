@@ -185,15 +185,33 @@ export async function processWebhook(client, webhook, opts = {}) {
 }
 
 // --- Lista de pedidos a seedear (panel operativo) ---------------------------
-// Asignación de canal determinística por índice → variedad multicanal estable.
+// Conjunto curado que cubre TODOS los estados del ciclo de vida del pedido,
+// para que el panel muestre variedad realista. Los números de pedido se eligen
+// según la distribución del dataset (dataset/seed-42), evitando los casos que
+// rompen la persistencia (pedido 20 = comprador sin id, pedido 48 = sin items).
+// Canal asignado round-robin para mostrar multicanal.
 const SEED_CHANNELS = ['mercadolibre', 'whatsapp', 'woocommerce', 'tienda_nube'];
-export function seedList(count = 24) {
-    const list = [];
-    for (let i = 1; i <= count; i++) {
-        const id = String(3000000000000000 + i);
-        list.push({ id, channel: SEED_CHANNELS[(i - 1) % SEED_CHANNELS.length] });
-    }
-    return list;
+const SEED_ORDER_NUMBERS = [
+    // paid (1-18)
+    1, 2, 3, 4, 7, 9, 11, 14,
+    // shipped (19-30)
+    21, 23, 25, 27, 30,
+    // delivered (31-38)
+    31, 32, 35, 38,
+    // pending_payment (39-42)
+    39, 40,
+    // cancelled (43-46)
+    43, 45,
+    // refunded (47-48) — 47 es válido, 48 no tiene items
+    47,
+    // error: estado ML no mapeable (49-50)
+    49,
+];
+export function seedList() {
+    return SEED_ORDER_NUMBERS.map((n, idx) => ({
+        id: String(3000000000000000 + n),
+        channel: SEED_CHANNELS[idx % SEED_CHANNELS.length],
+    }));
 }
 
 // --- KPIs del panel ----------------------------------------------------------

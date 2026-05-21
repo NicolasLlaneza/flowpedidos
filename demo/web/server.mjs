@@ -92,7 +92,7 @@ const server = http.createServer(async (req, res) => {
             seeding = true;
             const c = await pool.connect();
             try {
-                const list = seedList(24);
+                const list = seedList();
                 let ok = 0;
                 for (const item of list) {
                     const wh = { resource: `/orders/${item.id}`, topic: 'orders_v2', user_id: 123456789, attempts: 1 };

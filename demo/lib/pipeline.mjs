@@ -92,8 +92,14 @@ export function normalizeOrder(ml, channel = CHANNEL) {
         phone_hash: sha256(phone),
     };
 
-    const status = STATUS_MAP[ml.status] || 'error';
+    let status = STATUS_MAP[ml.status] || 'error';
     if (status === 'error') appliedRules.push(`warn:unmapped_status:${ml.status}`);
+    // Refinamiento del estado operativo: en ML el pago y el envío son estados
+    // separados. Si el pago está aprobado, el estado de fulfillment (shipping)
+    // determina si el pedido está enviado o entregado.
+    const shipStatusRaw = ml.shipping && ml.shipping.status;
+    if (status === 'paid' && shipStatusRaw === 'shipped') status = 'shipped';
+    else if (status === 'paid' && shipStatusRaw === 'delivered') status = 'delivered';
 
     const order = {
         external_id: String(ml.id),
