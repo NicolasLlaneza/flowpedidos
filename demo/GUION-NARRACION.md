@@ -7,12 +7,23 @@
 
 ---
 
+## Dos versiones para grabar
+
+- **Dashboard web** (recomendado, más visual): `node demo/web/server.mjs` → http://localhost:4000. Grabás la ventana del navegador y vas clickeando "Procesar siguiente pedido".
+- **CLI** (terminal): `node demo/run-demo.mjs`. Grabás la terminal.
+
+El guion de narración de abajo sirve para **ambas** — los pasos son los mismos.
+
 ## Antes de grabar
 
-1. **Cargar crédito en OpenAI** (sin esto, los mensajes salen por plantilla de respaldo, no por IA).
-2. Correr `node demo/reset.mjs` para limpiar la base (así la idempotencia se ve bien).
-3. Maximizar la ventana del terminal, fuente grande (16-18pt), tema oscuro.
-4. Tip de grabación: podés correr el demo una vez para ensayar, después grabar la toma buena.
+1. **Cargar crédito en OpenAI** (ya está hecho — verificado funcionando).
+2. Correr `node demo/reset.mjs` (o el botón "Reiniciar" del dashboard) para limpiar la base.
+3. **Dashboard**: maximizar el navegador, zoom 110-125%. **CLI**: terminal con fuente grande (16-18pt), tema oscuro.
+4. Ensayá una vuelta antes de grabar la toma buena.
+
+## Ritmo del dashboard
+
+Cada click de "Procesar siguiente pedido" anima la barra de etapas (~4-5 seg), después aparece el pedido en la tabla y el mensaje en la columna de la derecha. Narrá mientras se anima. La secuencia tiene 6 pasos (3 con IA, 1 duplicado, 1 fallback, 1 rechazo) — al final mostrás los stats y la tabla llena.
 
 ---
 

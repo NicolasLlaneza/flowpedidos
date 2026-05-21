@@ -53,11 +53,39 @@ Pasos:
 4. Grabar pantalla (OBS) mientras corre `node run-demo.mjs`
 5. Narrar siguiendo el guion
 
+## Dos formas de demostrar
+
+### A) Dashboard web (recomendado — más visual)
+
+Una página con la marca FlowPedidos que muestra el pipeline procesando en vivo: barra de etapas que se iluminan, tabla de pedidos, mensajes estilo chat y stats. Datos 100% reales del backend.
+
+```bash
+# 1. Stack arriba + base limpia
+docker compose up -d
+node reset.mjs
+
+# 2. Levantar el dashboard
+node web/server.mjs
+# → abrir http://localhost:4000
+```
+
+En la página: botón **"Procesar siguiente pedido"** ejecuta el pipeline real sobre el próximo pedido de la secuencia y anima el resultado. **"Reiniciar"** limpia todo para volver a grabar.
+
+### B) CLI (terminal)
+
+```bash
+node reset.mjs
+node run-demo.mjs
+```
+
 ## Archivos
 
 | Archivo | Qué es |
 |---|---|
-| `run-demo.mjs` | Runner principal con el trace visual |
+| `web/server.mjs` | Servidor del dashboard (API + estáticos) |
+| `web/public/index.html` | Dashboard FlowPedidos (página única) |
+| `lib/orchestrator.mjs` | Orquestación que devuelve datos estructurados (la usa el server) |
+| `run-demo.mjs` | Runner CLI con trace en terminal |
 | `reset.mjs` | Copia fixtures al mock + limpia la base |
 | `lib/pipeline.mjs` | Lógica del pipeline (misma que los nodos n8n) |
 | `GUION-NARRACION.md` | Guion de voz en off para el video |

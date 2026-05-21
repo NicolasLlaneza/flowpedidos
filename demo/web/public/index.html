@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlowPedidos — Demostración en vivo</title>
+<style>
+  :root {
+    --navy: #1E3A5F;
+    --navy-dark: #14283f;
+    --ice: #CADCFC;
+    --accent: #2F80ED;
+    --green: #27AE60;
+    --amber: #E2A100;
+    --red: #EB5757;
+    --gray: #8A97A8;
+    --bg: #0E1A2B;
+    --card: #16243a;
+    --card-light: #1d3050;
+    --text: #E8EEF7;
+    --text-dim: #9DB0C9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    padding: 24px;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; }
+
+  /* Header */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
+  }
+  .brand h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+  .brand h1 span { color: var(--accent); }
+  .brand p { color: var(--text-dim); font-size: 14px; margin-top: 2px; }
+  .controls { display: flex; gap: 10px; }
+  button {
+    font-family: inherit; font-size: 14px; font-weight: 600;
+    padding: 11px 20px; border-radius: 10px; border: none; cursor: pointer;
+    transition: transform .12s, box-shadow .12s, opacity .12s;
+  }
+  button:active { transform: scale(.97); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  .btn-primary { background: var(--accent); color: white; box-shadow: 0 4px 14px rgba(47,128,237,.35); }
+  .btn-primary:hover:not(:disabled) { box-shadow: 0 6px 20px rgba(47,128,237,.5); }
+  .btn-ghost { background: var(--card-light); color: var(--text); }
+
+  /* Pipeline strip */
+  .pipeline {
+    background: var(--card); border-radius: 16px; padding: 22px 20px;
+    margin-bottom: 20px; border: 1px solid #243a5a;
+  }
+  .pipeline-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gray); margin-bottom: 16px; }
+  .stages { display: flex; align-items: stretch; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+  .stage {
+    flex: 1; min-width: 96px; background: var(--card-light); border-radius: 10px;
+    padding: 12px 10px; text-align: center; position: relative;
+    border: 1.5px solid transparent; transition: all .25s;
+  }
+  .stage .num { font-size: 11px; color: var(--gray); font-weight: 700; }
+  .stage .lbl { font-size: 11.5px; margin-top: 4px; color: var(--text-dim); line-height: 1.25; }
+  .stage.active { border-color: var(--accent); background: #1b3458; box-shadow: 0 0 0 3px rgba(47,128,237,.18); transform: translateY(-3px); }
+  .stage.ok { border-color: var(--green); }
+  .stage.ok .num::after { content: " ✓"; color: var(--green); }
+  .stage.warn { border-color: var(--amber); }
+  .stage.warn .num::after { content: " ⚠"; color: var(--amber); }
+  .stage.err { border-color: var(--red); }
+  .stage.err .num::after { content: " ✗"; color: var(--red); }
+  .stage .detail {
+    font-size: 10px; color: var(--text-dim); margin-top: 6px; min-height: 12px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  /* Stats */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+  .stat { background: var(--card); border-radius: 14px; padding: 18px; border: 1px solid #243a5a; }
+  .stat .big { font-size: 30px; font-weight: 800; }
+  .stat .lab { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+  .stat.ok .big { color: var(--green); }
+  .stat.dup .big { color: var(--amber); }
+  .stat.rej .big { color: var(--red); }
+  .stat.cost .big { color: var(--ice); font-size: 24px; }
+
+  /* Two columns */
+  .cols { display: grid; grid-template-columns: 1.15fr 1fr; gap: 20px; }
+  @media (max-width: 880px) { .cols { grid-template-columns: 1fr; } .stats { grid-template-columns: repeat(2,1fr);} }
+  .panel { background: var(--card); border-radius: 16px; padding: 20px; border: 1px solid #243a5a; }
+  .panel h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--gray); margin-bottom: 14px; }
+
+  /* Orders table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: var(--gray); font-weight: 600; font-size: 11px; text-transform: uppercase; padding: 6px 8px; border-bottom: 1px solid #243a5a; }
+  td { padding: 9px 8px; border-bottom: 1px solid #1c2c45; }
+  tr.new { animation: rowin .5s ease; }
+  @keyframes rowin { from { background: #1f3a5e; opacity: .3; } to { background: transparent; opacity: 1; } }
+  .pill { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+  .pill.paid { background: rgba(39,174,96,.18); color: #5fd98a; }
+  .pill.dup { background: rgba(226,161,0,.18); color: #f0c14b; }
+  .tag-ia { background: rgba(47,128,237,.2); color: #6fa8f5; font-size: 10px; padding: 1px 7px; border-radius: 12px; }
+  .tag-tpl { background: rgba(138,151,168,.2); color: #b3c0d4; font-size: 10px; padding: 1px 7px; border-radius: 12px; }
+
+  /* Message bubbles */
+  .bubbles { display: flex; flex-direction: column; gap: 12px; max-height: 380px; overflow-y: auto; }
+  .bubble { background: var(--card-light); border-radius: 14px 14px 14px 4px; padding: 12px 14px; animation: bubin .45s ease; border-left: 3px solid var(--accent); }
+  .bubble.tpl { border-left-color: var(--gray); }
+  @keyframes bubin { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .bubble .meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .bubble .who { font-size: 12px; font-weight: 700; color: var(--ice); }
+  .bubble .txt { font-size: 13.5px; color: var(--text); }
+  .bubble .sub { font-size: 11px; color: var(--text-dim); margin-top: 7px; }
+
+  .empty { color: var(--gray); font-size: 13px; text-align: center; padding: 30px 0; }
+  .footer { margin-top: 24px; text-align: center; color: var(--gray); font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <h1>Flow<span>Pedidos</span></h1>
+      <p>Demostración en vivo · procesamiento real de pedidos</p>
+    </div>
+    <div class="controls">
+      <button class="btn-ghost" id="btnReset">Reiniciar</button>
+      <button class="btn-primary" id="btnProcess">Procesar siguiente pedido →</button>
+    </div>
+  </header>
+
+  <!-- Pipeline -->
+  <div class="pipeline">
+    <div class="pipeline-title" id="pipeTitle">Pipeline de procesamiento</div>
+    <div class="stages" id="stages"></div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat ok"><div class="big" id="sProc">0</div><div class="lab">Procesados</div></div>
+    <div class="stat dup"><div class="big" id="sDup">0</div><div class="lab">Duplicados bloqueados</div></div>
+    <div class="stat rej"><div class="big" id="sRej">0</div><div class="lab">Rechazados</div></div>
+    <div class="stat cost"><div class="big" id="sCost">US$0</div><div class="lab">Costo total en IA</div></div>
+  </div>
+
+  <!-- Columns -->
+  <div class="cols">
+    <div class="panel">
+      <h2>Pedidos · todos los canales en un solo lugar</h2>
+      <table>
+        <thead><tr><th>Pedido</th><th>Cliente</th><th>Producto</th><th>Total</th><th>Estado</th></tr></thead>
+        <tbody id="ordersBody"><tr><td colspan="5" class="empty">Sin pedidos todavía. Presioná "Procesar siguiente pedido".</td></tr></tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <h2>Mensajes generados</h2>
+      <div class="bubbles" id="bubbles"><div class="empty">Los mensajes aparecerán acá.</div></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    FlowPedidos · Trabajo Final Integrador · Tecnicatura Universitaria en Programación · UTN FRM 2026<br>
+    Datos reales: PostgreSQL + integración Mercado Libre (simulada) + generación con IA
+  </div>
+
+</div>
+
+<script>
+const STAGE_DEFS = [
+  'Webhook', 'Validar', 'Enrich', 'Normalizar',
+  'Idempotencia', 'Cliente', 'Persistir', 'Items', 'Seudonimizar', 'IA', 'Auditar'
+];
+
+const $ = (id) => document.getElementById(id);
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+function renderStages() {
+  $('stages').innerHTML = STAGE_DEFS.map((s, i) =>
+    `<div class="stage" id="stg${i}"><div class="num">${i+1}</div><div class="lbl">${s}</div><div class="detail" id="dtl${i}"></div></div>`
+  ).join('');
+}
+function clearStages() {
+  STAGE_DEFS.forEach((_, i) => {
+    const el = $('stg'+i); el.className = 'stage'; $('dtl'+i).textContent = '';
+  });
+}
+
+// Mapea cada paso del backend a un índice de stage visual
+function stageIndexFor(label) {
+  if (label.includes('Webhook')) return 0;
+  if (label.includes('Validaci')) return 1;
+  if (label.includes('enrich') || label.includes('plataforma')) return 2;
+  if (label.includes('Normaliza')) return 3;
+  if (label.includes('duplicado')) return 4;
+  if (label.includes('Cliente')) return 5;
+  if (label.includes('persistido')) return 6;
+  if (label.includes('Items')) return 7;
+  if (label.includes('Seudonim')) return 8;
+  if (label.includes('IA') || label.includes('OpenAI')) return 9;
+  if (label.includes('Notificaci') || label.includes('Auditar')) return 10;
+  return 0;
+}
+
+async function animateSteps(steps) {
+  clearStages();
+  for (const st of steps) {
+    const idx = stageIndexFor(st.label);
+    const el = $('stg'+idx);
+    el.classList.add('active');
+    await sleep(420);
+    el.classList.remove('active');
+    el.classList.add(st.status === 'ok' ? 'ok' : st.status === 'warn' ? 'warn' : 'err');
+    $('dtl'+idx).textContent = st.detail || '';
+  }
+}
+
+let busy = false;
+async function processNext() {
+  if (busy) return;
+  busy = true; $('btnProcess').disabled = true; $('btnReset').disabled = true;
+  try {
+    const r = await fetch('/api/process', { method: 'POST' });
+    const data = await r.json();
+    if (data.done) {
+      $('pipeTitle').textContent = 'Secuencia completa — presioná Reiniciar para repetir';
+      $('btnProcess').disabled = true;
+      busy = false; $('btnReset').disabled = false;
+      return;
+    }
+    $('pipeTitle').textContent = `Procesando: ${data.label}  ·  ${data.order_external}`;
+    await animateSteps(data.steps);
+    await refreshState();
+    if (data.result === 'processed' && data.message) addBubble(data);
+  } catch (e) {
+    alert('Error: ' + e.message);
+  } finally {
+    busy = false;
+    $('btnReset').disabled = false;
+    $('btnProcess').disabled = ($('btnProcess').dataset.done === '1');
+  }
+}
+
+function fmtMoney(n) {
+  const v = Number(n || 0);
+  return v === 0 ? 'US$0' : 'US$' + v.toFixed(6);
+}
+
+async function refreshState() {
+  const r = await fetch('/api/state');
+  const s = await r.json();
+  // stats
+  let proc = 0, dup = 0;
+  // contamos desde las órdenes + necesitamos rejected; usamos counts y seq
+  $('sProc').textContent = s.counts.pedidos;
+  $('sCost').textContent = fmtMoney(s.counts.costo_total);
+  // orders table
+  const body = $('ordersBody');
+  if (!s.orders.length) {
+    body.innerHTML = '<tr><td colspan="5" class="empty">Sin pedidos todavía.</td></tr>';
+  } else {
+    body.innerHTML = s.orders.map(o => {
+      const prod = (o.message_text ? '' : '') + shortProduct(o);
+      const tag = o.provider === 'openai' ? '<span class="tag-ia">IA</span>' : (o.provider === 'template' ? '<span class="tag-tpl">plantilla</span>' : '');
+      return `<tr class="new">
+        <td>#${o.external_id.slice(-4)}</td>
+        <td>${o.pseudonym || '—'}</td>
+        <td>${prod}</td>
+        <td>$${Number(o.total_amount).toLocaleString('es-AR')}</td>
+        <td><span class="pill paid">${o.status}</span> ${tag}</td>
+      </tr>`;
+    }).join('');
+  }
+  if (typeof s.seqIndex === 'number' && s.seqIndex >= s.seqTotal) {
+    $('btnProcess').dataset.done = '1';
+    $('btnProcess').disabled = true;
+  }
+}
+
+function shortProduct(o) {
+  // no tenemos el producto directo en el state; lo dejamos genérico desde el mensaje
+  return '<span style="color:var(--text-dim)">ver mensaje</span>';
+}
+
+const bubbleSeen = new Set();
+function addBubble(data) {
+  const key = data.order_external + ':' + (data.message.is_fallback ? 't' : 'i');
+  if (bubbleSeen.has(key)) return;
+  bubbleSeen.add(key);
+  const cont = $('bubbles');
+  if (cont.querySelector('.empty')) cont.innerHTML = '';
+  const m = data.message;
+  const who = m.is_fallback ? 'Plantilla de respaldo' : 'Mensaje IA';
+  const cls = m.is_fallback ? 'bubble tpl' : 'bubble';
+  const sub = m.is_fallback
+    ? `degradación funcional · ${data.order_external.slice(-4)}`
+    : `${m.latency_ms} ms · US$${(m.cost_usd||0).toFixed(6)} · confianza ${m.confidence ?? '—'}`;
+  const div = document.createElement('div');
+  div.className = cls;
+  div.innerHTML = `<div class="meta"><span class="who">${who}</span><span class="${m.is_fallback?'tag-tpl':'tag-ia'}">${m.is_fallback?'plantilla':'IA'}</span></div>
+    <div class="txt">${m.text}</div><div class="sub">${sub}</div>`;
+  cont.prepend(div);
+}
+
+async function resetAll() {
+  await fetch('/api/reset', { method: 'POST' });
+  bubbleSeen.clear();
+  $('bubbles').innerHTML = '<div class="empty">Los mensajes aparecerán acá.</div>';
+  $('ordersBody').innerHTML = '<tr><td colspan="5" class="empty">Sin pedidos todavía.</td></tr>';
+  $('sProc').textContent = '0'; $('sDup').textContent = '0'; $('sRej').textContent = '0'; $('sCost').textContent = 'US$0';
+  clearStages();
+  $('pipeTitle').textContent = 'Pipeline de procesamiento';
+  $('btnProcess').dataset.done = '0';
+  $('btnProcess').disabled = false;
+  // contadores locales
+  counters = { proc: 0, dup: 0, rej: 0 };
+}
+
+// Contadores locales para dup/rej (el state global no los separa)
+let counters = { proc: 0, dup: 0, rej: 0 };
+const _origProcess = processNext;
+async function processNextTracked() {
+  const before = $('sProc').textContent;
+  await _origProcess();
+}
+
+$('btnProcess').addEventListener('click', async () => {
+  // interceptamos el resultado para contar dup/rej
+  if (busy) return;
+  busy = true; $('btnProcess').disabled = true; $('btnReset').disabled = true;
+  try {
+    const r = await fetch('/api/process', { method: 'POST' });
+    const data = await r.json();
+    if (data.done) {
+      $('pipeTitle').textContent = 'Secuencia completa — presioná Reiniciar para repetir';
+      return;
+    }
+    $('pipeTitle').textContent = `Procesando: ${data.label} · ${data.order_external}`;
+    await animateSteps(data.steps);
+    if (data.result === 'duplicate') { counters.dup++; $('sDup').textContent = counters.dup; }
+    if (data.result === 'rejected') { counters.rej++; $('sRej').textContent = counters.rej; }
+    await refreshState();
+    if (data.result === 'processed' && data.message) addBubble(data);
+    if (data.seqIndex >= data.seqTotal) { $('btnProcess').dataset.done = '1'; }
+  } catch (e) { alert('Error: ' + e.message); }
+  finally {
+    busy = false;
+    $('btnReset').disabled = false;
+    $('btnProcess').disabled = ($('btnProcess').dataset.done === '1');
+  }
+});
+
+$('btnReset').addEventListener('click', resetAll);
+
+// init
+renderStages();
+refreshState();
+</script>
+</body>
+</html>
