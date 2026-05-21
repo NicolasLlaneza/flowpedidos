@@ -184,6 +184,78 @@ export async function processWebhook(client, webhook, opts = {}) {
     };
 }
 
+// --- Lista de pedidos a seedear (panel operativo) ---------------------------
+// Asignación de canal determinística por índice → variedad multicanal estable.
+const SEED_CHANNELS = ['mercadolibre', 'whatsapp', 'woocommerce', 'tienda_nube'];
+export function seedList(count = 24) {
+    const list = [];
+    for (let i = 1; i <= count; i++) {
+        const id = String(3000000000000000 + i);
+        list.push({ id, channel: SEED_CHANNELS[(i - 1) % SEED_CHANNELS.length] });
+    }
+    return list;
+}
+
+// --- KPIs del panel ----------------------------------------------------------
+export async function getKpis(client) {
+    const r = await client.query(`
+        SELECT
+          (SELECT count(*) FROM tfi.orders)                                              AS pedidos,
+          (SELECT coalesce(sum(total_amount),0) FROM tfi.orders WHERE status <> 'cancelled') AS ingresos,
+          (SELECT count(*) FROM tfi.orders WHERE status IN ('created','pending_payment')) AS pendientes,
+          (SELECT count(*) FROM tfi.ai_notifications)                                     AS mensajes,
+          (SELECT count(DISTINCT channel) FROM tfi.orders)                                AS canales
+    `);
+    return r.rows[0];
+}
+
+// --- Listado filtrable -------------------------------------------------------
+export async function getOrders(client, { channel, status, q } = {}) {
+    const where = [];
+    const params = [];
+    if (channel) { params.push(channel); where.push(`o.channel = $${params.length}`); }
+    if (status)  { params.push(status);  where.push(`o.status  = $${params.length}`); }
+    if (q) {
+        params.push(`%${q.toLowerCase()}%`);
+        const i = params.length;
+        where.push(`(lower(c.full_name) LIKE $${i} OR lower(o.external_id) LIKE $${i}
+                     OR EXISTS (SELECT 1 FROM tfi.order_items it WHERE it.order_id=o.id AND lower(it.product_name) LIKE $${i}))`);
+    }
+    const whereSql = where.length ? 'WHERE ' + where.join(' AND ') : '';
+    const r = await client.query(`
+        SELECT o.id, o.external_id, o.channel, o.status, o.total_amount, o.currency, o.received_at,
+               c.full_name AS customer_name,
+               (SELECT product_name FROM tfi.order_items it WHERE it.order_id=o.id LIMIT 1) AS product,
+               (SELECT count(*) FROM tfi.order_items it WHERE it.order_id=o.id) AS items_count,
+               n.provider, n.is_fallback
+        FROM tfi.orders o
+        LEFT JOIN tfi.customers c ON c.id = o.customer_id
+        LEFT JOIN tfi.ai_notifications n ON n.order_id = o.id
+        ${whereSql}
+        ORDER BY o.received_at DESC
+    `, params);
+    return r.rows;
+}
+
+// --- Detalle de un pedido con trazabilidad -----------------------------------
+export async function getOrderDetail(client, externalId) {
+    const oRes = await client.query(`
+        SELECT o.*, c.full_name AS customer_name, c.pseudonym, c.email, c.phone
+        FROM tfi.orders o LEFT JOIN tfi.customers c ON c.id=o.customer_id
+        WHERE o.external_id = $1 LIMIT 1`, [externalId]);
+    if (!oRes.rows.length) return null;
+    const order = oRes.rows[0];
+    const items = (await client.query(
+        `SELECT product_name, quantity, unit_price, delivery_status FROM tfi.order_items WHERE order_id=$1`, [order.id])).rows;
+    const notif = (await client.query(
+        `SELECT provider, model, message_text, is_fallback, cost_usd, latency_ms, generated_at
+         FROM tfi.ai_notifications WHERE order_id=$1 ORDER BY generated_at DESC LIMIT 1`, [order.id])).rows[0] || null;
+    const audit = (await client.query(
+        `SELECT event_type, severity, component, message, created_at
+         FROM tfi.audit_log WHERE order_id=$1 ORDER BY created_at ASC`, [order.id])).rows;
+    return { order, items, notif, audit };
+}
+
 // Estado actual para el panel del vendedor
 export async function getState(client) {
     const counts = await client.query(`
