@@ -11,7 +11,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./sql:/docker-entrypoint-initdb.d:ro
     ports:
-      - "5432:5432"
+      # Puerto del host configurable para evitar choque con un PostgreSQL local.
+      # Internamente sigue siendo 5432 (n8n se conecta por la red interna).
+      - "${PG_HOST_PORT:-5433}:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 10s

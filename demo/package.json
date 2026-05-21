@@ -1,0 +1,13 @@
+{
+  "name": "flowpedidos-demo",
+  "version": "1.0.0",
+  "description": "Demo CLI del pipeline FlowPedidos — ejecuta la lógica real end-to-end",
+  "type": "module",
+  "scripts": {
+    "demo": "node run-demo.mjs",
+    "reset": "node reset.mjs"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
+}
