@@ -87,7 +87,12 @@ const server = http.createServer(async (req, res) => {
         // --- Static: dashboard ---
         if (req.method === 'GET' && (url.pathname === '/' || url.pathname === '/index.html')) {
             const html = fs.readFileSync(path.join(__dirname, 'public', 'index.html'));
-            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+            res.writeHead(200, {
+                'Content-Type': 'text/html; charset=utf-8',
+                'Cache-Control': 'no-store, no-cache, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0',
+            });
             return res.end(html);
         }
 
