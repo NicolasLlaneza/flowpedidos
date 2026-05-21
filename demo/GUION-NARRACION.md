@@ -9,10 +9,45 @@
 
 ## Dos versiones para grabar
 
-- **Dashboard web** (recomendado, más visual): `node demo/web/server.mjs` → http://localhost:4000. Grabás la ventana del navegador y vas clickeando "Procesar siguiente pedido".
-- **CLI** (terminal): `node demo/run-demo.mjs`. Grabás la terminal.
+- **Dashboard web** (recomendado): `node demo/web/server.mjs` → http://localhost:4000. Muestra el escenario real (panel del vendedor + teléfono del cliente). Narración propia abajo.
+- **CLI** (terminal): `node demo/run-demo.mjs`. Muestra el detalle técnico del pipeline. Narración técnica más abajo.
 
-El guion de narración de abajo sirve para **ambas** — los pasos son los mismos.
+---
+
+## NARRACIÓN PARA EL DASHBOARD (vista de negocio)
+
+Esta es la recomendada para el coordinador: muestra qué hace el pedido, no las tripas del sistema.
+
+### Apertura
+> "Esto es FlowPedidos funcionando. A la izquierda está el panel del vendedor; a la derecha, el teléfono del cliente. Vamos a simular ventas que entran desde distintos canales y ver qué pasa con cada una."
+
+### Venta 1 — Mercado Libre
+*(click "Simular próxima venta")*
+> "Entra una venta desde Mercado Libre. FlowPedidos la captura, la organiza en el panel junto con todos los datos del cliente y el producto, y miren el teléfono: el cliente recibe automáticamente un mensaje confirmando su compra. Ese mensaje lo generó la inteligencia artificial según el estado del pedido — nadie lo escribió a mano."
+
+### Venta 2 — WhatsApp
+> "Ahora entra una venta por WhatsApp. Otro canal completamente distinto, pero cae en el mismo panel, unificada con la anterior. El cliente también recibe su mensaje. Esto es lo central: no importa de qué canal venga, todo queda en un solo lugar."
+
+### Venta 3 — Tienda Online
+> "Una tercera venta, esta vez desde la tienda online propia. Tres canales distintos, una sola vista ordenada. Antes esto vivía disperso en tres plataformas separadas."
+
+### Venta 4 — Duplicado
+> "Acá pasa algo importante. La primera venta vuelve a entrar — algo común cuando las plataformas reenvían notificaciones. FlowPedidos la reconoce y la bloquea. Al cliente no se le cobra dos veces ni se le manda otro mensaje. El panel no se ensucia con un duplicado."
+
+### Venta 5 — Servicio caído (respaldo)
+> "Ahora simulamos que el servicio de inteligencia artificial se cae. Miren: el cliente igual recibe una respuesta, esta vez con un mensaje de respaldo. El sistema no se rompe ni deja al cliente esperando — sigue funcionando aunque un componente externo falle."
+
+### Venta 6 — Notificación incompleta
+> "Por último, llega una notificación incompleta, sin los datos mínimos. FlowPedidos la descarta. No deja que información defectuosa entre al sistema."
+
+### Cierre
+> "En segundos procesamos ventas de tres canales, evitamos un cobro duplicado, resolvimos una caída de servicio y filtramos una notificación inválida. Todo automático, todo ordenado, sin intervención manual. Esto es FlowPedidos."
+
+---
+
+## NARRACIÓN TÉCNICA PARA EL CLI (terminal)
+
+Usar esta si grabás `node demo/run-demo.mjs` (muestra los pasos internos).
 
 ## Antes de grabar
 

@@ -71,7 +71,9 @@ const DELIVERY_MAP = {
 };
 
 // --- Normalización ML → canónico ---------------------------------------------
-export function normalizeOrder(ml) {
+// channel: permite simular órdenes que llegan de distintos canales
+// (mercadolibre, whatsapp, woocommerce, tienda_nube). Por defecto mercadolibre.
+export function normalizeOrder(ml, channel = CHANNEL) {
     const appliedRules = [];
     const buyer = ml.buyer || {};
     const fullName = [buyer.first_name, buyer.last_name].filter(Boolean).join(' ') || null;
@@ -81,8 +83,8 @@ export function normalizeOrder(ml) {
 
     const customer = {
         external_id: externalCustomerId,
-        channel: CHANNEL,
-        pseudonym: makePseudonym(CHANNEL, externalCustomerId || ml.id),
+        channel,
+        pseudonym: makePseudonym(channel, externalCustomerId || ml.id),
         full_name: fullName,
         email: buyer.email || null,
         phone,
@@ -95,7 +97,7 @@ export function normalizeOrder(ml) {
 
     const order = {
         external_id: String(ml.id),
-        channel: CHANNEL,
+        channel,
         status,
         total_amount: Number(ml.total_amount) || 0,
         currency: ml.currency_id || 'ARS',

@@ -50,14 +50,19 @@ const adminPool = new pg.Pool({
     max: 2,
 });
 
-// Secuencia curada de demostración (misma historia que el CLI)
+// Secuencia curada: simula ventas llegando de distintos canales.
+// Cuenta una historia de negocio:
+//   1-3) ventas de 3 canales distintos → se unifican + el cliente recibe mensaje
+//   4)   misma venta repetida → se evita cobrar dos veces
+//   5)   un servicio falla → el cliente igual recibe respuesta (respaldo)
+//   6)   notificación incompleta → se descarta
 const SEQUENCE = [
-    { wh: { resource: '/orders/3000000000000001', topic: 'orders_v2', user_id: 123456789, attempts: 1 }, label: 'Happy path' },
-    { wh: { resource: '/orders/3000000000000003', topic: 'orders_v2', user_id: 123456789, attempts: 1 }, label: 'Otro pedido' },
-    { wh: { resource: '/orders/3000000000000010', topic: 'orders_v2', user_id: 123456789, attempts: 1 }, label: 'Tercer pedido' },
-    { wh: { resource: '/orders/3000000000000001', topic: 'orders_v2', user_id: 123456789, attempts: 2 }, label: 'Reenvío (duplicado)' },
-    { wh: { resource: '/orders/3000000000000007', topic: 'orders_v2', user_id: 123456789, attempts: 1 }, label: 'Resiliencia (fallback)', forceFallback: true },
-    { wh: { topic: 'orders_v2', user_id: 123456789, attempts: 1 }, label: 'Webhook inválido' },
+    { wh: { resource: '/orders/3000000000000001', topic: 'orders_v2', user_id: 123456789, attempts: 1 }, channel: 'mercadolibre', label: 'Venta en Mercado Libre' },
+    { wh: { resource: '/orders/3000000000000003', topic: 'orders_v2', user_id: 123456789, attempts: 1 }, channel: 'whatsapp', label: 'Venta por WhatsApp' },
+    { wh: { resource: '/orders/3000000000000010', topic: 'orders_v2', user_id: 123456789, attempts: 1 }, channel: 'woocommerce', label: 'Venta en Tienda Online' },
+    { wh: { resource: '/orders/3000000000000001', topic: 'orders_v2', user_id: 123456789, attempts: 2 }, channel: 'mercadolibre', label: 'Misma venta repetida' },
+    { wh: { resource: '/orders/3000000000000007', topic: 'orders_v2', user_id: 123456789, attempts: 1 }, channel: 'tienda_nube', label: 'Venta con servicio caído', forceFallback: true },
+    { wh: { topic: 'orders_v2', user_id: 123456789, attempts: 1 }, channel: 'mercadolibre', label: 'Notificación incompleta' },
 ];
 let seqIndex = 0;
 
@@ -105,7 +110,9 @@ const server = http.createServer(async (req, res) => {
             try {
                 const result = await processWebhook(client, item.wh, {
                     apiKey: OPENAI_KEY,
+                    channel: item.channel,
                     forceFallback: item.forceFallback === true,
+                    useCache: true,
                 });
                 return json(res, 200, { label: item.label, ...result, seqIndex, seqTotal: SEQUENCE.length });
             } finally { client.release(); }

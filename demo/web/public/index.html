@@ -3,120 +3,82 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FlowPedidos — Demostración en vivo</title>
+<title>FlowPedidos — Demostración</title>
 <style>
   :root {
-    --navy: #1E3A5F;
-    --navy-dark: #14283f;
-    --ice: #CADCFC;
-    --accent: #2F80ED;
-    --green: #27AE60;
-    --amber: #E2A100;
-    --red: #EB5757;
-    --gray: #8A97A8;
-    --bg: #0E1A2B;
-    --card: #16243a;
-    --card-light: #1d3050;
-    --text: #E8EEF7;
-    --text-dim: #9DB0C9;
+    --navy:#1E3A5F; --bg:#0E1A2B; --card:#16243a; --card2:#1d3050;
+    --line:#243a5a; --text:#E8EEF7; --dim:#9DB0C9; --gray:#8A97A8;
+    --accent:#2F80ED; --green:#27AE60; --amber:#E2A100; --red:#EB5757;
+    --ml:#FFE600; --wa:#25D366; --woo:#9B6FD4; --tn:#2D8CFF;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.5;
-    padding: 24px;
-    min-height: 100vh;
-  }
-  .wrap { max-width: 1200px; margin: 0 auto; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);padding:24px;min-height:100vh}
+  .wrap{max-width:1200px;margin:0 auto}
 
-  /* Header */
-  header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 24px; flex-wrap: wrap; gap: 16px;
-  }
-  .brand h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
-  .brand h1 span { color: var(--accent); }
-  .brand p { color: var(--text-dim); font-size: 14px; margin-top: 2px; }
-  .controls { display: flex; gap: 10px; }
-  button {
-    font-family: inherit; font-size: 14px; font-weight: 600;
-    padding: 11px 20px; border-radius: 10px; border: none; cursor: pointer;
-    transition: transform .12s, box-shadow .12s, opacity .12s;
-  }
-  button:active { transform: scale(.97); }
-  button:disabled { opacity: .45; cursor: not-allowed; }
-  .btn-primary { background: var(--accent); color: white; box-shadow: 0 4px 14px rgba(47,128,237,.35); }
-  .btn-primary:hover:not(:disabled) { box-shadow: 0 6px 20px rgba(47,128,237,.5); }
-  .btn-ghost { background: var(--card-light); color: var(--text); }
+  header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+  .brand h1{font-size:27px;font-weight:800;letter-spacing:-.5px}
+  .brand h1 span{color:var(--accent)}
+  .brand p{color:var(--dim);font-size:14px;margin-top:2px}
+  .controls{display:flex;gap:10px}
+  button{font-family:inherit;font-size:14px;font-weight:600;padding:11px 18px;border-radius:10px;border:none;cursor:pointer;transition:transform .12s,box-shadow .12s,opacity .12s}
+  button:active{transform:scale(.97)}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(47,128,237,.35)}
+  .btn-ghost{background:var(--card2);color:var(--text)}
 
-  /* Pipeline strip */
-  .pipeline {
-    background: var(--card); border-radius: 16px; padding: 22px 20px;
-    margin-bottom: 20px; border: 1px solid #243a5a;
-  }
-  .pipeline-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gray); margin-bottom: 16px; }
-  .stages { display: flex; align-items: stretch; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
-  .stage {
-    flex: 1; min-width: 96px; background: var(--card-light); border-radius: 10px;
-    padding: 12px 10px; text-align: center; position: relative;
-    border: 1.5px solid transparent; transition: all .25s;
-  }
-  .stage .num { font-size: 11px; color: var(--gray); font-weight: 700; }
-  .stage .lbl { font-size: 11.5px; margin-top: 4px; color: var(--text-dim); line-height: 1.25; }
-  .stage.active { border-color: var(--accent); background: #1b3458; box-shadow: 0 0 0 3px rgba(47,128,237,.18); transform: translateY(-3px); }
-  .stage.ok { border-color: var(--green); }
-  .stage.ok .num::after { content: " ✓"; color: var(--green); }
-  .stage.warn { border-color: var(--amber); }
-  .stage.warn .num::after { content: " ⚠"; color: var(--amber); }
-  .stage.err { border-color: var(--red); }
-  .stage.err .num::after { content: " ✗"; color: var(--red); }
-  .stage .detail {
-    font-size: 10px; color: var(--text-dim); margin-top: 6px; min-height: 12px;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  }
+  .intro{color:var(--dim);font-size:13.5px;margin:14px 0 18px;padding:12px 16px;background:var(--card);border-radius:10px;border-left:3px solid var(--accent)}
 
-  /* Stats */
-  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
-  .stat { background: var(--card); border-radius: 14px; padding: 18px; border: 1px solid #243a5a; }
-  .stat .big { font-size: 30px; font-weight: 800; }
-  .stat .lab { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
-  .stat.ok .big { color: var(--green); }
-  .stat.dup .big { color: var(--amber); }
-  .stat.rej .big { color: var(--red); }
-  .stat.cost .big { color: var(--ice); font-size: 24px; }
+  /* toast / evento */
+  .toast{min-height:46px;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;margin-bottom:18px;background:var(--card);border:1px solid var(--line);font-size:14px;transition:all .3s;opacity:.5}
+  .toast.show{opacity:1;border-color:var(--accent);box-shadow:0 0 0 3px rgba(47,128,237,.15)}
+  .toast.dup{border-color:var(--amber);box-shadow:0 0 0 3px rgba(226,161,0,.15)}
+  .toast.rej{border-color:var(--red);box-shadow:0 0 0 3px rgba(235,87,87,.15)}
+  .toast .ico{font-size:20px}
+  .toast b{color:#fff}
 
-  /* Two columns */
-  .cols { display: grid; grid-template-columns: 1.15fr 1fr; gap: 20px; }
-  @media (max-width: 880px) { .cols { grid-template-columns: 1fr; } .stats { grid-template-columns: repeat(2,1fr);} }
-  .panel { background: var(--card); border-radius: 16px; padding: 20px; border: 1px solid #243a5a; }
-  .panel h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--gray); margin-bottom: 14px; }
+  .cols{display:grid;grid-template-columns:1.5fr 1fr;gap:20px}
+  @media(max-width:920px){.cols{grid-template-columns:1fr}}
+  .panel{background:var(--card);border-radius:16px;padding:20px;border:1px solid var(--line)}
+  .panel .ph{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px}
+  .panel h2{font-size:15px;font-weight:700}
+  .panel .hint{font-size:12px;color:var(--gray);margin-bottom:14px}
 
-  /* Orders table */
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { text-align: left; color: var(--gray); font-weight: 600; font-size: 11px; text-transform: uppercase; padding: 6px 8px; border-bottom: 1px solid #243a5a; }
-  td { padding: 9px 8px; border-bottom: 1px solid #1c2c45; }
-  tr.new { animation: rowin .5s ease; }
-  @keyframes rowin { from { background: #1f3a5e; opacity: .3; } to { background: transparent; opacity: 1; } }
-  .pill { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-  .pill.paid { background: rgba(39,174,96,.18); color: #5fd98a; }
-  .pill.dup { background: rgba(226,161,0,.18); color: #f0c14b; }
-  .tag-ia { background: rgba(47,128,237,.2); color: #6fa8f5; font-size: 10px; padding: 1px 7px; border-radius: 12px; }
-  .tag-tpl { background: rgba(138,151,168,.2); color: #b3c0d4; font-size: 10px; padding: 1px 7px; border-radius: 12px; }
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;color:var(--gray);font-weight:600;font-size:11px;text-transform:uppercase;padding:6px 7px;border-bottom:1px solid var(--line)}
+  td{padding:10px 7px;border-bottom:1px solid #1c2c45;vertical-align:middle}
+  tr.new td{animation:rowin .6s ease}
+  @keyframes rowin{0%{background:#244873}100%{background:transparent}}
+  tr.flash td{animation:flash 1s ease}
+  @keyframes flash{0%,100%{background:transparent}40%{background:rgba(226,161,0,.25)}}
+  .chan{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:12px}
+  .dot{width:9px;height:9px;border-radius:50%}
+  .dot.mercadolibre{background:var(--ml)} .dot.whatsapp{background:var(--wa)}
+  .dot.woocommerce{background:var(--woo)} .dot.tienda_nube{background:var(--tn)}
+  .prod{color:var(--dim);max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .st{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(39,174,96,.18);color:#5fd98a}
 
-  /* Message bubbles */
-  .bubbles { display: flex; flex-direction: column; gap: 12px; max-height: 380px; overflow-y: auto; }
-  .bubble { background: var(--card-light); border-radius: 14px 14px 14px 4px; padding: 12px 14px; animation: bubin .45s ease; border-left: 3px solid var(--accent); }
-  .bubble.tpl { border-left-color: var(--gray); }
-  @keyframes bubin { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-  .bubble .meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-  .bubble .who { font-size: 12px; font-weight: 700; color: var(--ice); }
-  .bubble .txt { font-size: 13.5px; color: var(--text); }
-  .bubble .sub { font-size: 11px; color: var(--text-dim); margin-top: 7px; }
+  /* phone */
+  .phone{background:#0b1622;border:1px solid var(--line);border-radius:26px;padding:14px;max-width:330px;margin:0 auto}
+  .phone .top{display:flex;align-items:center;gap:10px;padding:8px 6px 12px;border-bottom:1px solid var(--line);margin-bottom:12px}
+  .phone .av{width:36px;height:36px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-weight:700;color:#06210f}
+  .phone .nm{font-size:13.5px;font-weight:700}
+  .phone .on{font-size:11px;color:var(--green)}
+  .chat{display:flex;flex-direction:column;gap:10px;min-height:300px;max-height:430px;overflow-y:auto;padding:4px}
+  .msg{background:#1f3a2e;border:1px solid #2a5740;border-radius:12px 12px 12px 4px;padding:10px 12px;max-width:90%;font-size:13.5px;animation:msgin .4s ease;align-self:flex-start}
+  .msg.tpl{background:#2a2f3a;border-color:#3a4150}
+  @keyframes msgin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .msg .t{font-size:10px;color:var(--gray);margin-top:6px;display:flex;justify-content:space-between;gap:8px}
+  .typing{align-self:flex-start;background:#1f3a2e;border-radius:12px;padding:12px 16px;display:none}
+  .typing.show{display:block}
+  .typing span{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--dim);margin:0 2px;animation:blink 1.2s infinite}
+  .typing span:nth-child(2){animation-delay:.2s} .typing span:nth-child(3){animation-delay:.4s}
+  @keyframes blink{0%,60%,100%{opacity:.3}30%{opacity:1}}
 
-  .empty { color: var(--gray); font-size: 13px; text-align: center; padding: 30px 0; }
-  .footer { margin-top: 24px; text-align: center; color: var(--gray); font-size: 11px; }
+  .stats{display:flex;gap:24px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+  .stat .b{font-size:24px;font-weight:800}
+  .stat .l{font-size:11px;color:var(--gray)}
+  .empty{color:var(--gray);font-size:13px;text-align:center;padding:30px 0}
+  .footer{margin-top:26px;text-align:center;color:var(--gray);font-size:11px;line-height:1.6}
 </style>
 </head>
 <body>
@@ -125,239 +87,152 @@
   <header>
     <div class="brand">
       <h1>Flow<span>Pedidos</span></h1>
-      <p>Demostración en vivo · procesamiento real de pedidos</p>
+      <p>Demostración · una venta entra, se organiza, el cliente recibe su mensaje</p>
     </div>
     <div class="controls">
       <button class="btn-ghost" id="btnReset">Reiniciar</button>
-      <button class="btn-primary" id="btnProcess">Procesar siguiente pedido →</button>
+      <button class="btn-primary" id="btnNext">Simular próxima venta →</button>
     </div>
   </header>
 
-  <!-- Pipeline -->
-  <div class="pipeline">
-    <div class="pipeline-title" id="pipeTitle">Pipeline de procesamiento</div>
-    <div class="stages" id="stages"></div>
+  <div class="intro">
+    Cada vez que entra una venta — desde Mercado Libre, WhatsApp, tu tienda online — FlowPedidos la
+    captura, la organiza junto a las demás y le avisa al cliente automáticamente. A la izquierda ves
+    el panel del vendedor; a la derecha, lo que recibe el cliente en su teléfono.
   </div>
 
-  <!-- Stats -->
-  <div class="stats">
-    <div class="stat ok"><div class="big" id="sProc">0</div><div class="lab">Procesados</div></div>
-    <div class="stat dup"><div class="big" id="sDup">0</div><div class="lab">Duplicados bloqueados</div></div>
-    <div class="stat rej"><div class="big" id="sRej">0</div><div class="lab">Rechazados</div></div>
-    <div class="stat cost"><div class="big" id="sCost">US$0</div><div class="lab">Costo total en IA</div></div>
-  </div>
+  <div class="toast" id="toast"><span class="ico">👋</span><span id="toastTxt">Presioná "Simular próxima venta" para empezar.</span></div>
 
-  <!-- Columns -->
   <div class="cols">
+    <!-- Panel del vendedor -->
     <div class="panel">
-      <h2>Pedidos · todos los canales en un solo lugar</h2>
+      <div class="ph"><h2>Panel del vendedor</h2></div>
+      <div class="hint">Todos los canales, en un solo lugar. Antes esto estaba disperso en plataformas distintas.</div>
       <table>
-        <thead><tr><th>Pedido</th><th>Cliente</th><th>Producto</th><th>Total</th><th>Estado</th></tr></thead>
-        <tbody id="ordersBody"><tr><td colspan="5" class="empty">Sin pedidos todavía. Presioná "Procesar siguiente pedido".</td></tr></tbody>
+        <thead><tr><th>Canal</th><th>Cliente</th><th>Producto</th><th>Total</th><th>Estado</th></tr></thead>
+        <tbody id="orders"><tr><td colspan="5" class="empty">Todavía no entró ninguna venta.</td></tr></tbody>
       </table>
+      <div class="stats">
+        <div class="stat"><div class="b" id="sOrders">0</div><div class="l">pedidos unificados</div></div>
+        <div class="stat"><div class="b" id="sChannels">0</div><div class="l">canales</div></div>
+        <div class="stat"><div class="b" id="sMsg">0</div><div class="l">mensajes enviados</div></div>
+      </div>
     </div>
+
+    <!-- Teléfono del cliente -->
     <div class="panel">
-      <h2>Mensajes generados</h2>
-      <div class="bubbles" id="bubbles"><div class="empty">Los mensajes aparecerán acá.</div></div>
+      <div class="ph"><h2>Lo que recibe tu cliente</h2></div>
+      <div class="hint">Mensaje automático, según el estado del pedido.</div>
+      <div class="phone">
+        <div class="top">
+          <div class="av">N</div>
+          <div><div class="nm">Neumáticos Mendoza</div><div class="on">en línea</div></div>
+        </div>
+        <div class="chat" id="chat">
+          <div class="empty" id="chatEmpty">Los mensajes aparecerán acá.</div>
+          <div class="typing" id="typing"><span></span><span></span><span></span></div>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="footer">
     FlowPedidos · Trabajo Final Integrador · Tecnicatura Universitaria en Programación · UTN FRM 2026<br>
-    Datos reales: PostgreSQL + integración Mercado Libre (simulada) + generación con IA
+    Datos reales: PostgreSQL + integración multicanal (simulada) + mensajes generados con IA
   </div>
-
 </div>
 
 <script>
-const STAGE_DEFS = [
-  'Webhook', 'Validar', 'Enrich', 'Normalizar',
-  'Idempotencia', 'Cliente', 'Persistir', 'Items', 'Seudonimizar', 'IA', 'Auditar'
-];
-
+const CH_NAME = { mercadolibre:'Mercado Libre', whatsapp:'WhatsApp', woocommerce:'Tienda Online', tienda_nube:'Tienda Nube' };
 const $ = (id) => document.getElementById(id);
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+let busy = false, done = false;
 
-function renderStages() {
-  $('stages').innerHTML = STAGE_DEFS.map((s, i) =>
-    `<div class="stage" id="stg${i}"><div class="num">${i+1}</div><div class="lbl">${s}</div><div class="detail" id="dtl${i}"></div></div>`
-  ).join('');
-}
-function clearStages() {
-  STAGE_DEFS.forEach((_, i) => {
-    const el = $('stg'+i); el.className = 'stage'; $('dtl'+i).textContent = '';
-  });
+function toast(txt, cls='show') {
+  const t = $('toast');
+  t.className = 'toast ' + cls;
+  $('toastTxt').innerHTML = txt;
 }
 
-// Mapea cada paso del backend a un índice de stage visual
-function stageIndexFor(label) {
-  if (label.includes('Webhook')) return 0;
-  if (label.includes('Validaci')) return 1;
-  if (label.includes('enrich') || label.includes('plataforma')) return 2;
-  if (label.includes('Normaliza')) return 3;
-  if (label.includes('duplicado')) return 4;
-  if (label.includes('Cliente')) return 5;
-  if (label.includes('persistido')) return 6;
-  if (label.includes('Items')) return 7;
-  if (label.includes('Seudonim')) return 8;
-  if (label.includes('IA') || label.includes('OpenAI')) return 9;
-  if (label.includes('Notificaci') || label.includes('Auditar')) return 10;
-  return 0;
+function chanCell(ch) {
+  return `<span class="chan"><span class="dot ${ch}"></span>${CH_NAME[ch]||ch}</span>`;
 }
 
-async function animateSteps(steps) {
-  clearStages();
-  for (const st of steps) {
-    const idx = stageIndexFor(st.label);
-    const el = $('stg'+idx);
-    el.classList.add('active');
-    await sleep(420);
-    el.classList.remove('active');
-    el.classList.add(st.status === 'ok' ? 'ok' : st.status === 'warn' ? 'warn' : 'err');
-    $('dtl'+idx).textContent = st.detail || '';
-  }
+function addOrderRow(d) {
+  const tb = $('orders');
+  if (tb.querySelector('.empty')) tb.innerHTML = '';
+  const tr = document.createElement('tr');
+  tr.className = 'new';
+  tr.dataset.key = d.channel + ':' + d.order_external;
+  tr.innerHTML = `<td>${chanCell(d.channel)}</td>
+    <td>${d.customer_name}</td>
+    <td class="prod" title="${d.primary_product}">${d.primary_product}</td>
+    <td>$${Number(d.total).toLocaleString('es-AR')}</td>
+    <td><span class="st">${d.status}</span></td>`;
+  tb.appendChild(tr);
 }
 
-let busy = false;
-async function processNext() {
-  if (busy) return;
-  busy = true; $('btnProcess').disabled = true; $('btnReset').disabled = true;
-  try {
-    const r = await fetch('/api/process', { method: 'POST' });
-    const data = await r.json();
-    if (data.done) {
-      $('pipeTitle').textContent = 'Secuencia completa — presioná Reiniciar para repetir';
-      $('btnProcess').disabled = true;
-      busy = false; $('btnReset').disabled = false;
-      return;
-    }
-    $('pipeTitle').textContent = `Procesando: ${data.label}  ·  ${data.order_external}`;
-    await animateSteps(data.steps);
-    await refreshState();
-    if (data.result === 'processed' && data.message) addBubble(data);
-  } catch (e) {
-    alert('Error: ' + e.message);
-  } finally {
-    busy = false;
-    $('btnReset').disabled = false;
-    $('btnProcess').disabled = ($('btnProcess').dataset.done === '1');
-  }
-}
-
-function fmtMoney(n) {
-  const v = Number(n || 0);
-  return v === 0 ? 'US$0' : 'US$' + v.toFixed(6);
-}
-
-async function refreshState() {
-  const r = await fetch('/api/state');
-  const s = await r.json();
-  // stats
-  let proc = 0, dup = 0;
-  // contamos desde las órdenes + necesitamos rejected; usamos counts y seq
-  $('sProc').textContent = s.counts.pedidos;
-  $('sCost').textContent = fmtMoney(s.counts.costo_total);
-  // orders table
-  const body = $('ordersBody');
-  if (!s.orders.length) {
-    body.innerHTML = '<tr><td colspan="5" class="empty">Sin pedidos todavía.</td></tr>';
-  } else {
-    body.innerHTML = s.orders.map(o => {
-      const prod = (o.message_text ? '' : '') + shortProduct(o);
-      const tag = o.provider === 'openai' ? '<span class="tag-ia">IA</span>' : (o.provider === 'template' ? '<span class="tag-tpl">plantilla</span>' : '');
-      return `<tr class="new">
-        <td>#${o.external_id.slice(-4)}</td>
-        <td>${o.pseudonym || '—'}</td>
-        <td>${prod}</td>
-        <td>$${Number(o.total_amount).toLocaleString('es-AR')}</td>
-        <td><span class="pill paid">${o.status}</span> ${tag}</td>
-      </tr>`;
-    }).join('');
-  }
-  if (typeof s.seqIndex === 'number' && s.seqIndex >= s.seqTotal) {
-    $('btnProcess').dataset.done = '1';
-    $('btnProcess').disabled = true;
-  }
-}
-
-function shortProduct(o) {
-  // no tenemos el producto directo en el state; lo dejamos genérico desde el mensaje
-  return '<span style="color:var(--text-dim)">ver mensaje</span>';
-}
-
-const bubbleSeen = new Set();
-function addBubble(data) {
-  const key = data.order_external + ':' + (data.message.is_fallback ? 't' : 'i');
-  if (bubbleSeen.has(key)) return;
-  bubbleSeen.add(key);
-  const cont = $('bubbles');
-  if (cont.querySelector('.empty')) cont.innerHTML = '';
-  const m = data.message;
-  const who = m.is_fallback ? 'Plantilla de respaldo' : 'Mensaje IA';
-  const cls = m.is_fallback ? 'bubble tpl' : 'bubble';
-  const sub = m.is_fallback
-    ? `degradación funcional · ${data.order_external.slice(-4)}`
-    : `${m.latency_ms} ms · US$${(m.cost_usd||0).toFixed(6)} · confianza ${m.confidence ?? '—'}`;
+async function showMessage(d) {
+  const chat = $('chat');
+  const empty = $('chatEmpty'); if (empty) empty.remove();
+  const typing = $('typing');
+  typing.classList.add('show');
+  chat.scrollTop = chat.scrollHeight;
+  await sleep(1100);
+  typing.classList.remove('show');
+  const m = d.message;
   const div = document.createElement('div');
-  div.className = cls;
-  div.innerHTML = `<div class="meta"><span class="who">${who}</span><span class="${m.is_fallback?'tag-tpl':'tag-ia'}">${m.is_fallback?'plantilla':'IA'}</span></div>
-    <div class="txt">${m.text}</div><div class="sub">${sub}</div>`;
-  cont.prepend(div);
+  div.className = 'msg' + (m.is_fallback ? ' tpl' : '');
+  const tag = m.is_fallback ? 'mensaje de respaldo' : 'generado por IA';
+  div.innerHTML = `${m.text}<div class="t"><span>para ${d.customer_name}</span><span>${tag}</span></div>`;
+  chat.insertBefore(div, typing);
+  chat.scrollTop = chat.scrollHeight;
 }
 
-async function resetAll() {
-  await fetch('/api/reset', { method: 'POST' });
-  bubbleSeen.clear();
-  $('bubbles').innerHTML = '<div class="empty">Los mensajes aparecerán acá.</div>';
-  $('ordersBody').innerHTML = '<tr><td colspan="5" class="empty">Sin pedidos todavía.</td></tr>';
-  $('sProc').textContent = '0'; $('sDup').textContent = '0'; $('sRej').textContent = '0'; $('sCost').textContent = 'US$0';
-  clearStages();
-  $('pipeTitle').textContent = 'Pipeline de procesamiento';
-  $('btnProcess').dataset.done = '0';
-  $('btnProcess').disabled = false;
-  // contadores locales
-  counters = { proc: 0, dup: 0, rej: 0 };
+async function refreshStats() {
+  const r = await fetch('/api/state'); const s = await r.json();
+  $('sOrders').textContent = s.counts.pedidos;
+  $('sChannels').textContent = s.counts.canales;
+  $('sMsg').textContent = s.counts.mensajes_ia;
 }
 
-// Contadores locales para dup/rej (el state global no los separa)
-let counters = { proc: 0, dup: 0, rej: 0 };
-const _origProcess = processNext;
-async function processNextTracked() {
-  const before = $('sProc').textContent;
-  await _origProcess();
-}
-
-$('btnProcess').addEventListener('click', async () => {
-  // interceptamos el resultado para contar dup/rej
-  if (busy) return;
-  busy = true; $('btnProcess').disabled = true; $('btnReset').disabled = true;
+async function next() {
+  if (busy || done) return;
+  busy = true; $('btnNext').disabled = true; $('btnReset').disabled = true;
   try {
-    const r = await fetch('/api/process', { method: 'POST' });
-    const data = await r.json();
-    if (data.done) {
-      $('pipeTitle').textContent = 'Secuencia completa — presioná Reiniciar para repetir';
-      return;
+    const r = await fetch('/api/process', { method:'POST' });
+    const d = await r.json();
+    if (d.done) { done = true; toast('Demostración completa. Presioná Reiniciar para repetir.', 'show'); return; }
+
+    if (d.result === 'processed') {
+      toast(`<span class="ico">🛒</span> Nueva venta en <b>${CH_NAME[d.channel]}</b> — ${d.customer_name} compró ${d.primary_product}`);
+      await sleep(700);
+      addOrderRow(d);
+      await refreshStats();
+      await showMessage(d);
+    } else if (d.result === 'duplicate') {
+      toast(`<span class="ico">🛡️</span> Esa venta ya había entrado. La <b>bloqueamos</b> — a ${d.customer_name||'tu cliente'} no se le cobra dos veces.`, 'dup');
+      const row = document.querySelector(`tr[data-key="${d.channel}:${d.order_external}"]`);
+      if (row) { row.classList.remove('flash'); void row.offsetWidth; row.classList.add('flash'); }
+    } else if (d.result === 'rejected') {
+      toast(`<span class="ico">🚫</span> Llegó una notificación <b>incompleta</b>. Se descartó — tus datos quedan limpios.`, 'rej');
     }
-    $('pipeTitle').textContent = `Procesando: ${data.label} · ${data.order_external}`;
-    await animateSteps(data.steps);
-    if (data.result === 'duplicate') { counters.dup++; $('sDup').textContent = counters.dup; }
-    if (data.result === 'rejected') { counters.rej++; $('sRej').textContent = counters.rej; }
-    await refreshState();
-    if (data.result === 'processed' && data.message) addBubble(data);
-    if (data.seqIndex >= data.seqTotal) { $('btnProcess').dataset.done = '1'; }
-  } catch (e) { alert('Error: ' + e.message); }
+  } catch(e) { toast('Error: ' + e.message, 'rej'); }
   finally {
-    busy = false;
-    $('btnReset').disabled = false;
-    $('btnProcess').disabled = ($('btnProcess').dataset.done === '1');
+    busy = false; $('btnReset').disabled = false; $('btnNext').disabled = done;
   }
-});
+}
 
-$('btnReset').addEventListener('click', resetAll);
+async function reset() {
+  await fetch('/api/reset', { method:'POST' });
+  done = false;
+  $('orders').innerHTML = '<tr><td colspan="5" class="empty">Todavía no entró ninguna venta.</td></tr>';
+  $('chat').innerHTML = '<div class="empty" id="chatEmpty">Los mensajes aparecerán acá.</div><div class="typing" id="typing"><span></span><span></span><span></span></div>';
+  $('sOrders').textContent='0'; $('sChannels').textContent='0'; $('sMsg').textContent='0';
+  $('btnNext').disabled = false;
+  toast('Listo para empezar. Presioná "Simular próxima venta".', 'show');
+}
 
-// init
-renderStages();
-refreshState();
-</script>
-</body>
-</html>
+$('btnNext').addEventListener('click', next);
+$('btnReset').addEventListener('click', reset);
+refreshStats();

@@ -1,0 +1,35 @@
+{
+  "mercadolibre:3000000000000001": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "message_text": "Tu pedido del Neumático Bridgestone Ecopia EP150 185/65 R14 ha sido recibido y ya está pago. Te mantendremos informado sobre el estado de tu envío. Gracias por elegirnos.",
+    "tone": "informativo",
+    "confidence": 1,
+    "prompt_tokens": 251,
+    "completion_tokens": 58,
+    "cost_usd": 0.000072,
+    "latency_ms": 2233
+  },
+  "whatsapp:3000000000000003": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "message_text": "Tu pedido de un Neumático Bridgestone Ecopia EP150 185/65 R14 ha sido recibido y ya está pago. Estamos procesando tu compra y te mantendremos informado sobre el estado de tu envío.",
+    "tone": "informativo",
+    "confidence": 1,
+    "prompt_tokens": 253,
+    "completion_tokens": 60,
+    "cost_usd": 0.000074,
+    "latency_ms": 1608
+  },
+  "woocommerce:3000000000000010": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "message_text": "Tu pedido de un Neumático Bridgestone Turanza T005 205/55 R16 ha sido recibido y está pago. Estamos procesando tu solicitud. Gracias por elegirnos.",
+    "tone": "informativo",
+    "confidence": 1,
+    "prompt_tokens": 252,
+    "completion_tokens": 52,
+    "cost_usd": 0.000069,
+    "latency_ms": 1240
+  }
+}
