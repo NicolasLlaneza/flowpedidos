@@ -46,3 +46,6 @@ mocks/data/orders/30*.json
 # Material de presentación/tesis (no es parte del funcionamiento de la app)
 docs/
 video/
+
+# Config de herramientas de dev (no es parte de la app)
+.claude/
