@@ -1,114 +1,81 @@
-# Guion de narración — Video de funcionamiento (demo técnico)
+# Guion de narración — Video de funcionamiento (MVP)
 
-**Destino**: video que pide el coordinador, explicado por ustedes, mostrando el funcionamiento real.
-**Tono**: técnico-explicativo (NO comercial — este es distinto al pitch de FlowPedidos).
-**Formato**: voz en off sobre la grabación del terminal corriendo `node run-demo.mjs`.
-**Duración estimada**: 2:30 – 3:30 min (el demo tarda ~30-40s en correr; la narración puede pausar el video en momentos clave).
-
----
-
-## Dos versiones para grabar
-
-- **Dashboard web** (recomendado): `node demo/web/server.mjs` → http://localhost:4000. Muestra el escenario real (panel del vendedor + teléfono del cliente). Narración propia abajo.
-- **CLI** (terminal): `node demo/run-demo.mjs`. Muestra el detalle técnico del pipeline. Narración técnica más abajo.
+**Destino**: video que pide el coordinador, mostrando el funcionamiento real, explicado por ustedes.
+**Sobre qué se graba**: el panel de operación en http://localhost:4000.
+**Tono**: técnico-explicativo. Se introduce terminología y se la explica en lenguaje claro.
+**Duración estimada**: 3 a 4 minutos.
+**Narración**: una sola voz, en off.
 
 ---
-
-## NARRACIÓN PARA EL DASHBOARD (vista de negocio)
-
-Esta es la recomendada para el coordinador: muestra qué hace el pedido, no las tripas del sistema.
-
-### Apertura
-> "Esto es FlowPedidos funcionando. A la izquierda está el panel del vendedor; a la derecha, el teléfono del cliente. Vamos a simular ventas que entran desde distintos canales y ver qué pasa con cada una."
-
-### Venta 1 — Mercado Libre
-*(click "Simular próxima venta")*
-> "Entra una venta desde Mercado Libre. FlowPedidos la captura, la organiza en el panel junto con todos los datos del cliente y el producto, y miren el teléfono: el cliente recibe automáticamente un mensaje confirmando su compra. Ese mensaje lo generó la inteligencia artificial según el estado del pedido — nadie lo escribió a mano."
-
-### Venta 2 — WhatsApp
-> "Ahora entra una venta por WhatsApp. Otro canal completamente distinto, pero cae en el mismo panel, unificada con la anterior. El cliente también recibe su mensaje. Esto es lo central: no importa de qué canal venga, todo queda en un solo lugar."
-
-### Venta 3 — Tienda Online
-> "Una tercera venta, esta vez desde la tienda online propia. Tres canales distintos, una sola vista ordenada. Antes esto vivía disperso en tres plataformas separadas."
-
-### Venta 4 — Duplicado
-> "Acá pasa algo importante. La primera venta vuelve a entrar — algo común cuando las plataformas reenvían notificaciones. FlowPedidos la reconoce y la bloquea. Al cliente no se le cobra dos veces ni se le manda otro mensaje. El panel no se ensucia con un duplicado."
-
-### Venta 5 — Servicio caído (respaldo)
-> "Ahora simulamos que el servicio de inteligencia artificial se cae. Miren: el cliente igual recibe una respuesta, esta vez con un mensaje de respaldo. El sistema no se rompe ni deja al cliente esperando — sigue funcionando aunque un componente externo falle."
-
-### Venta 6 — Notificación incompleta
-> "Por último, llega una notificación incompleta, sin los datos mínimos. FlowPedidos la descarta. No deja que información defectuosa entre al sistema."
-
-### Cierre
-> "En segundos procesamos ventas de tres canales, evitamos un cobro duplicado, resolvimos una caída de servicio y filtramos una notificación inválida. Todo automático, todo ordenado, sin intervención manual. Esto es FlowPedidos."
-
----
-
-## NARRACIÓN TÉCNICA PARA EL CLI (terminal)
-
-Usar esta si grabás `node demo/run-demo.mjs` (muestra los pasos internos).
 
 ## Antes de grabar
 
-1. **Cargar crédito en OpenAI** (ya está hecho — verificado funcionando).
-2. Correr `node demo/reset.mjs` (o el botón "Reiniciar" del dashboard) para limpiar la base.
-3. **Dashboard**: maximizar el navegador, zoom 110-125%. **CLI**: terminal con fuente grande (16-18pt), tema oscuro.
-4. Ensayá una vuelta antes de grabar la toma buena.
-
-## Ritmo del dashboard
-
-Cada click de "Procesar siguiente pedido" anima la barra de etapas (~4-5 seg), después aparece el pedido en la tabla y el mensaje en la columna de la derecha. Narrá mientras se anima. La secuencia tiene 6 pasos (3 con IA, 1 duplicado, 1 fallback, 1 rechazo) — al final mostrás los stats y la tabla llena.
+1. Stack arriba: `docker compose up -d`
+2. Levantar el panel: `node demo/web/server.mjs`
+3. En el navegador, abrir http://localhost:4000 y, si está vacío, presionar **"Cargar pedidos"** (esto ingesta el dataset por el pipeline real; los mensajes ya están cacheados, no gasta IA).
+4. Tener un pedido elegido para mostrar el detalle (idealmente uno con mensaje de IA).
+5. Maximizar el navegador, zoom 110%.
 
 ---
 
-## Estructura de la narración
+## Glosario que se usa en la narración
 
-### Apertura (antes de correr el comando)
-> "Lo que vamos a mostrar es el pipeline de procesamiento de pedidos funcionando de punta a punta. No son pantallas de ejemplo: el sistema recibe pedidos reales, los procesa, los guarda en una base de datos PostgreSQL, y genera los mensajes con inteligencia artificial. Todo lo que van a ver ocurre de verdad."
+Para que la narración suene precisa, estos son los términos y su explicación breve:
 
-*(Acá ejecutás `node run-demo.mjs`)*
-
----
-
-### Pedido 1 — Happy path (el flujo completo)
-> "El primer pedido entra desde Mercado Libre. El sistema valida que la notificación tenga la estructura correcta. Después consulta la plataforma para traer todos los datos completos del pedido — esto se llama enriquecimiento. Acá viene un paso clave: la normalización. Cada plataforma representa los datos distinto, así que el sistema los convierte a un modelo común, único. Verifica que no sea un duplicado, registra al cliente, y persiste el pedido en la base."
-
-> "Antes de generar el mensaje, observen este paso: seudonimización. Al servicio de inteligencia artificial solo le mandamos un identificador anónimo del cliente, nunca su nombre, mail o teléfono. Eso es privacidad por diseño. Y finalmente, la IA genera el mensaje personalizado para el comprador."
-
-*(Señalar el mensaje generado en pantalla)*
-> "Este mensaje no estaba escrito de antemano. Lo generó el modelo en este momento, según el estado del pedido."
+- **Webhook**: notificación automática que una plataforma (Mercado Libre, etc.) envía cuando ocurre un evento, como una nueva venta.
+- **Pipeline**: la secuencia de pasos por la que pasa cada pedido, de principio a fin.
+- **Modelo de datos canónico**: una estructura única y común a la que se traducen los pedidos de todos los canales, sin importar el formato original de cada uno.
+- **Normalización**: el proceso de convertir los datos de cada canal a ese modelo común.
+- **Idempotencia**: la propiedad que garantiza que procesar el mismo evento dos veces produzca el mismo resultado — es decir, no duplica ni vuelve a cobrar.
+- **Seudonimización**: reemplazar los datos personales por un identificador anónimo antes de enviarlos a un servicio externo.
+- **Trazabilidad / auditoría**: el registro de cada paso que ocurrió con un pedido, para poder reconstruir su historia.
 
 ---
 
-### Pedido 2 — Consistencia
-> "El segundo pedido sigue exactamente el mismo flujo. Esto muestra que el proceso es consistente, no un caso armado."
+## NARRACIÓN
+
+### Apertura — qué es esto
+> "Lo que estamos viendo es el panel de operación de FlowPedidos, nuestra arquitectura de integración multicanal para PyMEs de comercio electrónico. No son pantallas de ejemplo: cada pedido que aparece acá fue procesado de verdad por el sistema, almacenado en una base de datos PostgreSQL, y su mensaje fue generado con inteligencia artificial."
+
+### El panel — el valor
+> "Arriba tenemos los indicadores de operación: cantidad de pedidos procesados, ingresos, pedidos pendientes, mensajes enviados, y la cantidad de canales activos. Acá está la primera idea central: estos pedidos llegaron desde cuatro canales distintos — Mercado Libre, WhatsApp, una tienda online y Tienda Nube — pero están todos unificados en una sola vista. Esto es lo que resuelve la fragmentación operativa: en lugar de revisar cuatro plataformas por separado, el negocio tiene un único punto de control."
+
+### Cómo llega un pedido — el pipeline con terminología
+> "¿Cómo llega cada pedido hasta acá? A través de un pipeline de varios pasos. Primero, la plataforma de venta emite un webhook — una notificación automática — cuando se genera una orden. El sistema valida que esa notificación tenga la estructura correcta. Después consulta la plataforma para traer los datos completos del pedido, un paso que llamamos enriquecimiento."
+
+> "El paso clave que viene a continuación es la normalización al modelo de datos canónico. Cada canal representa la información de forma diferente; el sistema traduce todos esos formatos a una estructura común y única. Eso es lo que permite que un pedido de Mercado Libre y uno de WhatsApp convivan en la misma tabla con la misma estructura."
+
+> "Antes de guardar, el sistema aplica un control de idempotencia: verifica que el pedido no haya sido procesado antes. Esto evita duplicados cuando una plataforma reenvía la misma notificación, algo que ocurre con frecuencia. Si el pedido es nuevo, se persiste en la base junto con el cliente y los productos."
+
+### El detalle — privacidad y trazabilidad
+*(click en un pedido)*
+> "Si abrimos un pedido, vemos su detalle completo. Acá hay un punto importante de diseño: el cliente se identifica con su nombre real para el vendedor, pero observen el seudónimo. Cuando el sistema genera el mensaje con inteligencia artificial, le envía únicamente ese seudónimo — nunca el nombre, el email ni el teléfono. Esto es seudonimización, y responde al principio de privacidad por diseño."
+
+> "Más abajo está el mensaje que recibió el cliente, generado automáticamente por el modelo de lenguaje según el estado del pedido. Y al final, la trazabilidad: el registro cronológico de cada paso que ocurrió con este pedido. En cualquier momento se puede reconstruir exactamente qué pasó, cuándo y por qué."
+
+### Filtros / multicanal
+*(usar el filtro de canal o estado)*
+> "El panel permite filtrar por canal, por estado o buscar un pedido puntual. Esto convierte la operación, que antes estaba dispersa y era manual, en una gestión centralizada y consultable."
+
+### Cierre
+> "En resumen: FlowPedidos recibe pedidos de múltiples canales mediante webhooks, los normaliza a un modelo de datos común, controla duplicados con idempotencia, protege los datos personales mediante seudonimización, genera comunicaciones con inteligencia artificial, y deja trazabilidad completa de todo el proceso. Esto demuestra que la lógica de la arquitectura propuesta funciona de manera integrada y reproducible."
 
 ---
 
-### Pedido 3 — Idempotencia (el reenvío)
-> "Ahora viene algo importante. Este es el mismo pedido que el primero, reenviado — algo que pasa todo el tiempo en la realidad, cuando la plataforma manda la notificación dos veces. Miren: el sistema lo detecta, marca que ya existe, y lo bloquea. No se procesa de nuevo, no se le cobra al cliente dos veces, no se le manda otro mensaje. Esto es el control de idempotencia."
+## Notas de grabación
+
+- **Si querés mostrar resiliencia**: el sistema tiene un mecanismo de degradación funcional — si el servicio de IA falla, genera el mensaje con una plantilla de respaldo. En el panel, los pedidos con respaldo muestran la etiqueta "plantilla de respaldo" en su detalle. Podés mencionarlo aunque no haya uno visible.
+- **Honestidad académica**: esto es un MVP evaluado en entorno controlado, no un producto en producción. Si lo aclarás, suma rigor: "esta es una implementación de referencia, evaluada con un conjunto de pedidos representativos".
+- **Ritmo**: pausar al pasar de un bloque al siguiente. No leer de corrido.
+- **Términos**: la primera vez que uses un término técnico, explicalo en la misma frase (como está redactado arriba). No asumas que el coordinador conoce "idempotencia" o "canónico".
 
 ---
 
-### Pedido 4 — Resiliencia (el fallback)
-> "Acá simulamos una falla del servicio de inteligencia artificial — porque en producción, los servicios externos a veces no responden. Observen qué hace el sistema: en lugar de romperse o dejar al cliente sin respuesta, degrada a una plantilla predefinida. El cliente igual recibe una comunicación válida. Esto es la resiliencia: el sistema sigue funcionando aunque un componente externo falle."
+## Comando para mostrar la base directamente (opcional, cierre técnico)
 
----
+Si querés cerrar mostrando que los datos están realmente en PostgreSQL:
 
-### Pedido 5 — Validación (el rechazo)
-> "El último evento es una notificación inválida, sin los datos mínimos. El sistema la rechaza con un código de error, la registra en la auditoría, y no deja que información defectuosa avance por el pipeline."
-
----
-
-### Cierre (sobre el resumen final)
-> "El resumen muestra lo que pasó: pedidos procesados, duplicados bloqueados, eventos rechazados, y el costo real en inteligencia artificial. Y abajo, el estado de la base de datos: cada pedido, cliente, ítem y notificación quedó registrado, junto con la traza completa de auditoría de cada paso. Todo esto ocurrió en segundos, de forma automática, y quedó documentado. Esto demuestra que la lógica de la arquitectura propuesta funciona."
-
----
-
-## Notas
-
-- Si grabás con el fallback activo (sin crédito OpenAI), **cambiá la narración del Pedido 1**: en vez de "la IA genera el mensaje", decí "el sistema genera el mensaje — en este caso por plantilla, porque mostramos también el mecanismo de respaldo". Es honesto y sigue siendo válido.
-- Lo ideal es grabar CON crédito para mostrar la IA real en los pedidos 1 y 2, y dejar el fallback solo para el pedido 4 (donde lo forzamos a propósito).
-- Si el coordinador quiere ver la base de datos directamente, podés agregar al final una consulta en vivo:
-  `docker compose exec postgres psql -U tfi_app -d tfi -c "SELECT external_id, status, (SELECT message_text FROM tfi.ai_notifications n WHERE n.order_id=o.id) FROM tfi.orders o;"`
+```bash
+docker compose exec postgres psql -U tfi_app -d tfi -c \
+"SELECT external_id, channel, status, (SELECT message_text FROM tfi.ai_notifications n WHERE n.order_id=o.id) AS mensaje FROM tfi.orders o LIMIT 5;"
+```
