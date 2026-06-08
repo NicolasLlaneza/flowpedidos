@@ -4,7 +4,7 @@ Esta carpeta contiene los **artefactos que viven dentro de los nodos** del workf
 
 Cuando el workflow esté funcionando, exportarlo a `workflow.json` y guardarlo acá también.
 
-## Arquitectura del flujo (Fase 3)
+## Arquitectura del flujo (Fase 3 + despacho WhatsApp)
 
 ```
 [Webhook trigger: POST /webhook/ml-order]
@@ -34,21 +34,42 @@ Cuando el workflow esté funcionando, exportarlo a `workflow.json` y guardarlo a
                                 ↓
                          [Postgres: 04_insert_items.sql]
                                 ↓
-                         [Code: build prompt v1 con pseudonym]
+                         [Code: build-llm-prompt.js]
                                 ↓
                          [OpenAI: chat completion]
                                 ↓
-                         [Code: parse JSON + validar respuesta]
+                         [Code: parse-llm-response.js]
                                 ↓
                             válida?
                             /     \
                            no      sí
                            ↓       ↓
-                    [usar plantilla] [usar mensaje LLM]
+                    [fallback-template.js]
                            ↓       ↓
                          [Postgres: 06_insert_ai_notification.sql]
                                 ↓
-                         [Audit: persisted_ok]
+                    ── DESPACHO WHATSAPP ──────────────────
+                                ↓
+                         [Postgres: 07_get_customer_phone.sql]
+                                ↓
+                         [Code: build-wa-payload.js]
+                                ↓
+                           phone ok?
+                           /       \
+                          no        sí
+                          ↓         ↓
+                   [Audit:   [HTTP Request: Meta Cloud API
+                    no_phone  POST /{PHONE_NUMBER_ID}/messages]
+                    → failed]          ↓
+                          ↓      Meta ok?
+                          ↓      /       \
+                          ↓    sí         no
+                          ↓    ↓           ↓
+                          ↓  status=sent  status=failed
+                          ↓    ↓           ↓
+                         [Postgres: 08_update_dispatch.sql]
+                                ↓
+                         [Audit: dispatch_ok / dispatch_failed]
                                 ↓
                          [Respond 200]
 ```
@@ -63,6 +84,9 @@ Cuando el workflow esté funcionando, exportarlo a `workflow.json` y guardarlo a
 | `Build LLM prompt`     | `lib/build-llm-prompt.js`     | Run Once for Each Item |
 | `Parse LLM response`   | `lib/parse-llm-response.js`   | Run Once for Each Item |
 | `Fallback template`    | `lib/fallback-template.js`    | Run Once for Each Item |
+| `Build WA payload`     | `lib/build-wa-payload.js`     | Run Once for Each Item |
+| `Merge dispatch ctx`   | `lib/merge-dispatch-context.js` | Run Once for Each Item |
+| `Parse WA response`    | `lib/parse-wa-response.js`    | Run Once for Each Item |
 
 ### Nodos de Postgres
 Credencial a usar: **`tfi_app`** (no el superuser n8n).
@@ -82,12 +106,48 @@ Configurar una vez en Settings → Credentials → New → Postgres:
 | `Insert items`          | `sql/04_insert_items.sql`          | Execute Query |
 | `Audit ...`             | `sql/05_insert_audit.sql`          | Execute Query |
 | `Insert ai_notification`| `sql/06_insert_ai_notification.sql`| Execute Query |
+| `Get customer phone`    | `sql/07_get_customer_phone.sql`    | Execute Query |
+| `Update dispatch`       | `sql/08_update_dispatch.sql`       | Execute Query |
+
+> **Nota sobre nombres de nodos**: `merge-dispatch-context.js` referencia al nodo Postgres por el nombre exacto `"Insert ai_notification"`. Si le ponés otro nombre en n8n, actualizá la línea `$('Insert ai_notification')` en ese archivo.
 
 ### Nodos HTTP/LLM
 | Nodo en n8n | Config |
 |---|---|
 | `Enrich from mock`     | GET `http://mock-marketplace/orders/{{ $json.order_id }}` |
 | `Call OpenAI`          | OpenAI node → Model: `gpt-4o-mini` → params del `prompts/v1.md` |
+| `Send WhatsApp`        | Ver sección "Configuración nodo Meta API" más abajo |
+
+### Configuración nodo Meta API (`Send WhatsApp`)
+
+Tipo: **HTTP Request**
+
+| Campo | Valor |
+|---|---|
+| Method | POST |
+| URL | `https://graph.facebook.com/v20.0/{{ $env.WHATSAPP_PHONE_NUMBER_ID }}/messages` |
+| Authentication | Generic Credential Type → Header Auth |
+| Header name | `Authorization` |
+| Header value | `Bearer {{ $env.WHATSAPP_ACCESS_TOKEN }}` |
+| Body Content Type | JSON |
+| Body | `{{ JSON.stringify($json.meta_body) }}` |
+| Response | Include response headers: No |
+
+Variables de entorno a agregar en `.env`:
+```
+WHATSAPP_PHONE_NUMBER_ID=  # ID numérico del número de teléfono en Meta Business
+WHATSAPP_ACCESS_TOKEN=     # Token permanente o temporal (System User o Test token)
+```
+
+Respuesta exitosa de Meta (200):
+```json
+{
+  "messaging_product": "whatsapp",
+  "contacts": [{ "input": "+549...", "wa_id": "549..." }],
+  "messages": [{ "id": "wamid.HBgN..." }]
+}
+```
+→ Extraer `wa_message_id` con: `{{ $json.messages?.[0]?.id ?? null }}`
 
 ## Convenciones para el workflow
 
