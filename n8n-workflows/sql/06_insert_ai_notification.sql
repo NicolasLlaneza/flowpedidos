@@ -26,7 +26,8 @@ VALUES (
     $9, $10, $11, $12,
     $13
 )
-RETURNING id AS notification_id, generated_at;
+RETURNING id AS notification_id, order_id, message_text, generated_at;
+-- order_id y message_text son necesarios para los nodos de despacho (07, 08).
 
 -- Parámetros:
 --   $1  = {{ $json.order_id }}
