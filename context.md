@@ -55,7 +55,8 @@ Webhook POST /ml-order
 
 ## Estado del workflow en n8n
 
-**Sesión 2026-06-08** — construido hasta nodo 13:
+**Sesión 2026-06-08** — construido hasta nodo 13.
+**Sesión 2026-06-11** — construido hasta nodo 21:
 
 | # | Nodo | Tipo | Estado |
 |---|------|------|--------|
@@ -72,14 +73,14 @@ Webhook POST /ml-order
 | 11 | `Respond 200 duplicate` | Respond to Webhook | ✅ |
 | 12 | `Upsert customer` | Postgres | ✅ |
 | 13 | `Insert order` | Postgres | ✅ |
-| 14 | `Split items` | Split In Batches | ⏳ |
-| 15 | `Insert items` | Postgres | ⏳ |
-| 16 | `Build LLM prompt` | Code | ⏳ |
-| 17 | `Call OpenAI` | OpenAI | ⏳ |
-| 18 | `Parse LLM response` | Code | ⏳ |
-| 19 | IF `Use fallback?` | IF | ⏳ |
-| 20 | `Fallback template` | Code | ⏳ |
-| 21 | `Insert ai_notification` | Postgres | ⏳ |
+| 14 | `Split items` | Code | ✅ |
+| 15 | `Insert items` | Postgres | ✅ |
+| 16 | `Build LLM prompt` | Code | ✅ |
+| 17 | `Call OpenAI` | OpenAI | ✅ |
+| 18 | `Parse LLM response` | Code | ✅ |
+| 19 | IF `Use fallback?` | IF | ✅ |
+| 20 | `Fallback template` | Code | ✅ |
+| 21 | `Insert ai_notification` | Postgres | ✅ |
 | 22 | `Get customer phone` | Postgres | ⏳ |
 | 23 | `Merge dispatch ctx` | Code | ⏳ |
 | 24 | `Build WA payload` | Code | ⏳ |
@@ -133,7 +134,12 @@ Ver `.env.example`. Críticas para el despacho WA:
 
 ---
 
+## Notas de implementación
+
+- **Nodo 14 (Split items)**: se implementó como Code node (no Item Lists) porque la versión gratuita de n8n no tiene "Split Out Items". El código referencia `$('Normalize ML order')`, `$('Upsert customer')` y `$('Insert order')` para armar un item por producto.
+- **Nodo 17 (Call OpenAI)**: operación "Message a Model". Los mensajes se pasan como `{{ $json.messages[0].content }}` (system) y `{{ $json.messages[1].content }}` (user) directamente en las cajas de texto.
+
 ## Próxima sesión
 
-Continuar desde nodo **14 — Split items** y avanzar hasta el 30.
+Continuar desde nodo **22 — Get customer phone** y avanzar hasta el 30.
 Cuando el workflow esté completo, exportarlo desde n8n y guardar como `n8n-workflows/workflow.json`.
