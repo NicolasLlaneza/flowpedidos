@@ -1,0 +1,1071 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ml-order",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "3cecebb3-af50-40a9-b13c-93bafb56816f",
+      "name": "Webhook ML order",
+      "webhookId": "2f39f422-d721-4e45-8180-ec600db1ee76"
+    },
+    {
+      "parameters": {
+        "jsCode": "  const REQUIRED_FIELDS = ['resource', 'topic', 'user_id'];\n  const RESOURCE_PATTERN = /^\\/orders\\/(\\d+)$/;\n  const SUPPORTED_TOPICS = ['orders_v2'];\n\n  const results = [];\n\n  for (const item of $input.all()) {\n      const payload = item.json;\n      const errors = [];\n\n      for (const field of REQUIRED_FIELDS) {\n          if (payload[field] === undefined || payload[field] === null) {\n              errors.push(`missing_field:${field}`);\n          }\n      }\n\n      let order_id = null;\n      if (payload.resource) {\n          const match = String(payload.resource).match(RESOURCE_PATTERN);\n          if (match) {\n              order_id = match[1];\n          } else {\n              errors.push(`invalid_resource_format:${payload.resource}`);\n          }\n      }\n\n      if (payload.topic && !SUPPORTED_TOPICS.includes(payload.topic)) {\n          errors.push(`unsupported_topic:${payload.topic}`);\n      }\n\n      if (payload.user_id !== undefined && !Number.isFinite(Number(payload.user_id))) {\n          errors.push(`invalid_user_id:${payload.user_id}`);\n      }\n\n      results.push({\n          json: {\n              valid: errors.length === 0,\n              errors,\n              webhook: payload,\n              order_id,\n              channel: 'mercadolibre',\n              received_at: new Date().toISOString(),\n          }\n      });\n  }\n\n  return results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "529760e9-6325-40e6-a399-c0f52ed1cea4",
+      "name": "Validate webhook"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e8f92719-40a8-4053-aeab-a44adc8bc8f9",
+              "leftValue": "={{ $json.valid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "a70d0a0a-3744-4dbf-97a3-a2c6989f15c6",
+      "name": "Valid?"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO tfi.audit_log (\n      order_id, event_type, severity, component,\n      message, payload, duration_ms, retry_attempt\n  )\n  VALUES (\n      NULL, $1, $2, $3,\n      $4, $5::jsonb, $6, $7\n  )\n  RETURNING id AS audit_id, created_at;",
+        "options": {
+          "queryReplacement": "$1 validation_failed, $2 warning, $3 webhook, $4{{ $json.errors.join(', ') }}, $5 {{ JSON.stringify({ errors: $json.errors, webhook: $json.webhook }) }}, $6 , $7 0"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        624,
+        96
+      ],
+      "id": "9e28ae80-32db-480a-bb96-a8d6e6ddcd55",
+      "name": "Audit validation_failed",
+      "credentials": {
+        "postgres": {
+          "id": "vNyNbhNBYftjmCca",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{ \"error\": \"invalid_payload\", \"details\": \"{{ $json.errors }}\" }",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        832,
+        96
+      ],
+      "id": "076a6c6c-a521-4ecf-a88f-c6333b285813",
+      "name": "Respond 400"
+    },
+    {
+      "parameters": {
+        "url": "=http://mock-marketplace/orders/{{ $json.order_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        624,
+        -96
+      ],
+      "id": "dec166bc-da5c-4abd-bcab-cbede1d9df71",
+      "name": "Enrich from mock"
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\n  const NORMALIZATION_VERSION = 'v1';\n  const CHANNEL = 'mercadolibre';\n\n  const STATUS_MAP = {\n      confirmed:            'created',\n      payment_required:     'pending_payment',\n      payment_in_process:   'pending_payment',\n      partially_paid:       'pending_payment',\n      paid:                 'paid',\n      preparing:            'preparing',\n      shipped:              'shipped',\n      delivered:            'delivered',\n      partially_refunded:   'refunded',\n      refunded:             'refunded',\n      pending_cancel:       'cancelled',\n      cancelled:            'cancelled',\n      invalid:              'error',\n  };\n\n  const DELIVERY_STATUS_MAP = {\n      pending:        'pending',\n      handling:       'preparing',\n      ready_to_ship:  'preparing',\n      shipped:        'shipped',\n      delivered:      'delivered',\n      not_delivered:  'pending',\n      cancelled:      'cancelled',\n      returned:       'returned',\n  };\n\n  function sha256(value) {\n      if (value === null || value === undefined || value === '') return null;\n      return crypto.createHash('sha256').update(String(value).toLowerCase().trim()).digest('hex');\n  }\n\n  function makePseudonym(channel, externalId) {\n      const hash = crypto\n          .createHash('sha256')\n          .update(`${channel}:${externalId}`)\n          .digest('hex')\n          .slice(0, 12);\n      return `cust_${hash}`;\n  }\n\n  function buildPhoneString(phone) {\n      if (!phone) return null;\n      const area = phone.area_code || '';\n      const num = phone.number || '';\n      return area && num ? `${area}${num}` : (num || null);\n  }\n\n  function normalizeStatus(mlStatus) {\n      return STATUS_MAP[mlStatus] || 'error';\n  }\n\n  function deriveDeliveryStatus(orderStatus, shippingStatus) {\n      if (orderStatus === 'cancelled') return 'cancelled';\n      if (shippingStatus && DELIVERY_STATUS_MAP[shippingStatus]) {\n          return DELIVERY_STATUS_MAP[shippingStatus];\n      }\n      return 'pending';\n  }\n\n  const out = [];\n\n  for (const item of $input.all()) {\n      const t0 = Date.now();\n      const ml = item.json;\n      const appliedRules = [];\n\n      const buyer = ml.buyer || {};\n      const fullName = [buyer.first_name, buyer.last_name].filter(Boolean).join(' ') || null;\n      const phone = buildPhoneString(buyer.phone);\n      const externalCustomerId = buyer.id ? String(buyer.id) : null;\n\n      const customer = {\n          external_id: externalCustomerId,\n          channel: CHANNEL,\n          pseudonym: makePseudonym(CHANNEL, externalCustomerId || ml.id),\n          full_name: fullName,\n          email: buyer.email || null,\n          phone,\n          email_hash: sha256(buyer.email),\n          phone_hash: sha256(phone),\n      };\n\n      const status = normalizeStatus(ml.status);\n      if (status === 'error') appliedRules.push(`warn:unmapped_status:${ml.status}`);\n\n      const order = {\n          external_id: String(ml.id),\n          channel: CHANNEL,\n          status,\n          total_amount: Number(ml.total_amount) || 0,\n          currency: ml.currency_id || 'ARS',\n          source_created_at: ml.date_created || new Date().toISOString(),\n          raw_payload: ml,\n          normalization_version: NORMALIZATION_VERSION,\n      };\n\n      const shippingStatus = ml.shipping && ml.shipping.status;\n      const deliveryStatus = deriveDeliveryStatus(status, shippingStatus);\n\n      const items = (ml.order_items || []).map((oi) => {\n          const itm = oi.item || {};\n          return {\n              sku: itm.seller_custom_field || itm.id || null,\n              product_name: itm.title || '(sin título)',\n              quantity: Number(oi.quantity) || 1,\n              unit_price: Number(oi.unit_price) || 0,\n              delivery_status: deliveryStatus,\n              metadata: {\n                  ml_item_id: itm.id || null,\n                  category_id: itm.category_id || null,\n                  warranty: itm.warranty || null,\n                  sale_fee: oi.sale_fee || null,\n              },\n          };\n      });\n\n      out.push({\n          json: {\n              customer,\n              order,\n              items,\n              meta: {\n                  normalization_ms: Date.now() - t0,\n                  applied_rules: appliedRules,\n                  normalization_version: NORMALIZATION_VERSION,\n              },\n          },\n      });\n  }\n\n  return out;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        -96
+      ],
+      "id": "17cdfa18-1c74-4fa2-841d-abce9e32961d",
+      "name": "Normalize ML order"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n      o.id          AS order_id,\n      o.external_id,\n      o.channel,\n      o.status,\n      o.received_at,\n      true          AS already_exists\n  FROM tfi.orders o\n  WHERE o.external_id = $1\n    AND o.channel     = $2;",
+        "options": {
+          "queryReplacement": "$1  {{ $json.order.external_id }}, $2 {{ $json.order.channel }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1040,
+        -96
+      ],
+      "id": "d7a2e911-8e1c-4fdc-b33f-4bc5efb3d753",
+      "name": "Check idempotency",
+      "credentials": {
+        "postgres": {
+          "id": "vNyNbhNBYftjmCca",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "42a30a8b-21bc-4792-9ffd-032d75c78b41",
+              "leftValue": "={{ $json.already_exists }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1248,
+        -96
+      ],
+      "id": "7fd5aa6f-5e6a-4686-b03d-e7a3d14c29a4",
+      "name": "If Duplicate?"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO tfi.audit_log (\n      order_id, event_type, severity, component,\n      message, payload, duration_ms, retry_attempt\n  )\n  VALUES (\n      $1::uuid, $2, $3, $4,\n      $5, $6::jsonb, $7, $8\n  )\n  RETURNING id AS audit_id, created_at;",
+        "options": {
+          "queryReplacement": "$1  {{ $json.order_id }}, $2 duplicate_detected , $3 info, $4 webhook, $5 Orden duplicada ignorada, $6  {{ JSON.stringify({ external_id: $json.external_id, channel: $json.channel }) }}, $7 , $8 0"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1456,
+        -192
+      ],
+      "id": "cf822d92-ff8a-442d-8bcd-01724998dcf3",
+      "name": "Audit duplicate",
+      "credentials": {
+        "postgres": {
+          "id": "vNyNbhNBYftjmCca",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": " { \"status\": \"ok\", \"detail\": \"duplicate_ignored\" }",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1616,
+        -192
+      ],
+      "id": "4de6fe82-749f-45cb-9bb9-8ff2a5ff003d",
+      "name": "Respond 200 duplicate"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO tfi.customers (\n      external_id, channel, pseudonym,\n      full_name, email, phone,\n      email_hash, phone_hash\n  )\n  VALUES ($1, $2, $3, $4, $5, $6, $7, $8)\n  ON CONFLICT (external_id, channel) DO UPDATE SET\n      full_name  = COALESCE(EXCLUDED.full_name,  tfi.customers.full_name),\n      email      = COALESCE(EXCLUDED.email,      tfi.customers.email),\n      phone      = COALESCE(EXCLUDED.phone,      tfi.customers.phone),\n      email_hash = COALESCE(EXCLUDED.email_hash, tfi.customers.email_hash),\n      phone_hash = COALESCE(EXCLUDED.phone_hash, tfi.customers.phone_hash),\n      updated_at = now()\n  RETURNING id AS customer_id, pseudonym;",
+        "options": {
+          "queryReplacement": "=$1 {{ $json.customer.external_id }}, $2 {{ $json.customer.channel }}, $3 {{ $json.customer.pseudonym }}, $4  {{ $json.customer.full_name }}, $5 {{ $json.customer.email }}, $6  {{ $json.customer.phone }}, $7 {{ $json.customer.email_hash }}, $8  {{ $json.customer.phone_hash }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1456,
+        0
+      ],
+      "id": "38051465-c8c8-4b4d-b7fe-488bc9fa6a93",
+      "name": "Upsert customer",
+      "credentials": {
+        "postgres": {
+          "id": "vNyNbhNBYftjmCca",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": " INSERT INTO tfi.orders (\n      external_id, channel, customer_id,\n      status, total_amount, currency,\n      source_created_at, raw_payload, normalization_version\n  )\n  VALUES (\n      $1, $2, $3,\n      $4, $5, $6,\n      $7, $8::jsonb, $9\n  )\n  ON CONFLICT (external_id, channel) DO NOTHING\n  RETURNING id AS order_id, received_at;",
+        "options": {
+          "queryReplacement": "$1  {{ $json.order.external_id }}, $2 {{ $json.order.channel }}, $3 {{ $json.customer_id }}, $4 {{ $json.order.status }, $5 {{ $json.order.total_amount }}, $6 {{ $json.order.currency }}, $7 {{ $json.order.source_created_at }}, $8 {{ JSON.stringify($json.order.raw_payload) }}, $9 {{ $json.order.normalization_version }} "
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1664,
+        0
+      ],
+      "id": "ade471f3-0318-4153-a1df-ff67ca99ed5a",
+      "name": "Insert Order",
+      "credentials": {
+        "postgres": {
+          "id": "vNyNbhNBYftjmCca",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": " const norm    = $('Normalize ML order').first().json;\n  const custRow = $('Upsert customer').first().json;\n  const ordRow  = $('Insert order').first().json;\n\n  return norm.items.map(item => ({\n    json: {\n      order_id:        ordRow.order_id,\n      customer_id:     custRow.customer_id,\n      pseudonym:       custRow.pseudonym,\n      sku:             item.sku,\n      product_name:    item.product_name,\n      quantity:        item.quantity,\n      unit_price:      item.unit_price,\n      delivery_status: item.delivery_status,\n      metadata:        item.metadata,\n      // contexto para nodos posteriores\n      customer:        norm.customer,\n      order:           norm.order,\n    }\n  })); const norm    = $('Normalize ML order').first().json;\n  const custRow = $('Upsert customer').first().json;\n  const ordRow  = $('Insert order').first().json;\n\n  return norm.items.map(item => ({\n    json: {\n      order_id:        ordRow.order_id,\n      customer_id:     custRow.customer_id,\n      pseudonym:       custRow.pseudonym,\n      sku:             item.sku,\n      product_name:    item.product_name,\n      quantity:        item.quantity,\n      unit_price:      item.unit_price,\n      delivery_status: item.delivery_status,\n      metadata:        item.metadata,\n      // contexto para nodos posteriores\n      customer:        norm.customer,\n      order:           norm.order,\n    }\n  }));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1872,
+        0
+      ],
+      "id": "437ca9cc-8ca8-4540-8a0e-42fdb3b50a88",
+      "name": "Split Items"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO tfi.order_items (\n      order_id, sku, product_name,\n      quantity, unit_price, delivery_status, metadata\n  )\n  VALUES (\n      $1, $2, $3,\n      $4, $5, $6, $7::jsonb\n  )\n  RETURNING id AS item_id;",
+        "options": {
+          "queryReplacement": "$1 {{ $json.order_id }}, $2 {{ $json.sku }}, $3 {{ $json.product_name }}, $4 {{ $json.quantity }}, $5 {{ $json.unit_price }}, $6 {{ $json.delivery_status }}, $7 {{ JSON.stringify($json.metadata || {}) }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        2080,
+        0
+      ],
+      "id": "3072c087-3e00-4acc-a049-14e489d62c2f",
+      "name": "Insert Items",
+      "credentials": {
+        "postgres": {
+          "id": "vNyNbhNBYftjmCca",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const PROMPT_VERSION = 'v1';\n\n// Hiperparámetros del prompts/v1.md (versión inicial)\nconst HYPERPARAMS = {\n    temperature: 0.4,\n    top_p: 0.9,\n    max_tokens: 220,\n    response_format: { type: 'json_object' },\n    seed: 42,\n};\n\nconst SYSTEM_MESSAGE = `Sos un asistente de comunicación post-venta para una PyME argentina que vende\nneumáticos en Mercado Libre. Tu única tarea es redactar mensajes cortos y\ncordiales para enviar al comprador después de un cambio en el estado de su\npedido.\n\nREGLAS ESTRICTAS:\n1. Solo usar información que esté en el contexto JSON que te entrego.\n   Si un dato falta, no lo inventes ni lo asumas: omitilo del mensaje.\n2. No incluyas tu razonamiento, disculpas por restricciones, ni meta-comentarios.\n3. No mencionés a \"OpenAI\", \"IA\", \"modelo de lenguaje\" ni similares.\n4. Tono: argentino neutro, cordial pero no informal. Usá \"vos\", no \"tú\" ni \"usted\".\n5. Longitud: máximo 4 oraciones, idealmente 2-3. Sin emojis salvo que el contexto\n   los pida explícitamente.\n6. No prometas tiempos de entrega, descuentos, ni acciones que el contexto no\n   confirme.\n7. Si el estado es \"error\" o el contexto está incompleto, generá un mensaje\n   genérico de \"estamos revisando tu pedido\" sin inventar detalles.\n\nOUTPUT:\nDevolvé exclusivamente un objeto JSON válido con esta estructura:\n{\n  \"message\": \"texto del mensaje, listo para enviar\",\n  \"tone\": \"informativo\" | \"cordial\" | \"disculpa\" | \"celebratorio\",\n  \"confidence\": número entre 0 y 1\n}\n\nconfidence refleja qué tan completa es la información del contexto.\nSi tuviste que omitir datos importantes, bajá la confidence.`;\n\n// --- Helpers -----------------------------------------------------------------\nfunction getPrimaryProductName(items) {\n    if (!items || items.length === 0) return null;\n    // Tomamos el item de mayor monto (más representativo del pedido)\n    const sorted = [...items].sort(\n        (a, b) => (Number(b.unit_price) * Number(b.quantity)) -\n                  (Number(a.unit_price) * Number(a.quantity))\n    );\n    return sorted[0].product_name;\n}\n\nfunction buildContext(input) {\n    // SOLO estos campos pueden llegar al LLM.\n    // No incluir nunca: full_name, email, phone, doc_number, billing_info, etc.\n    const ctx = {\n        customer_pseudonym: input.customer.pseudonym,\n        order_status: input.order.status,\n        items_count: (input.items || []).length,\n        primary_product_name: getPrimaryProductName(input.items),\n        channel: input.order.channel,\n        total_amount: input.order.total_amount,\n        currency: input.order.currency,\n        source_created_at: input.order.source_created_at,\n    };\n\n    // Defensa: lanzar error si alguna PII se coló accidentalmente\n    const pii_keys = ['full_name', 'email', 'phone', 'doc_number', 'address', 'first_name', 'last_name'];\n    const ctx_str = JSON.stringify(ctx).toLowerCase();\n    for (const key of pii_keys) {\n        if (ctx_str.includes(`\"${key}\"`)) {\n            throw new Error(`PII leak detected: campo ${key} no debe llegar al LLM`);\n        }\n    }\n\n    return ctx;\n}\n\nfunction buildUserMessage(ctx) {\n    return `Contexto del pedido:\n- Pseudónimo del cliente: ${ctx.customer_pseudonym}\n- Estado normalizado: ${ctx.order_status}\n- Cantidad de productos: ${ctx.items_count}\n- Producto principal: ${ctx.primary_product_name || '(no especificado)'}\n- Canal de venta: ${ctx.channel}\n- Monto total: ${ctx.total_amount} ${ctx.currency}\n- Fecha del pedido: ${ctx.source_created_at}\n\nGenerá el mensaje según las reglas del system.`;\n}\n\n// --- Main --------------------------------------------------------------------\nconst input = $json;\n\nif (!input.customer || !input.order) {\n    throw new Error('Input inválido: faltan customer u order. Verificar el normalizador.');\n}\n\nconst t_build_start = Date.now();\nconst context = buildContext(input);\nconst userMessage = buildUserMessage(context);\n\nreturn {\n    json: {\n        // Identificadores que vamos a necesitar después\n        order_id: input.order_id,\n        customer_id: input.customer_id,\n        prompt_version: PROMPT_VERSION,\n\n        // Mensajes para el nodo OpenAI (algunos nodos los esperan en .messages,\n        // otros directamente; ajustar según la versión del nodo OpenAI)\n        messages: [\n            { role: 'system', content: SYSTEM_MESSAGE },\n            { role: 'user',   content: userMessage },\n        ],\n\n        // Hiperparámetros — el nodo OpenAI permite override con estos campos\n        model: 'gpt-4o-mini',\n        ...HYPERPARAMS,\n\n        // Métricas internas\n        prompt_build_ms: Date.now() - t_build_start,\n        // Conservamos el contexto enviado para auditoría posterior\n        sent_context: context,\n        // Para que el parser sepa cuándo arrancó la llamada\n        llm_call_started_at: new Date().toISOString(),\n    },\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2288,
+        0
+      ],
+      "id": "b0575570-84b8-48a5-97cf-51a0bd5033fb",
+      "name": "Build LLM prompt"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "={{ $json.messages[0].content }}"
+            },
+            {
+              "content": "={{ $json.messages[1].content }}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "maxTokens": 220,
+          "temperature": 0.4
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        2496,
+        0
+      ],
+      "id": "80e2500a-465d-4575-b63b-76ded946f386",
+      "name": "Call OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "xVEvgE6fo3hvouhY",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// =============================================================================\n// parse-llm-response.js\n// -----------------------------------------------------------------------------\n// Pegar en un nodo \"Code\" (modo: \"Run Once for Each Item\") DESPUÉS del nodo\n// OpenAI/Anthropic.\n//\n// Función:\n//   - Extrae el texto generado y la metadata de uso (tokens, latencia)\n//   - Valida que sea JSON parseable con la shape esperada\n//   - Calcula cost_usd usando el pricing del proveedor\n//   - Devuelve un item listo para INSERT en tfi.ai_notifications,\n//     o un item con use_fallback=true para que el siguiente nodo IF\n//     redirija al fallback-template.js\n//\n// Pricing por 1M tokens (actualizar cuando cambien las tarifas).\n// Fuente: https://openai.com/pricing y https://www.anthropic.com/pricing\n// =============================================================================\n\nconst PRICING = {\n    openai: {\n        'gpt-4o-mini':  { input: 0.150, output: 0.600 },  // USD por 1M tokens\n        'gpt-4o':       { input: 2.500, output: 10.000 },\n    },\n    anthropic: {\n        'claude-haiku-4-5':   { input: 1.000, output: 5.000 },  // placeholder, ajustar\n        'claude-haiku-3-5':   { input: 0.800, output: 4.000 },\n    },\n};\n\nconst MIN_CONFIDENCE = 0.3;            // confidence < este → fallback\nconst MAX_MESSAGE_LENGTH = 600;        // chars, defensa contra respuestas muy largas\nconst MIN_MESSAGE_LENGTH = 20;         // chars, evita respuestas vacías/triviales\n\n// --- Helpers -----------------------------------------------------------------\nfunction calculateCostUSD(provider, model, promptTokens, completionTokens) {\n    const tier = PRICING[provider] && PRICING[provider][model];\n    if (!tier) return null; // pricing desconocido → guardamos NULL en DB\n    const inputCost  = (promptTokens     || 0) * tier.input  / 1_000_000;\n    const outputCost = (completionTokens || 0) * tier.output / 1_000_000;\n    return Number((inputCost + outputCost).toFixed(6));\n}\n\nfunction extractTextAndUsage(llmRaw) {\n    // Soporta tanto OpenAI como Anthropic en estructuras nativas, además del\n    // wrapper que aplica el nodo OpenAI de n8n.\n\n    // n8n OpenAI node devuelve a veces { message: { content: \"...\" } } o\n    // { content: \"...\" } o el formato crudo de la API.\n    if (typeof llmRaw === 'string') {\n        return { text: llmRaw, usage: {} };\n    }\n\n    // Formato crudo de OpenAI Chat Completions API\n    if (llmRaw.choices && Array.isArray(llmRaw.choices) && llmRaw.choices[0]) {\n        const choice = llmRaw.choices[0];\n        const text = (choice.message && choice.message.content) ||\n                     choice.text ||\n                     '';\n        return { text, usage: llmRaw.usage || {} };\n    }\n\n    // Formato crudo de Anthropic Messages API\n    if (llmRaw.content && Array.isArray(llmRaw.content) && llmRaw.content[0]) {\n        const text = llmRaw.content[0].text || '';\n        const usage = llmRaw.usage ? {\n            prompt_tokens:     llmRaw.usage.input_tokens,\n            completion_tokens: llmRaw.usage.output_tokens,\n        } : {};\n        return { text, usage };\n    }\n\n    // Algunos wrappers de n8n\n    if (llmRaw.message && llmRaw.message.content) {\n        return { text: llmRaw.message.content, usage: llmRaw.usage || {} };\n    }\n    if (typeof llmRaw.content === 'string') {\n        return { text: llmRaw.content, usage: llmRaw.usage || {} };\n    }\n    if (typeof llmRaw.text === 'string') {\n        return { text: llmRaw.text, usage: llmRaw.usage || {} };\n    }\n\n    return { text: '', usage: {} };\n}\n\nfunction parseAndValidate(text) {\n    const out = { valid: false, parsed: null, errors: [] };\n\n    if (!text || typeof text !== 'string') {\n        out.errors.push('empty_response');\n        return out;\n    }\n\n    let parsed;\n    try {\n        // Algunos modelos pueden devolver el JSON envuelto en backticks; los limpiamos\n        const cleaned = text.replace(/^```(?:json)?\\s*/i, '').replace(/\\s*```$/, '').trim();\n        parsed = JSON.parse(cleaned);\n    } catch (e) {\n        out.errors.push(`invalid_json:${e.message}`);\n        return out;\n    }\n\n    if (typeof parsed.message !== 'string') {\n        out.errors.push('missing_field:message');\n    } else {\n        if (parsed.message.length < MIN_MESSAGE_LENGTH) {\n            out.errors.push(`message_too_short:${parsed.message.length}`);\n        }\n        if (parsed.message.length > MAX_MESSAGE_LENGTH) {\n            out.errors.push(`message_too_long:${parsed.message.length}`);\n        }\n    }\n\n    if (typeof parsed.tone !== 'string') {\n        out.errors.push('missing_field:tone');\n    }\n\n    if (typeof parsed.confidence !== 'number' ||\n        parsed.confidence < 0 ||\n        parsed.confidence > 1) {\n        out.errors.push('invalid_field:confidence');\n    } else if (parsed.confidence < MIN_CONFIDENCE) {\n        out.errors.push(`low_confidence:${parsed.confidence}`);\n    }\n\n    out.valid = out.errors.length === 0;\n    out.parsed = parsed;\n    return out;\n}\n\n// --- Main --------------------------------------------------------------------\nconst input = $json;\nconst t_parse_start = Date.now();\n\n// Identificadores y metadata heredados del build-llm-prompt\nconst order_id       = input.order_id;\nconst customer_id    = input.customer_id;\nconst prompt_version = input.prompt_version || 'v1';\nconst provider       = input.provider || 'openai';\nconst model          = input.model || 'gpt-4o-mini';\nconst startedAt      = input.llm_call_started_at;\n\n// La respuesta real puede estar en distintos lados según cómo se conectó el nodo\nconst llmRaw = input.response || input.data || input.llm || input;\n\nconst { text, usage } = extractTextAndUsage(llmRaw);\nconst validation = parseAndValidate(text);\n\nconst promptTokens     = usage.prompt_tokens     || usage.input_tokens     || null;\nconst completionTokens = usage.completion_tokens || usage.output_tokens    || null;\nconst costUSD          = calculateCostUSD(provider, model, promptTokens, completionTokens);\n\nconst latencyMs = startedAt\n    ? (Date.now() - new Date(startedAt).getTime())\n    : null;\n\nif (validation.valid) {\n    // Camino feliz: usar el mensaje del LLM\n    return {\n        json: {\n            order_id,\n            customer_id,\n            use_fallback: false,\n\n            provider,\n            model,\n            prompt_version,\n\n            usage: {\n                prompt_tokens: promptTokens,\n                completion_tokens: completionTokens,\n            },\n            cost_usd: costUSD,\n            latency_ms: latencyMs,\n\n            message_text: validation.parsed.message,\n            tone: validation.parsed.tone,\n            confidence: validation.parsed.confidence,\n            is_fallback: false,\n            message_status: 'validated',\n            error_message: null,\n\n            audit_event: {\n                event_type: 'llm_call_ok',\n                severity: 'info',\n                component: 'llm',\n                message: `LLM ${provider}/${model} respondió OK (confidence=${validation.parsed.confidence})`,\n                payload: {\n                    prompt_version,\n                    tokens_prompt: promptTokens,\n                    tokens_completion: completionTokens,\n                    cost_usd: costUSD,\n                    latency_ms: latencyMs,\n                    confidence: validation.parsed.confidence,\n                    tone: validation.parsed.tone,\n                },\n            },\n        },\n    };\n}\n\n// Respuesta inválida: marcar para que el siguiente IF node rutee al fallback\nreturn {\n    json: {\n        order_id,\n        customer_id,\n        use_fallback: true,\n        fallback_reason: validation.errors.join(','),\n\n        // Preservamos lo que sí pudimos extraer para auditoría\n        provider,\n        model,\n        prompt_version,\n        cost_usd: costUSD,       // pagamos los tokens igual aunque sea inválida\n        latency_ms: latencyMs,\n        raw_response: text,       // crudo para análisis posterior\n        validation_errors: validation.errors,\n\n        // Necesario para que el nodo fallback construya bien (mantiene shape)\n        order: input.order || null,\n        customer: input.customer || null,\n        items: input.items || null,\n\n        audit_event: {\n            event_type: 'llm_call_failed',\n            severity: 'warning',\n            component: 'llm',\n            message: `LLM ${provider}/${model} devolvió respuesta inválida: ${validation.errors.join(', ')}`,\n            payload: {\n                prompt_version,\n                errors: validation.errors,\n                cost_usd: costUSD,\n                latency_ms: latencyMs,\n                raw_excerpt: text.slice(0, 200),\n            },\n        },\n    },\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2752,
+        0
+      ],
+      "id": "bcceee11-7dc1-463b-b778-064575271f0c",
+      "name": "Parse LLM Response"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e5bf4d71-af08-421d-b663-4ddce9421192",
+              "leftValue": "={{ $json.use_fallback }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2960,
+        0
+      ],
+      "id": "36e48643-8980-44af-b099-af94d1e045b9",
+      "name": "Use Fallback?"
+    },
+    {
+      "parameters": {
+        "jsCode": "// =============================================================================\n// fallback-template.js\n// -----------------------------------------------------------------------------\n// Pegar en un nodo \"Code\" (modo: \"Run Once for Each Item\") en la rama de\n// degradación funcional del workflow.\n//\n// Se invoca cuando:\n//   - El LLM no responde dentro del timeout configurado\n//   - La respuesta del LLM no parsea como JSON\n//   - La respuesta no cumple la shape esperada (message/tone/confidence)\n//   - El confidence devuelto es muy bajo (< 0.3)\n//\n// Produce un mensaje basado en plantilla estática por estado, garantizando\n// que el cliente reciba algo aunque el componente generativo no funcione.\n// Cap 5.8 del documento — degradación funcional controlada.\n// =============================================================================\n\nconst TEMPLATE_VERSION = 'template-v1';\n\n// Plantillas por estado del modelo canónico (alineadas con CHECK constraint\n// de tfi.orders.status). Texto: argentino neutro, mismo tono que el prompt v1.\nconst TEMPLATES = {\n    created: {\n        message: 'Recibimos tu compra. Te avisamos en cuanto se confirme el pago.',\n        tone: 'informativo',\n    },\n    pending_payment: {\n        message: 'Estamos esperando la confirmación del pago de tu compra. Si ya pagaste, no te preocupes — en algunos casos puede demorar unos minutos.',\n        tone: 'informativo',\n    },\n    paid: {\n        message: 'Recibimos el pago de tu compra. Estamos preparando tu pedido para el envío. Gracias por elegirnos.',\n        tone: 'cordial',\n    },\n    preparing: {\n        message: 'Tu pedido se está preparando. Te avisamos en cuanto lo despachemos.',\n        tone: 'informativo',\n    },\n    shipped: {\n        message: 'Tu pedido fue despachado. Vas a recibirlo en los próximos días según el método de envío que elegiste.',\n        tone: 'informativo',\n    },\n    delivered: {\n        message: 'Confirmamos la entrega de tu pedido. ¡Gracias por tu compra! Si necesitás algo, escribinos.',\n        tone: 'celebratorio',\n    },\n    cancelled: {\n        message: 'Tu pedido fue cancelado. Si fue un error o querés más información, contactanos así lo resolvemos.',\n        tone: 'disculpa',\n    },\n    refunded: {\n        message: 'Se procesó el reembolso de tu pedido. Puede demorar unos días en verse reflejado según tu medio de pago.',\n        tone: 'disculpa',\n    },\n    error: {\n        message: 'Estamos revisando algunos detalles de tu pedido. Te contactamos en cuanto tengamos novedades.',\n        tone: 'informativo',\n    },\n};\n\n// Plantilla absolutamente genérica si el estado tampoco existe en el map.\n// No debería llegar acá si el normalizador funcionó (mapea estados desconocidos\n// a 'error'), pero es defensa en profundidad.\nconst ULTIMATE_FALLBACK = {\n    message: 'Recibimos tu compra. Te contactamos en cuanto haya novedades sobre tu pedido.',\n    tone: 'informativo',\n};\n\nconst input = $json;\nconst status = input.order && input.order.status;\nconst reason = input.fallback_reason || 'unknown';\n\nconst template = TEMPLATES[status] || ULTIMATE_FALLBACK;\n\nreturn {\n    json: {\n        order_id: input.order_id,\n        customer_id: input.customer_id,\n\n        // Provider especial 'template' coherente con el CHECK constraint\n        // de tfi.ai_notifications (provider='template' ↔ is_fallback=true)\n        provider: 'template',\n        model: null,\n        prompt_version: null,\n\n        // Sin tokens ni costo porque no fue llamada externa\n        usage: { prompt_tokens: null, completion_tokens: null },\n        cost_usd: 0,\n        latency_ms: 0,\n\n        // Output con la misma shape que devolvería el LLM, así el INSERT\n        // posterior es uniforme y no requiere branching\n        message_text: template.message,\n        tone: template.tone,\n        confidence: 1.0, // plantilla es 100% predecible\n        is_fallback: true,\n        message_status: 'validated',\n\n        // Telemetría: por qué se cayó al fallback\n        fallback_reason: reason,\n        template_version: TEMPLATE_VERSION,\n        applied_template_status: status,\n\n        // Para audit_log\n        audit_event: {\n            event_type: 'fallback_triggered',\n            severity: 'warning',\n            component: 'llm',\n            message: `Degradación a plantilla por ${reason}`,\n            payload: { fallback_reason: reason, status, template_version: TEMPLATE_VERSION },\n        },\n    },\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3168,
+        -96
+      ],
+      "id": "3bac0f02-6ded-4460-b28c-08226218aecc",
+      "name": "Fallback template"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": " SELECT\n      c.phone,\n      c.full_name\n  FROM tfi.customers  c\n  JOIN tfi.orders     o ON o.customer_id = c.id\n  WHERE o.id = $1::uuid;",
+        "options": {
+          "queryReplacement": "$1 {{ $json.order_id }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        3376,
+        96
+      ],
+      "id": "635acbf3-47de-4140-8ba2-c1ea55db2ddd",
+      "name": "Get customer phone",
+      "credentials": {
+        "postgres": {
+          "id": "vNyNbhNBYftjmCca",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": " INSERT INTO tfi.ai_notifications (\n      order_id,\n      provider, model, prompt_version,\n      prompt_tokens, completion_tokens, cost_usd, latency_ms,\n      message_text, message_status, is_fallback, delivery_channel,\n      error_message\n  )\n  VALUES (\n      $1::uuid,\n      $2, $3, $4,\n      $5, $6, $7, $8,\n      $9, $10, $11, $12,\n      $13\n  )\n  RETURNING id AS notification_id, order_id, message_text, generated_at;",
+        "options": {
+          "queryReplacement": "$1   {{ $json.order_id }}, $2 {{ $json.provider }}, $3 {{ $json.model }}, $4 {{ $json.prompt_version }}, $5 {{ $json.usage.prompt_tokens }}, $6 {{ $json.usage.completion_tokens }}, $7 {{ $json.cost_usd }}, $8 {{ $json.latency_ms }}, $9 {{ $json.message_text }}, $10 {{ $json.message_status }}, $11 {{ $json.is_fallback }}, $12 whatsapp, $13 {{ $json.error_message }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        3168,
+        96
+      ],
+      "id": "8618f982-b077-4070-aab0-96f3a621c346",
+      "name": "Insert ai_notification",
+      "credentials": {
+        "postgres": {
+          "id": "vNyNbhNBYftjmCca",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": " const aiNotif = $('Insert ai_notification').first().json;\n  const customerRow = $input.first().json;\n\n  const notificationId = aiNotif.notification_id || null;\n  const orderId        = aiNotif.order_id        || null;\n  const messageText    = aiNotif.message_text    || '';\n  const phone          = customerRow.phone       || null;\n  const fullName       = customerRow.full_name   || null;\n\n  return {\n      json: {\n          notification_id: notificationId,\n          order_id:        orderId,\n          message_text:    messageText,\n          phone,\n          full_name:       fullName,\n      },\n  };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3584,
+        96
+      ],
+      "id": "1e27fadf-4dd6-41a3-bad9-98581276a65c",
+      "name": "Merge dispatch ctx"
+    },
+    {
+      "parameters": {
+        "jsCode": "function toE164Argentina(raw) {\n      if (!raw) return null;\n      let digits = raw.replace(/\\D/g, '');\n      if (digits.startsWith('549') && digits.length >= 12) return `+${digits}`;\n      if (digits.startsWith('54')  && digits.length >= 11) return `+549${digits.slice(2)}`;\n      if (digits.startsWith('0')) digits = digits.slice(1);\n      if (digits.length === 10) return `+549${digits}`;\n      if (digits.length === 8) return `+54911${digits}`;\n      return null;\n  }\n\n  function buildGreeting(fullName) {\n      if (!fullName) return '';\n      const firstName = fullName.trim().split(/\\s+/)[0];\n      return `Hola ${firstName}!\\n`;\n  }\n\n  const input = $json;\n  const customerRow = Array.isArray(input) ? input[0] : input;\n\n  const rawPhone    = customerRow.phone     || input.phone     || null;\n  const fullName    = customerRow.full_name || input.full_name || null;\n  const notificationId = input.notification_id || input.id    || null;\n  const messageText    = input.message_text || input.message  || '';\n  const orderId        = input.order_id || null;\n\n  const phone = toE164Argentina(rawPhone);\n\n  if (!phone) {\n      return {\n          json: {\n              no_phone: true,\n              reason: rawPhone ? `phone_not_normalizable:${rawPhone}` : 'phone_missing',\n              notification_id: notificationId,\n              order_id: orderId,\n          },\n      };\n  }\n\n  const greeting     = buildGreeting(fullName);\n  const finalMessage = `${greeting}${messageText}`.trim();\n\n  const metaBody = {\n      messaging_product: 'whatsapp',\n      recipient_type:    'individual',\n      to:                phone,\n      type:              'text',\n      text: { preview_url: false, body: finalMessage },\n  };\n\n  return {\n      json: {\n          no_phone:        false,\n          notification_id: notificationId,\n          order_id:        orderId,\n          to_phone:        phone,\n          meta_body:       metaBody,\n          audit_event: {\n              event_type: 'dispatch_attempted',\n              severity:   'info',\n              component:  'dispatcher',\n              message:    `Intentando envío WhatsApp a ${phone}`,\n              payload:    { notification_id: notificationId, to: phone },\n          },\n      },\n  };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3792,
+        96
+      ],
+      "id": "2f35c017-5c83-46e9-a71a-6f40e3c82b07",
+      "name": "Build WA payload"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ae9a5201-2d81-4359-ab27-c56fe8150c28",
+              "leftValue": "={{ $json.no_phone }}",
+              "rightValue": "false",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4000,
+        96
+      ],
+      "id": "1e14dbf1-f78c-4481-ab2b-f4a844fb12cc",
+      "name": "IF Phone ok?"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v20.0/{{ $env.WHATSAPP_PHONE_NUMBER_ID }}/messages ",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.meta_body) }}   ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        4208,
+        0
+      ],
+      "id": "bb62e2ed-abef-40ea-a9c7-70957663d4ea",
+      "name": "Send Whatsapp",
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "xRSPdmDu8PnkEwWl",
+          "name": "Bearer Auth account"
+        },
+        "httpHeaderAuth": {
+          "id": "VvmN7lCUqYgCZqcc",
+          "name": "Header Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": " const input = $json;\n\n  const notificationId = input.notification_id || null;\n  const orderId        = input.order_id        || null;\n  const toPhone        = input.to_phone        || null;\n\n  const httpError = input.error || input.message || null;\n  const httpStatus = input.statusCode || input.status || null;\n  const isHttpError = !!httpError || (httpStatus && httpStatus >= 400);\n\n  if (isHttpError) {\n      const errorDetail = typeof httpError === 'object'\n          ? JSON.stringify(httpError)\n          : String(httpError || `HTTP ${httpStatus}`);\n\n      return {\n          json: {\n              notification_id: notificationId,\n              order_id:        orderId,\n              message_status:  'failed',\n              wa_message_id:   null,\n              error_reason:    errorDetail,\n              audit_event: {\n                  event_type: 'dispatch_failed',\n                  severity:   'error',\n                  component:  'dispatcher',\n                  message:    `Meta API rechazó el mensaje: ${errorDetail.slice(0, 200)}`,\n                  payload:    { notification_id: notificationId, to: toPhone, error: errorDetail },\n              },\n          },\n      };\n  }\n\n  const waMessageId = (input.messages && input.messages[0] && input.messages[0].id) || null;\n\n  if (!waMessageId) {\n      return {\n          json: {\n              notification_id: notificationId,\n              order_id:        orderId,\n              message_status:  'failed',\n              wa_message_id:   null,\n              error_reason:    'meta_response_missing_message_id',\n              audit_event: {\n                  event_type: 'dispatch_failed',\n                  severity:   'warning',\n                  component:  'dispatcher',\n                  message:    'Meta respondió 200 pero sin messages[0].id',\n                  payload:    { notification_id: notificationId, raw_response: input },\n              },\n          },\n      };\n  }\n\n  return {\n      json: {\n          notification_id: notificationId,\n          order_id:        orderId,\n          message_status:  'sent',\n          wa_message_id:   waMessageId,\n          error_reason:    null,\n          audit_event: {\n              event_type: 'dispatch_ok',\n              severity:   'info',\n              component:  'dispatcher',\n              message:    `Mensaje enviado por WhatsApp (wamid: ${waMessageId})`,\n              payload:    { notification_id: notificationId, to: toPhone, wa_message_id: waMessageId\n  },\n          },\n      },\n  };"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4416,
+        0
+      ],
+      "id": "66b01077-f99c-4726-b1fd-cf86c1fe3e87",
+      "name": "Parse WA response"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": " UPDATE tfi.ai_notifications\n  SET\n      message_status = $2,\n      sent_at        = CASE WHEN $2 = 'sent' THEN now() ELSE sent_at END,\n      wa_message_id  = $3,\n      error_message  = $4\n  WHERE id = $1::uuid\n  RETURNING id, message_status, sent_at, wa_message_id;",
+        "options": {
+          "queryReplacement": "$1 {{ $json.notification_id }}, $2 {{ $json.message_status }}, $3  {{ $json.wa_message_id }}, $4 {{ $json.error_reason }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        4624,
+        0
+      ],
+      "id": "b8343253-9b7d-4636-84ee-0da62cfb15dd",
+      "name": "Update dispatch",
+      "credentials": {
+        "postgres": {
+          "id": "vNyNbhNBYftjmCca",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO tfi.audit_log (\n      order_id, event_type, severity, component,\n      message, payload, duration_ms, retry_attempt\n  )\n  VALUES (\n      $1::uuid, $2, $3, $4,\n      $5, $6::jsonb, $7, $8\n  )\n  RETURNING id AS audit_id, created_at;",
+        "options": {
+          "queryReplacement": "$1 {{ $json.order_id }}, $2 {{ $json.audit_event.event_type }}, $3 {{ $json.audit_event.severity }}, $4 {{ $json.audit_event.component }}, $5 {{ $json.audit_event.message }}, $6 {{ JSON.stringify($json.audit_event.payload) }}, $7 {{ null }}, $8 {{ 0 }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        4832,
+        0
+      ],
+      "id": "2af8b41f-b4b0-4552-9f42-b5077900d198",
+      "name": "Audit dispatch",
+      "credentials": {
+        "postgres": {
+          "id": "vNyNbhNBYftjmCca",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "OK",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        5040,
+        0
+      ],
+      "id": "ebb1fb3a-81d5-4d09-8734-c225a42673cd",
+      "name": "Respond 200"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": " INSERT INTO tfi.audit_log (\n      order_id, event_type, severity, component,\n      message, payload, duration_ms, retry_attempt\n  )\n  VALUES (\n      $1::uuid, $2, $3, $4,\n      $5, $6::jsonb, $7, $8\n  )\n  RETURNING id AS audit_id, created_at;",
+        "options": {
+          "queryReplacement": "$1 {{ $json.order_id }}, $2 'no_phone', $3 'warning', $4 'dispatcher', $5 'Cliente sin teléfono registrado, despacho abortado', $6 {{ JSON.stringify({ notification_id: $json.notification_id, reason: $json.reason }) }}, $7 {{ null }}, $8 {{ 0 }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        4208,
+        192
+      ],
+      "id": "ab5041e7-3271-4b2e-8e9d-8ce5627e609e",
+      "name": "Audit no_phone",
+      "credentials": {
+        "postgres": {
+          "id": "vNyNbhNBYftjmCca",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE tfi.ai_notifications\n  SET\n      message_status = $2,\n      sent_at        = CASE WHEN $2 = 'sent' THEN now() ELSE sent_at END,\n      wa_message_id  = $3,\n      error_message  = $4\n  WHERE id = $1::uuid\n  RETURNING id, message_status, sent_at, wa_message_id;",
+        "options": {
+          "queryReplacement": "$1 {{ $json.notification_id }}, $2 'failed', $3 {{ null }}, $4 'no_phone'"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        4416,
+        192
+      ],
+      "id": "d0879260-cc15-414c-83a1-57b778f88e91",
+      "name": "Update dispatch (no phone)",
+      "credentials": {
+        "postgres": {
+          "id": "vNyNbhNBYftjmCca",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO tfi.audit_log (\n      order_id, event_type, severity, component,\n      message, payload, duration_ms, retry_attempt\n  )\n  VALUES (\n      $1::uuid, $2, $3, $4,\n      $5, $6::jsonb, $7, $8\n  )\n  RETURNING id AS audit_id, created_at;",
+        "options": {
+          "queryReplacement": "$1 {{ $json.order_id }}, $2 'dispatch_failed', $3 'error', $4 'dispatcher', $5 'Despacho WhatsApp fallido por ausencia de teléfono', $6 {{ JSON.stringify({ notification_id: $json.notification_id }) }}, $7 {{ null }}, $8 {{ 0 }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        4624,
+        192
+      ],
+      "id": "5482649b-d10d-4340-8ef0-ae01eb9894eb",
+      "name": "Audit dispatch_failed",
+      "credentials": {
+        "postgres": {
+          "id": "vNyNbhNBYftjmCca",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook ML order": {
+      "main": [
+        [
+          {
+            "node": "Validate webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate webhook": {
+      "main": [
+        [
+          {
+            "node": "Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Valid?": {
+      "main": [
+        [
+          {
+            "node": "Enrich from mock",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Audit validation_failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audit validation_failed": {
+      "main": [
+        [
+          {
+            "node": "Respond 400",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enrich from mock": {
+      "main": [
+        [
+          {
+            "node": "Normalize ML order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize ML order": {
+      "main": [
+        [
+          {
+            "node": "Check idempotency",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check idempotency": {
+      "main": [
+        [
+          {
+            "node": "If Duplicate?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Duplicate?": {
+      "main": [
+        [
+          {
+            "node": "Audit duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Upsert customer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audit duplicate": {
+      "main": [
+        [
+          {
+            "node": "Respond 200 duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert customer": {
+      "main": [
+        [
+          {
+            "node": "Insert Order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Order": {
+      "main": [
+        [
+          {
+            "node": "Split Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Items": {
+      "main": [
+        [
+          {
+            "node": "Insert Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Items": {
+      "main": [
+        [
+          {
+            "node": "Build LLM prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build LLM prompt": {
+      "main": [
+        [
+          {
+            "node": "Call OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Parse LLM Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse LLM Response": {
+      "main": [
+        [
+          {
+            "node": "Use Fallback?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Use Fallback?": {
+      "main": [
+        [
+          {
+            "node": "Fallback template",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Insert ai_notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fallback template": {
+      "main": [
+        [
+          {
+            "node": "Insert ai_notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert ai_notification": {
+      "main": [
+        [
+          {
+            "node": "Get customer phone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get customer phone": {
+      "main": [
+        [
+          {
+            "node": "Merge dispatch ctx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge dispatch ctx": {
+      "main": [
+        [
+          {
+            "node": "Build WA payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build WA payload": {
+      "main": [
+        [
+          {
+            "node": "IF Phone ok?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF Phone ok?": {
+      "main": [
+        [
+          {
+            "node": "Send Whatsapp",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Audit no_phone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Whatsapp": {
+      "main": [
+        [
+          {
+            "node": "Parse WA response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse WA response": {
+      "main": [
+        [
+          {
+            "node": "Update dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update dispatch": {
+      "main": [
+        [
+          {
+            "node": "Audit dispatch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audit dispatch": {
+      "main": [
+        [
+          {
+            "node": "Respond 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audit no_phone": {
+      "main": [
+        [
+          {
+            "node": "Update dispatch (no phone)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update dispatch (no phone)": {
+      "main": [
+        [
+          {
+            "node": "Audit dispatch_failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "3836e4c1-818d-4764-8681-4fca2d14981a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "be3cf29afa6f3fa21447f3ef48fb9252df66482d57dab574432ad7a1c1d11dcd"
+  },
+  "id": "oULvr3rIK4xtEBU5",
+  "tags": []
+}

@@ -29,7 +29,11 @@ const SUPPORTED_TOPICS = ['orders_v2'];
 const results = [];
 
 for (const item of $input.all()) {
-    const payload = item.json;
+    // n8n Webhook node envuelve el body en item.json.body; cuando el código
+    // se invoca con un objeto plano (tests directos) los campos viven al raíz.
+    // Soportamos ambos formatos.
+    const raw = item.json;
+    const payload = (raw && typeof raw.body === 'object' && raw.body !== null) ? raw.body : raw;
     const errors = [];
 
     // 1. Campos obligatorios presentes
