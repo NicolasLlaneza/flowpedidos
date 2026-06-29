@@ -11,9 +11,9 @@ UPDATE tfi.ai_notifications
 SET
     message_status = $2,
     sent_at        = CASE WHEN $2 = 'sent' THEN now() ELSE sent_at END,
-    wa_message_id  = $3,
-    error_message  = $4
-WHERE id = $1::uuid
+    wa_message_id  = NULLIF($3::text, 'null'),
+    error_message  = NULLIF($4::text, 'null')
+WHERE id = NULLIF($1::text, 'null')::uuid
 RETURNING id, message_status, sent_at, wa_message_id;
 
 -- Parámetros:

@@ -56,6 +56,15 @@ services:
       N8N_RUNNERS_ENABLED: "true"
       N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
 
+      # Permitir módulos nativos de Node en los Code nodes (crypto para SHA-256
+      # de seudonimización y hashes de email/teléfono)
+      NODE_FUNCTION_ALLOW_BUILTIN: "crypto"
+
+      # Permitir lectura de variables de entorno desde los nodos (necesario
+      # para que el HTTP Request de WhatsApp use $env.WHATSAPP_PHONE_NUMBER_ID
+      # en la URL y $env.WHATSAPP_ACCESS_TOKEN en el header de auth).
+      N8N_BLOCK_ENV_ACCESS_IN_NODE: "false"
+
       # Meta WhatsApp Business API — disponibles como $env.WHATSAPP_* en los Code nodes
       WHATSAPP_PHONE_NUMBER_ID: ${WHATSAPP_PHONE_NUMBER_ID}
       WHATSAPP_ACCESS_TOKEN: ${WHATSAPP_ACCESS_TOKEN}

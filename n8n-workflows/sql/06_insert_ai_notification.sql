@@ -20,11 +20,11 @@ INSERT INTO tfi.ai_notifications (
     error_message
 )
 VALUES (
-    $1::uuid,
-    $2, $3, $4,
-    $5, $6, $7, $8,
-    $9, $10, $11, $12,
-    $13
+    NULLIF($1::text, 'null')::uuid,
+    $2, NULLIF($3::text, 'null'), NULLIF($4::text, 'null'),
+    NULLIF($5::text, 'null')::integer, NULLIF($6::text, 'null')::integer, NULLIF($7::text, 'null')::numeric, NULLIF($8::text, 'null')::integer,
+    $9, $10, NULLIF($11::text, 'null')::boolean, NULLIF($12::text, 'null'),
+    NULLIF($13::text, 'null')
 )
 RETURNING id AS notification_id, order_id, message_text, generated_at;
 -- order_id y message_text son necesarios para los nodos de despacho (07, 08).

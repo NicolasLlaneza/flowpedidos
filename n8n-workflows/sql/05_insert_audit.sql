@@ -15,8 +15,10 @@ INSERT INTO tfi.audit_log (
     message, payload, duration_ms, retry_attempt
 )
 VALUES (
-    $1::uuid, $2, $3, $4,
-    $5, $6::jsonb, $7, $8
+    NULLIF($1::text, 'null')::uuid, $2, $3, $4,
+    NULLIF($5::text, 'null'), $6::jsonb,
+    NULLIF($7::text, 'null')::integer,
+    COALESCE(NULLIF($8::text, 'null')::integer, 0)
 )
 RETURNING id AS audit_id, created_at;
 
