@@ -68,6 +68,10 @@ services:
       # Meta WhatsApp Business API — disponibles como $env.WHATSAPP_* en los Code nodes
       WHATSAPP_PHONE_NUMBER_ID: ${WHATSAPP_PHONE_NUMBER_ID}
       WHATSAPP_ACCESS_TOKEN: ${WHATSAPP_ACCESS_TOKEN}
+
+      # WooCommerce — secret del webhook, disponible como $env.WC_WEBHOOK_SECRET
+      # en validate-wc-webhook.js para verificar la firma HMAC-SHA256.
+      WC_WEBHOOK_SECRET: ${WC_WEBHOOK_SECRET}
     volumes:
       - n8n_data:/home/node/.n8n
       - ./n8n-workflows:/workflows
