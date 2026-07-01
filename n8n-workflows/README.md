@@ -246,22 +246,39 @@ Setup inicial (primera vez, ~10 min):
 3. **Products → Add New** → creá 1-3 productos con precio y SKU.
 4. Configurá el webhook (**WooCommerce → Settings → Advanced → Webhooks**):
    - **Topic**: `Order created`
-   - **Delivery URL**: `http://tfi-n8n:5678/webhook/wc-order`
+   - **Delivery URL**: ver "Conectividad" abajo
    - **Secret**: el mismo valor que pusiste en `WC_WEBHOOK_SECRET` del `.env`
    - **Status**: Active
 
-> Si preferís usar una instalación de WordPress que ya tenés en otro compose,
-> conectá su container a la red del stack:
-> `docker network connect tfi-net <nombre-container-wordpress>` y usá la misma
-> Delivery URL (`http://tfi-n8n:5678/webhook/wc-order`).
+### Conectividad WooCommerce → n8n
 
-> **Error "URL de entrega no válida" al guardar el webhook**: WordPress bloquea
-> por seguridad las peticiones a IPs privadas (`wp_http_validate_url`), y el
-> container de n8n vive en la red interna (172.x). El repo incluye un *must-use
-> plugin* (`wordpress/mu-plugins/flowpedidos-allow-internal-webhook.php`) que
-> habilita el host `tfi-n8n`; el compose ya lo monta. Si usás tu propio WordPress,
-> copiá ese archivo a `wp-content/mu-plugins/` (se carga solo, sin activar) y
-> volvé a guardar el webhook.
+**Opción A — ngrok (recomendada, es la misma que usa Mercado Libre).**
+Como ML exige una URL pública HTTPS, conviene unificar: exponés n8n con ngrok y
+lo usás para los dos canales. Ventaja extra: al ser una URL pública, WordPress no
+la bloquea (ver la nota del bloqueo de IP privada más abajo).
+
+```bash
+ngrok http 5678          # da algo como https://abc123.ngrok-free.app
+```
+
+- Delivery URL en WooCommerce: `https://abc123.ngrok-free.app/webhook/wc-order`
+- (Opcional) seteá `WEBHOOK_URL=https://abc123.ngrok-free.app/` en el `.env` y
+  recreá n8n, para que muestre las URLs de webhook correctas.
+- La URL free de ngrok cambia en cada reinicio: si reiniciás ngrok, actualizá la
+  Delivery URL del webhook (y la notifications URL de ML).
+
+**Opción B — red interna Docker (plan B, funciona offline).**
+WordPress y n8n en la misma red `tfi-net`, sin exponer nada a internet. Delivery
+URL: `http://tfi-n8n:5678/webhook/wc-order`. Con esta opción WordPress bloquea la
+entrega por ser IP privada (`wp_http_validate_url`), así que el repo incluye un
+*must-use plugin* (`wordpress/mu-plugins/flowpedidos-allow-internal-webhook.php`)
+que habilita el host `tfi-n8n`; el compose de WordPress ya lo monta. Si usás tu
+propio WordPress, copiá ese archivo a `wp-content/mu-plugins/` (se carga solo) y
+volvé a guardar el webhook.
+
+> Si preferís usar una instalación de WordPress que ya tenés en otro compose y vas
+> por la Opción B, conectá su container a la red del stack:
+> `docker network connect tfi-net <nombre-container-wordpress>`.
 
 ### Simular la compra desde la tienda
 

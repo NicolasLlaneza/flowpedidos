@@ -45,7 +45,10 @@ services:
       N8N_HOST: localhost
       N8N_PORT: 5678
       N8N_PROTOCOL: http
-      WEBHOOK_URL: http://localhost:5678/
+      # URL base que n8n usa para construir las URLs de los webhooks. En local
+      # es localhost; cuando exponés n8n con ngrok (para ML/WooCommerce reales)
+      # seteá WEBHOOK_URL en el .env con la URL pública HTTPS de ngrok.
+      WEBHOOK_URL: ${WEBHOOK_URL:-http://localhost:5678/}
       GENERIC_TIMEZONE: America/Argentina/Mendoza
       TZ: America/Argentina/Mendoza
 
