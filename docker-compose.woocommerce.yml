@@ -1,0 +1,72 @@
+# =============================================================================
+# docker-compose.woocommerce.yml — WordPress + WooCommerce para pruebas reales
+# -----------------------------------------------------------------------------
+# Levanta una tienda WooCommerce local en la MISMA red (tfi-net) que n8n, así el
+# webhook de un pedido viaja por la red interna hasta n8n sin exponer nada a
+# internet.
+#
+# Requisitos:
+#   - El stack principal ya levantado (crea la red externa `tfi-net`):
+#       docker compose up -d
+#
+# Uso (levantar la tienda además del stack principal):
+#   docker compose -f docker-compose.yml -f docker-compose.woocommerce.yml up -d
+#
+#   # o, si el stack principal ya está corriendo, solo la tienda:
+#   docker compose -f docker-compose.woocommerce.yml up -d
+#
+# Tienda:  http://localhost:8080   (configurable con WC_HOST_PORT)
+# Delivery URL del webhook hacia n8n:  http://tfi-n8n:5678/webhook/wc-order
+# =============================================================================
+
+services:
+  wc-mysql:
+    image: mariadb:11
+    container_name: tfi-wc-mysql
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: ${WC_DB_PASSWORD:-wordpress}
+      MARIADB_ROOT_PASSWORD: ${WC_DB_ROOT_PASSWORD:-rootpass}
+    volumes:
+      - wc_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - tfi-net
+
+  wordpress:
+    image: wordpress:latest
+    container_name: tfi-wordpress
+    restart: unless-stopped
+    depends_on:
+      wc-mysql:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: wc-mysql:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: ${WC_DB_PASSWORD:-wordpress}
+      WORDPRESS_DB_NAME: wordpress
+    ports:
+      - "${WC_HOST_PORT:-8080}:80"
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - tfi-net
+
+volumes:
+  wc_mysql_data:
+    name: tfi_wc_mysql_data
+  wordpress_data:
+    name: tfi_wordpress_data
+
+# La red la crea el stack principal (docker-compose.yml). Acá la referenciamos
+# como externa para que WordPress y n8n compartan el mismo bridge.
+networks:
+  tfi-net:
+    external: true
+    name: tfi-net
