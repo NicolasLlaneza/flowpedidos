@@ -255,6 +255,14 @@ Setup inicial (primera vez, ~10 min):
 > `docker network connect tfi-net <nombre-container-wordpress>` y usá la misma
 > Delivery URL (`http://tfi-n8n:5678/webhook/wc-order`).
 
+> **Error "URL de entrega no válida" al guardar el webhook**: WordPress bloquea
+> por seguridad las peticiones a IPs privadas (`wp_http_validate_url`), y el
+> container de n8n vive en la red interna (172.x). El repo incluye un *must-use
+> plugin* (`wordpress/mu-plugins/flowpedidos-allow-internal-webhook.php`) que
+> habilita el host `tfi-n8n`; el compose ya lo monta. Si usás tu propio WordPress,
+> copiá ese archivo a `wp-content/mu-plugins/` (se carga solo, sin activar) y
+> volvé a guardar el webhook.
+
 ### Simular la compra desde la tienda
 
 Con el workflow **activo** en n8n:

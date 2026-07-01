@@ -55,6 +55,8 @@ services:
       - "${WC_HOST_PORT:-8080}:80"
     volumes:
       - wordpress_data:/var/www/html
+      # must-use plugin: habilita la entrega de webhooks al n8n interno (IP privada)
+      - ./wordpress/mu-plugins:/var/www/html/wp-content/mu-plugins
     networks:
       - tfi-net
 
