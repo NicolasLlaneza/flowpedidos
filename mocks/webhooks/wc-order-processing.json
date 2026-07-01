@@ -1,0 +1,65 @@
+{
+  "id": 728,
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "date_created": "2026-06-28T14:05:11",
+  "date_created_gmt": "2026-06-28T17:05:11",
+  "date_modified": "2026-06-28T14:05:40",
+  "discount_total": "0.00",
+  "shipping_total": "1500.00",
+  "total": "48900.00",
+  "total_tax": "0.00",
+  "customer_id": 12,
+  "order_key": "wc_order_aBcD1234EfGh",
+  "payment_method": "bacs",
+  "payment_method_title": "Transferencia bancaria directa",
+  "billing": {
+    "first_name": "Lucía",
+    "last_name": "Fernández",
+    "company": "",
+    "address_1": "Av. San Martín 1234",
+    "address_2": "",
+    "city": "Godoy Cruz",
+    "state": "Mendoza",
+    "postcode": "5501",
+    "country": "AR",
+    "email": "lucia.fernandez@example.com",
+    "phone": "+5492614567890"
+  },
+  "shipping": {
+    "first_name": "Lucía",
+    "last_name": "Fernández",
+    "address_1": "Av. San Martín 1234",
+    "city": "Godoy Cruz",
+    "state": "Mendoza",
+    "postcode": "5501",
+    "country": "AR"
+  },
+  "line_items": [
+    {
+      "id": 15,
+      "name": "Yerba Mate Orgánica 1kg",
+      "product_id": 41,
+      "variation_id": 0,
+      "quantity": 2,
+      "sku": "YERBA-ORG-1K",
+      "price": 18700,
+      "subtotal": "37400.00",
+      "total": "37400.00"
+    },
+    {
+      "id": 16,
+      "name": "Bombilla de Acero Inoxidable",
+      "product_id": 44,
+      "variation_id": 0,
+      "quantity": 1,
+      "sku": "BOMB-ACERO",
+      "price": 10000,
+      "subtotal": "10000.00",
+      "total": "10000.00"
+    }
+  ],
+  "date_paid": "2026-06-28T14:05:38",
+  "date_paid_gmt": "2026-06-28T17:05:38"
+}

@@ -149,6 +149,109 @@ Respuesta exitosa de Meta (200):
 ```
 → Extraer `wa_message_id` con: `{{ $json.messages?.[0]?.id ?? null }}`
 
+## Rama WooCommerce (multicanal real)
+
+Suma WooCommerce como **canal real** junto al de Mercado Libre. No reemplaza el
+flujo de ML: es una rama nueva con su propio webhook y adaptador que **converge**
+en el mismo tronco (idempotencia → persistencia → LLM → WhatsApp → auditoría).
+
+```
+[Webhook trigger: POST /webhook/wc-order]   ← Raw Body: ON
+            ↓
+[Code: validate-wc-webhook.js]  ← valida firma HMAC-SHA256, detecta ping
+            ↓
+         valid?
+        /       \
+       no        sí
+       ↓          ↓
+[Respond 200]  [Code: normalize-wc-order.js]   ← SIN enrich (WC manda el pedido completo)
+ (o 401 si                 ↓
+  firma inválida)  [Postgres: 01_idempotency_check.sql]
+                           ↓
+                   ── converge con el tronco compartido ──
+```
+
+Diferencia central con ML: **no hay paso de enrich**. WooCommerce envía el pedido
+completo en el body del webhook, así que se pasa directo del validador al
+normalizador. A partir del check de idempotencia, los nodos son los mismos que
+usa ML (`02`…`08`, LLM, fallback, WhatsApp, audit).
+
+### Nodos de la rama
+
+| Nodo en n8n | Archivo | Modo / Config |
+|---|---|---|
+| `Webhook WC order`      | —                              | HTTP Method POST, Path `wc-order`, **Options → Raw Body: ON** |
+| `Validate WC webhook`   | `lib/validate-wc-webhook.js`   | Code, Run Once for All Items |
+| `IF Valid?`             | —                              | `{{ $json.valid }}` is true |
+| `Normalize WC order`    | `lib/normalize-wc-order.js`    | Code, Run Once for All Items |
+
+Desde `Normalize WC order` en adelante se reutilizan los nodos existentes
+(`Check idempotency` → … → `Respond 200`).
+
+### Por qué "Raw Body: ON"
+
+WooCommerce firma los **bytes exactos** del body (HMAC-SHA256 en base64, header
+`x-wc-webhook-signature`). Si n8n re-serializa el JSON, el orden de claves o los
+escapes unicode pueden cambiar y la firma no coincide. Con *Raw Body* activado, el
+validador usa el body crudo y la firma valida siempre. Sin eso, cae a
+`JSON.stringify(body)` (best-effort) y lo avisa en `applied_rules` — sirve en dev,
+no confíes en prod.
+
+### Mapeo de estados WooCommerce → canónico
+
+| WooCommerce | Canónico | Nota |
+|---|---|---|
+| `checkout-draft`     | `created` | |
+| `pending` / `on-hold`| `pending_payment` | esperando pago (p.ej. transferencia) |
+| `processing`         | `paid` | pago recibido, en preparación |
+| `completed`          | `delivered` | WC lo da por finalizado |
+| `cancelled`          | `cancelled` | |
+| `refunded`           | `refunded` | |
+| `failed`             | `error` | pago fallido |
+
+WooCommerce no tiene estados de envío nativos (shipped/delivered vienen de plugins
+de tracking); el `delivery_status` de cada item se deriva del estado del pedido.
+
+### Setup en WooCommerce (WordPress admin)
+
+1. **WooCommerce → Settings → Advanced → Webhooks → Add webhook**
+   - **Topic**: `Order created` (agregar otro para `Order updated` si querés
+     notificar cambios de estado)
+   - **Delivery URL**: URL del webhook de n8n (ver conectividad abajo)
+   - **Secret**: un valor fuerte → copiarlo a `WC_WEBHOOK_SECRET` en `.env`
+   - **Status**: Active
+2. Al guardar, WooCommerce manda un **ping** de activación; el validador lo detecta
+   (`is_ping: true`) y no lo procesa como pedido.
+3. Probar: crear un pedido en la tienda (o cambiarle el estado) → dispara el webhook.
+
+### Conectividad: WordPress (Docker) → n8n
+
+Como tu WordPress corre en Docker, lo más simple es que **comparta la red** de este
+stack (`tfi-net`), así el webhook viaja por la red interna sin exponer n8n a
+internet. Dos opciones:
+
+- **Mismo compose**: mover los servicios `wordpress` + `mysql` a este
+  `docker-compose.yml` con `networks: [tfi-net]`. Delivery URL:
+  `http://n8n:5678/webhook/wc-order`.
+- **Compose separado (tu caso actual)**: conectar tu container de WordPress a la red
+  externa `tfi-net`:
+  ```bash
+  docker network connect tfi-net <nombre-del-container-wordpress>
+  ```
+  Delivery URL usando el nombre del container de n8n:
+  `http://tfi-n8n:5678/webhook/wc-order`.
+
+> Para "escuchar" el evento de prueba desde la UI de n8n, el path es
+> `/webhook-test/wc-order` mientras el workflow está en modo *Listen for test event*.
+> Una vez activado el workflow, queda en `/webhook/wc-order`.
+
+### Probar el normalizador sin webhook
+
+Hay un fixture de pedido WooCommerce realista en
+`mocks/webhooks/wc-order-processing.json` (2 productos, guest→customer con id, estado
+`processing`). Podés pegarlo como pinned data en el nodo Webhook o alimentarlo
+directo al normalizador para validar el mapeo canónico.
+
 ## Convenciones para el workflow
 
 1. **Naming de nodos**: usar prefijo de etapa (`webhook`, `enrich`, `normalize`, `persist`, `llm`, `audit`) seguido de la acción.

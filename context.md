@@ -100,6 +100,8 @@ Webhook POST /ml-order
 |---------|----------|------|
 | `n8n-workflows/lib/validate-webhook.js` | `Validate webhook` | Run Once for All Items |
 | `n8n-workflows/lib/normalize-ml-order.js` | `Normalize ML order` | Run Once for All Items |
+| `n8n-workflows/lib/validate-wc-webhook.js` | `Validate WC webhook` (rama WooCommerce) | Run Once for All Items |
+| `n8n-workflows/lib/normalize-wc-order.js` | `Normalize WC order` (rama WooCommerce) | Run Once for All Items |
 | `n8n-workflows/lib/build-llm-prompt.js` | `Build LLM prompt` | Run Once for Each Item |
 | `n8n-workflows/lib/parse-llm-response.js` | `Parse LLM response` | Run Once for Each Item |
 | `n8n-workflows/lib/fallback-template.js` | `Fallback template` | Run Once for Each Item |
@@ -143,3 +145,17 @@ Ver `.env.example`. Críticas para el despacho WA:
 
 Continuar desde nodo **22 — Get customer phone** y avanzar hasta el 30.
 Cuando el workflow esté completo, exportarlo desde n8n y guardar como `n8n-workflows/workflow.json`.
+
+### Rama WooCommerce (integración real, en curso)
+
+Artefactos listos y testeados: `validate-wc-webhook.js` (firma HMAC + ping) y
+`normalize-wc-order.js` (converge al mismo modelo canónico que ML). Ver
+`n8n-workflows/README.md` → sección "Rama WooCommerce".
+
+Pendiente de armar en la UI de n8n:
+1. Nodo `Webhook WC order` (path `wc-order`, **Raw Body: ON**).
+2. `Validate WC webhook` (Code) → `IF Valid?` → `Normalize WC order` (Code).
+3. Cablear `Normalize WC order` al `Check idempotency` existente (converge con ML).
+4. Setear `WC_WEBHOOK_SECRET` en `.env` y conectar el container de WordPress a la
+   red `tfi-net` (delivery URL `http://tfi-n8n:5678/webhook/wc-order`).
+5. Reexportar `workflow.json` cuando la rama quede andando.
