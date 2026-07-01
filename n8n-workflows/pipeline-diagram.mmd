@@ -20,9 +20,10 @@ flowchart TD
         WC2["Code: Validate WC webhook<br/>firma HMAC + detecta ping"]
         WC3{"Valid?"}
         WC5["Code: Normalize WC order<br/>(sin enrich)"]
-        WCbad["Respond 200<br/>(ping / firma invalida)"]
+        WCaudit["Postgres 05: Audit<br/>wc_validation_failed / ping"]
+        WCbad["Respond to Webhook<br/>200 (o 401 si firma invalida)"]
         WC1 --> WC2 --> WC3
-        WC3 -->|no / ping| WCbad
+        WC3 -->|no / ping| WCaudit --> WCbad
         WC3 -->|si| WC5
     end
 
