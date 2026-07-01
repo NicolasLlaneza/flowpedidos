@@ -224,26 +224,63 @@ de tracking); el `delivery_status` de cada item se deriva del estado del pedido.
    (`is_ping: true`) y no lo procesa como pedido.
 3. Probar: crear un pedido en la tienda (o cambiarle el estado) → dispara el webhook.
 
-### Conectividad: WordPress (Docker) → n8n
+### Levantar la tienda con Docker (recomendado)
 
-Como tu WordPress corre en Docker, lo más simple es que **comparta la red** de este
-stack (`tfi-net`), así el webhook viaja por la red interna sin exponer n8n a
-internet. Dos opciones:
+El repo incluye `docker-compose.woocommerce.yml` que levanta WordPress + MariaDB en
+la **misma red** que n8n (`tfi-net`), así el webhook viaja por la red interna sin
+exponer nada a internet.
 
-- **Mismo compose**: mover los servicios `wordpress` + `mysql` a este
-  `docker-compose.yml` con `networks: [tfi-net]`. Delivery URL:
-  `http://n8n:5678/webhook/wc-order`.
-- **Compose separado (tu caso actual)**: conectar tu container de WordPress a la red
-  externa `tfi-net`:
-  ```bash
-  docker network connect tfi-net <nombre-del-container-wordpress>
-  ```
-  Delivery URL usando el nombre del container de n8n:
-  `http://tfi-n8n:5678/webhook/wc-order`.
+```bash
+# Requiere el stack principal levantado (crea la red tfi-net):
+docker compose up -d
+
+# Levantar la tienda (WordPress en http://localhost:8080):
+docker compose -f docker-compose.woocommerce.yml up -d
+```
+
+Setup inicial (primera vez, ~10 min):
+
+1. Abrí `http://localhost:8080` → completá el wizard de WordPress (título, usuario
+   admin, contraseña).
+2. **Plugins → Add New** → instalá y activá **WooCommerce** → corré su setup wizard.
+3. **Products → Add New** → creá 1-3 productos con precio y SKU.
+4. Configurá el webhook (**WooCommerce → Settings → Advanced → Webhooks**):
+   - **Topic**: `Order created`
+   - **Delivery URL**: `http://tfi-n8n:5678/webhook/wc-order`
+   - **Secret**: el mismo valor que pusiste en `WC_WEBHOOK_SECRET` del `.env`
+   - **Status**: Active
+
+> Si preferís usar una instalación de WordPress que ya tenés en otro compose,
+> conectá su container a la red del stack:
+> `docker network connect tfi-net <nombre-container-wordpress>` y usá la misma
+> Delivery URL (`http://tfi-n8n:5678/webhook/wc-order`).
+
+### Simular la compra desde la tienda
+
+Con el workflow **activo** en n8n:
+
+1. Entrá a la tienda (`http://localhost:8080/shop` o la home).
+2. Agregá un producto al carrito → **Checkout** → completá datos de facturación
+   (nombre, email, teléfono) → hacé el pedido con un método offline (p.ej.
+   "Transferencia bancaria directa" / *Cash on delivery*, que WooCommerce trae).
+3. Al confirmarse, WooCommerce dispara el webhook `order.created` → n8n recibe,
+   valida la firma, normaliza y persiste el pedido.
+
+Verificar que entró:
+
+```bash
+docker compose exec postgres psql -U postgres -d tfi -c \
+  "SELECT external_id, channel, status, total_amount FROM tfi.orders WHERE channel='woocommerce' ORDER BY received_at DESC LIMIT 5;"
+```
 
 > Para "escuchar" el evento de prueba desde la UI de n8n, el path es
 > `/webhook-test/wc-order` mientras el workflow está en modo *Listen for test event*.
 > Una vez activado el workflow, queda en `/webhook/wc-order`.
+>
+> El estado del pedido recién creado suele ser `pending`/`on-hold` (→ canónico
+> `pending_payment`); si marcás el pedido como *Processing* o *Completed* en el
+> admin y tenés un webhook `Order updated`, se dispara de nuevo con el estado
+> actualizado.
 
 ### Probar el normalizador sin webhook
 
