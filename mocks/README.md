@@ -56,6 +56,19 @@ Por default apunta a `http://localhost:5678/webhook/ml-order`. Si tu workflow en
 ./mocks/send-webhook.sh paid-2235 http://localhost:5678/webhook-test/mi-flow
 ```
 
+### Disparar un webhook de WooCommerce (firmado con HMAC)
+
+`send-wc-webhook.sh` simula un pedido de WooCommerce, firmándolo con HMAC-SHA256
+igual que la plataforma real (toma el secret de `WC_WEBHOOK_SECRET` del `.env`).
+
+```bash
+./mocks/send-wc-webhook.sh                       # wc-order-processing → /webhook/wc-order
+./mocks/send-wc-webhook.sh wc-order-processing http://localhost:5678/webhook-test/wc-order
+```
+
+Sin `WC_WEBHOOK_SECRET` seteado manda una firma inválida a propósito (para probar
+el rechazo). Ver la rama WooCommerce en `n8n-workflows/README.md`.
+
 ### Consultar un pedido directamente (lo que hará n8n en el paso de enrich)
 
 ```bash
