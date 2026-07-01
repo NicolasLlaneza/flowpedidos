@@ -1,0 +1,82 @@
+flowchart TD
+    %% ===================== CANAL MERCADO LIBRE =====================
+    subgraph ML["Canal Mercado Libre"]
+        direction TB
+        ML1["Webhook ML<br/>POST /webhook/ml-order"]
+        ML2["Code: Validate webhook"]
+        ML3{"Valid?"}
+        ML4["HTTP: Enrich from mock<br/>GET /orders/:id"]
+        ML5["Code: Normalize ML order"]
+        MLbad["Audit validation_failed<br/>+ Respond 400"]
+        ML1 --> ML2 --> ML3
+        ML3 -->|no| MLbad
+        ML3 -->|si| ML4 --> ML5
+    end
+
+    %% ===================== CANAL WOOCOMMERCE (NUEVO) =====================
+    subgraph WC["Canal WooCommerce  (nuevo)"]
+        direction TB
+        WC1["Webhook WC<br/>POST /webhook/wc-order<br/><b>Raw Body: ON</b>"]
+        WC2["Code: Validate WC webhook<br/>firma HMAC + detecta ping"]
+        WC3{"Valid?"}
+        WC5["Code: Normalize WC order<br/>(sin enrich)"]
+        WCbad["Respond 200<br/>(ping / firma invalida)"]
+        WC1 --> WC2 --> WC3
+        WC3 -->|no / ping| WCbad
+        WC3 -->|si| WC5
+    end
+
+    %% ===================== CONVERGENCIA =====================
+    IDEM["Postgres 01: Check idempotency"]
+    ML5 --> IDEM
+    WC5 --> IDEM
+
+    %% ===================== TRONCO COMPARTIDO =====================
+    subgraph TRUNK["Tronco compartido (ambos canales)"]
+        direction TB
+        DUP{"Duplicate?"}
+        DUPa["Audit duplicate<br/>+ Respond 200"]
+        UC["Postgres 02: Upsert customer"]
+        IO["Postgres 03: Insert order"]
+        SI["Code: Split items"]
+        II["Postgres 04: Insert items"]
+        BP["Code: Build LLM prompt<br/>(seudonimizacion + guard PII)"]
+        OAI["OpenAI: gpt-4o-mini"]
+        PR["Code: Parse LLM response"]
+        UF{"Use fallback?"}
+        FT["Code: Fallback template"]
+        IN["Postgres 06: Insert ai_notification"]
+        DUP -->|si| DUPa
+        DUP -->|no| UC --> IO --> SI --> II --> BP --> OAI --> PR --> UF
+        UF -->|si| FT --> IN
+        UF -->|no| IN
+    end
+    IDEM --> DUP
+
+    %% ===================== DESPACHO WHATSAPP =====================
+    subgraph WA["Despacho WhatsApp"]
+        direction TB
+        GP["Postgres 07: Get customer phone"]
+        MD["Code: Merge dispatch ctx"]
+        BW["Code: Build WA payload"]
+        PH{"Phone ok?"}
+        NP["Audit no_phone<br/>+ dispatch_failed"]
+        SW["HTTP: Send WhatsApp<br/>Meta Cloud API"]
+        PW["Code: Parse WA response"]
+        UD["Postgres 08: Update dispatch"]
+        AD["Postgres 05: Audit dispatch"]
+        R200["Respond 200"]
+        GP --> MD --> BW --> PH
+        PH -->|no| NP --> UD
+        PH -->|si| SW --> PW --> UD
+        UD --> AD --> R200
+    end
+    IN --> GP
+
+    %% ===================== ESTILOS =====================
+    classDef nuevo fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    classDef decision fill:#fff8e1,stroke:#f9a825,stroke-width:1px;
+    classDef converge fill:#e3f2fd,stroke:#1565c0,stroke-width:2px;
+    class WC1,WC2,WC5 nuevo;
+    class ML3,WC3,DUP,UF,PH decision;
+    class IDEM converge;
