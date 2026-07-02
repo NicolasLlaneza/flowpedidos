@@ -99,11 +99,56 @@ services:
     networks:
       - tfi-net
 
+  # WooCommerce de prueba (WordPress + MySQL) para integración multicanal real.
+  # WP y n8n viven en la misma red interna → el webhook viaja sin pasar por
+  # internet, sin necesidad de ngrok.
+  mysql:
+    image: mysql:8.0
+    container_name: tfi-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: ${WP_DB_USER}
+      MYSQL_PASSWORD: ${WP_DB_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - tfi-net
+
+  wordpress:
+    image: wordpress:latest
+    container_name: tfi-wordpress
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: ${WP_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WP_DB_PASSWORD}
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wp_data:/var/www/html
+    ports:
+      - "${WP_HOST_PORT:-8080}:80"
+    networks:
+      - tfi-net
+
 volumes:
   postgres_data:
     name: tfi_postgres_data
   n8n_data:
     name: tfi_n8n_data
+  mysql_data:
+    name: tfi_mysql_data
+  wp_data:
+    name: tfi_wp_data
 
 networks:
   tfi-net:
