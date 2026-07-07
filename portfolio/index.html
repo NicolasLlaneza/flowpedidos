@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nicolás Llaneza — Desarrollador Full Stack</title>
+<meta name="description" content="Portfolio de Nicolás Llaneza, desarrollador full stack. Proyectos con React, Node, FastAPI, Supabase y n8n.">
+<style>
+  :root {
+    --bg: #0b0e14;
+    --bg-alt: #11151f;
+    --card: #151a26;
+    --border: #232a3a;
+    --text: #e7eaf2;
+    --text-dim: #96a0b5;
+    --accent: #6ee7b7;
+    --accent-dim: #2f8f6d;
+    --radius: 14px;
+    --max-width: 1080px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+  }
+
+  a { color: inherit; }
+
+  .wrap {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* Nav */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(11, 14, 20, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 0;
+  }
+
+  .logo {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    font-size: 1.05rem;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    transition: color 0.15s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  /* Hero */
+  .hero {
+    padding: 96px 0 72px;
+  }
+
+  .eyebrow {
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    line-height: 1.1;
+    margin: 0 0 18px;
+    letter-spacing: -0.02em;
+  }
+
+  .hero p.lead {
+    color: var(--text-dim);
+    font-size: 1.15rem;
+    max-width: 620px;
+    margin: 0 0 32px;
+  }
+
+  .btn-row { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: transform 0.15s, background 0.15s, border-color 0.15s;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #06251b;
+  }
+  .btn-primary:hover { transform: translateY(-1px); background: #7ef0c0; }
+
+  .btn-ghost {
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .btn-ghost:hover { border-color: var(--accent-dim); transform: translateY(-1px); }
+
+  /* Sections */
+  section { padding: 64px 0; }
+
+  h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .section-sub {
+    color: var(--text-dim);
+    margin: 0 0 40px;
+    max-width: 640px;
+  }
+
+  /* About / stack */
+  .stack-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  .tag {
+    border: 1px solid var(--border);
+    background: var(--bg-alt);
+    color: var(--text-dim);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+  }
+
+  /* Projects */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 22px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .card:hover {
+    border-color: var(--accent-dim);
+    transform: translateY(-3px);
+  }
+
+  .card-kicker {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .card h3 {
+    margin: 0 0 10px;
+    font-size: 1.25rem;
+  }
+
+  .card p {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin: 0 0 20px;
+    flex-grow: 1;
+  }
+
+  .card .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .card .tags span {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+
+  .card-link:hover { color: var(--accent); }
+
+  /* Contact */
+  .contact-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 48px;
+    text-align: center;
+  }
+
+  .contact-card h2 { margin-bottom: 12px; }
+  .contact-card p { color: var(--text-dim); margin-bottom: 28px; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  @media (max-width: 640px) {
+    .nav-links { gap: 16px; }
+    .hero { padding: 64px 0 48px; }
+    .contact-card { padding: 32px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <a class="logo" href="#top">Nicolás Llaneza</a>
+      <ul class="nav-links">
+        <li><a href="#proyectos">Proyectos</a></li>
+        <li><a href="#sobre-mi">Sobre mí</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <section class="hero" id="top">
+      <div class="eyebrow">Portfolio</div>
+      <h1>Nicolás Llaneza<br>Desarrollador Full Stack</h1>
+      <p class="lead">
+        Construyo aplicaciones web de punta a punta: desde el modelo de datos y la API
+        hasta la interfaz. Formado en la Tecnicatura Universitaria en Programación (UTN-FRM),
+        con experiencia llevando un proyecto real a producción para un cliente.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#proyectos">Ver proyectos</a>
+        <a class="btn btn-ghost" href="#contacto">Contactarme</a>
+      </div>
+    </section>
+
+    <section id="proyectos">
+      <h2>Proyectos</h2>
+      <p class="section-sub">Una selección de trabajos académicos, personales y para cliente real.</p>
+
+      <div class="projects-grid">
+
+        <div class="card">
+          <div class="card-kicker">Producción · Cliente real</div>
+          <h3>Neu+</h3>
+          <p>
+            Sistema de seguimiento post-venta para un taller automotriz. Gestión de clientes,
+            vehículos y servicios con fotos, consulta pública de historial por patente, y
+            notificaciones por WhatsApp vía Edge Functions. Row Level Security y auditoría
+            defensiva en cada tabla.
+          </p>
+          <div class="tags">
+            <span>React</span><span>Vite</span><span>Tailwind</span>
+            <span>Supabase</span><span>PostgreSQL</span><span>Vercel</span>
+          </div>
+          <a class="card-link" href="https://github.com/NicolasLlaneza/Neu-" target="_blank" rel="noopener">
+            Ver en GitHub ↗
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="card-kicker">Trabajo final integrador</div>
+          <h3>flowpedidos</h3>
+          <p>
+            Arquitectura de integración multicanal para PyMEs e-commerce. Orquesta pedidos
+            de múltiples canales con n8n y genera respuestas contextualizadas con LLMs,
+            comparando OpenAI GPT-4o-mini contra Anthropic Claude Haiku.
+          </p>
+          <div class="tags">
+            <span>n8n</span><span>PostgreSQL</span><span>OpenAI</span><span>Claude</span><span>Docker</span>
+          </div>
+          <a class="card-link" href="https://github.com/NicolasLlaneza/flowpedidos" target="_blank" rel="noopener">
+            Ver en GitHub ↗
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="card-kicker">Proyecto personal</div>
+          <h3>TremendoGol</h3>
+          <p>
+            App de fixtures, resultados y tablas de posiciones de fútbol, consumiendo la
+            API de API-Football en tiempo real. Backend propio con Prisma sobre PostgreSQL
+            para persistencia y cacheo de datos.
+          </p>
+          <div class="tags">
+            <span>React</span><span>Vite</span><span>Tailwind</span>
+            <span>Express</span><span>Prisma</span><span>PostgreSQL</span>
+          </div>
+          <a class="card-link" href="https://github.com/NicolasLlaneza/TremendoGol" target="_blank" rel="noopener">
+            Ver en GitHub ↗
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="card-kicker">Trabajo grupal · Cursada</div>
+          <h3>Food Store</h3>
+          <p>
+            E-commerce de productos alimenticios: catálogo, carrito y pedidos con máquina de
+            estados (pendiente → confirmado → en preparación → en camino → entregado), panel
+            admin para stock e insumos, auth JWT con refresh tokens y roles (admin/stock/pedidos/cliente).
+          </p>
+          <div class="tags">
+            <span>FastAPI</span><span>SQLModel</span><span>PostgreSQL</span>
+            <span>React</span><span>TypeScript</span><span>Docker</span>
+          </div>
+          <a class="card-link" href="https://github.com/NicolasLlaneza/PROG4" target="_blank" rel="noopener">
+            Ver en GitHub ↗
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="sobre-mi">
+      <h2>Sobre mí</h2>
+      <p class="section-sub">
+        Estudiante de la Tecnicatura Universitaria en Programación (UTN-FRM). Me interesa
+        el trabajo full stack: modelar datos, diseñar APIs prolijas y armar interfaces que
+        se sientan bien de usar. Vengo llevando proyectos de la cursada a un nivel de
+        producción real, incluyendo despliegue para un cliente.
+      </p>
+      <div class="stack-tags">
+        <span class="tag">JavaScript / TypeScript</span>
+        <span class="tag">React</span>
+        <span class="tag">Node.js / Express</span>
+        <span class="tag">Python / FastAPI</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">Supabase</span>
+        <span class="tag">n8n</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Java</span>
+      </div>
+    </section>
+
+    <section id="contacto">
+      <div class="contact-card">
+        <h2>Hablemos</h2>
+        <p>¿Tenés un proyecto en mente o una oportunidad? Escribime.</p>
+        <div class="btn-row" style="justify-content: center;">
+          <a class="btn btn-primary" href="mailto:nicolasllanezabvb@gmail.com">Enviar email</a>
+          <a class="btn btn-ghost" href="https://github.com/NicolasLlaneza" target="_blank" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    © <span id="year"></span> Nicolás Llaneza
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
