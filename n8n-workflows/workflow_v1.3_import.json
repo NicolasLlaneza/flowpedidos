@@ -1078,13 +1078,7 @@
     },
     "Insert Items": {
       "main": [
-        [
-          {
-            "node": "Build LLM prompt",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        []
       ]
     },
     "Insert Order": {
@@ -1092,6 +1086,11 @@
         [
           {
             "node": "Split Items",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Build LLM prompt",
             "type": "main",
             "index": 0
           }
