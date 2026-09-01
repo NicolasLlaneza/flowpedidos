@@ -49,9 +49,11 @@ const out = [];
 
 for (const item of $input.all()) {
     const t0 = Date.now();
-    // El webhook de WC mete el pedido en item.json.body. Si vino plano, usar el raíz.
-    const raw = item.json;
-    const wc = (raw && typeof raw.body === 'object' && raw.body !== null) ? raw.body : raw;
+    // v1.3: entre Validate WC webhook y este nodo se insertaron Persist raw
+    // event WC + ACK 200 WC, por lo que $input ya no trae el body del pedido.
+    // Se lee el pedido directamente desde Validate WC webhook, que lo emite
+    // como `.order` (ver validate-wc-webhook.js).
+    const wc = $('Validate WC webhook').item.json.order || {};
 
     const appliedRules = [];
     const billing = wc.billing || {};
@@ -123,11 +125,18 @@ for (const item of $input.all()) {
     }));
     if (items.length === 0) appliedRules.push('warn:no_items');
 
+    // v1.3: raw_event_id y ack_at vienen del nodo Persist raw event WC
+    // (§4.1.1 del TFI corregido). El ack_at se persiste en tfi.orders y la
+    // ventana received_at→ack_at debe quedar por debajo de 500 ms.
+    const rawEvt = $('Persist raw event WC').item.json;
+
     out.push({
         json: {
             customer,
             order,
             items,
+            raw_event_id: rawEvt.raw_event_id,
+            ack_at: rawEvt.ack_at,
             meta: {
                 normalization_ms: Date.now() - t0,
                 applied_rules: appliedRules,

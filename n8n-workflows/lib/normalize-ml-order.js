@@ -177,11 +177,18 @@ for (const item of $input.all()) {
         appliedRules.push('warn:no_items');
     }
 
+    // v1.3: raw_event_id y ack_at vienen del nodo Persist raw event ML
+    // (§4.1.1 del TFI corregido). El ack_at se persiste en tfi.orders y la
+    // ventana received_at→ack_at debe quedar por debajo de 500 ms.
+    const rawEvt = $('Persist raw event ML').item.json;
+
     out.push({
         json: {
             customer,
             order,
             items,
+            raw_event_id: rawEvt.raw_event_id,
+            ack_at: rawEvt.ack_at,
             meta: {
                 normalization_ms: Date.now() - t0,
                 applied_rules: appliedRules,
