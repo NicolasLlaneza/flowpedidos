@@ -118,16 +118,23 @@ for (const item of $input.all()) {
     const buyer = ml.buyer || {};
     const fullName = [buyer.first_name, buyer.last_name].filter(Boolean).join(' ') || null;
     const phone = buildPhoneString(buyer.phone);
-    const externalCustomerId = buyer.id ? String(buyer.id) : null;
 
+    // D1 (v1.3): si el buyer_id viene nulo, se genera un identificador sustituto
+    // determinístico `synthetic:{channel}:{order.external_id}`. Es reproducible
+    // (mismo pedido reingresado hace UPSERT sobre la misma fila) y trazable
+    // (el prefijo permite filtrar y contar sustituciones). Preserva la
+    // integridad referencial (customers.external_id NOT NULL) sin bloquear
+    // el pedido, según §4.6 del TFI corregido.
+    let externalCustomerId = buyer.id ? String(buyer.id) : null;
     if (!externalCustomerId) {
-        appliedRules.push('warn:buyer_id_missing');
+        externalCustomerId = `synthetic:${CHANNEL}:${ml.id}`;
+        appliedRules.push('warn:buyer_id_missing_substituted');
     }
 
     const customer = {
         external_id: externalCustomerId,
         channel: CHANNEL,
-        pseudonym: makePseudonym(CHANNEL, externalCustomerId || ml.id),
+        pseudonym: makePseudonym(CHANNEL, externalCustomerId),
         full_name: fullName,
         email: buyer.email || null,
         phone,

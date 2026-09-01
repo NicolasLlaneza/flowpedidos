@@ -69,15 +69,25 @@ for (const item of $input.all()) {
     // WC tiene dos identificadores posibles del cliente:
     //   - customer_id (numérico, si es usuario registrado; 0 para guest checkouts)
     //   - email (fallback estable cuando es guest)
-    const externalCustomerId = wc.customer_id && wc.customer_id !== 0
+    let externalCustomerId = wc.customer_id && wc.customer_id !== 0
         ? String(wc.customer_id)
         : (email || null);
-    if (!externalCustomerId) appliedRules.push('warn:customer_id_missing');
+
+    // D1 (v1.3): si ninguno de los dos está disponible, se genera un identificador
+    // sustituto determinístico `synthetic:{channel}:{order.external_id}`. Es
+    // reproducible (mismo pedido reingresado hace UPSERT sobre la misma fila) y
+    // trazable (el prefijo permite filtrar y contar sustituciones). Preserva la
+    // integridad referencial (customers.external_id NOT NULL) sin bloquear el
+    // pedido, según §4.6 del TFI corregido.
+    if (!externalCustomerId) {
+        externalCustomerId = `synthetic:${CHANNEL}:${wc.id}`;
+        appliedRules.push('warn:customer_id_missing_substituted');
+    }
 
     const customer = {
         external_id: externalCustomerId,
         channel: CHANNEL,
-        pseudonym: makePseudonym(CHANNEL, externalCustomerId || String(wc.id)),
+        pseudonym: makePseudonym(CHANNEL, externalCustomerId),
         full_name: fullName,
         email,
         phone,
