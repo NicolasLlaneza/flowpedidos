@@ -1,0 +1,62 @@
+{
+  "id": 3000000000000056,
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-13T05:42:06.000-03:00",
+  "date_modified": "2026-08-13T05:42:06.000-03:00",
+  "date_created_gmt": "2026-08-13T08:42:06.000Z",
+  "date_modified_gmt": "2026-08-13T08:42:06.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "155703.72",
+  "customer_id": 0,
+  "order_key": "wc_order_295pdxi1z1u",
+  "billing": {
+    "first_name": "Agustina",
+    "last_name": "Castro",
+    "email": "agustina.castro@example.com",
+    "phone": "+5492615556356",
+    "address_1": "Calle 4132",
+    "city": "Maipú",
+    "state": "Mendoza",
+    "postcode": "M5515",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Agustina",
+    "last_name": "Castro",
+    "address_1": "Calle 9586",
+    "city": "Maipú",
+    "state": "Mendoza",
+    "postcode": "M5515",
+    "country": "AR"
+  },
+  "payment_method": "account_money",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_5esy2yxukq",
+  "line_items": [
+    {
+      "id": 7985,
+      "name": "Neumático Bridgestone Ecopia EP150 185/65 R14",
+      "product_id": 314,
+      "variation_id": 0,
+      "quantity": 2,
+      "subtotal": "155703.72",
+      "total": "155703.72",
+      "sku": "BST-EP150-185-65-R14",
+      "price": 77851.86
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

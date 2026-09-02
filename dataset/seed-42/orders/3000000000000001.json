@@ -2,10 +2,9 @@
   "id": 3000000000000001,
   "status": "paid",
   "status_detail": null,
-  "date_created": "2026-04-23T00:06:08.000-03:00",
-  "date_closed": "2026-04-23T00:43:40.000-03:00",
-  "last_updated": "2026-04-24T00:23:53.000-03:00",
-  "expiration_date": null,
+  "date_created": "2026-08-05T00:06:08.000-03:00",
+  "date_closed": "2026-08-05T00:43:40.000-03:00",
+  "last_updated": "2026-08-06T00:23:53.000-03:00",
   "order_items": [
     {
       "item": {
@@ -27,12 +26,12 @@
   "paid_amount": 72494.89,
   "currency_id": "ARS",
   "buyer": {
-    "id": 400448291,
-    "nickname": "JPÉREZ_86",
+    "id": 400669734,
+    "nickname": "JPÉREZ_25",
     "email": "juan.pérez@example.com",
     "phone": {
       "area_code": "261",
-      "number": "5556697",
+      "number": "5558524",
       "extension": null,
       "verified": true
     },
@@ -40,7 +39,7 @@
     "last_name": "Pérez",
     "billing_info": {
       "doc_type": "DNI",
-      "doc_number": "35531851"
+      "doc_number": "33965811"
     }
   },
   "seller": {
@@ -53,7 +52,7 @@
       "transaction_amount": 72494.89,
       "currency_id": "ARS",
       "status": "approved",
-      "date_approved": "2026-04-23T00:43:40.000-03:00",
+      "date_approved": "2026-08-05T00:43:40.000-03:00",
       "payment_method_id": "account_money",
       "payment_type": "account_money",
       "installments": 6

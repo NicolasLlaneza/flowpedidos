@@ -2,49 +2,36 @@
   "id": 3000000000000037,
   "status": "paid",
   "status_detail": null,
-  "date_created": "2026-04-21T01:52:56.000-03:00",
-  "date_closed": "2026-04-21T03:09:16.000-03:00",
-  "last_updated": "2026-04-21T14:02:57.000-03:00",
-  "expiration_date": null,
+  "date_created": "2026-08-23T05:42:02.000-03:00",
+  "date_closed": "2026-08-23T06:29:25.000-03:00",
+  "last_updated": "2026-08-24T08:31:01.000-03:00",
   "order_items": [
     {
       "item": {
-        "id": "MLA1014850691",
-        "title": "Neumático Continental ContiPremium 205/60 R16",
+        "id": "MLA9668571608",
+        "title": "Neumático Fate Maxisport 195/65 R15",
         "category_id": "MLA1747",
         "variation_id": null,
-        "seller_custom_field": "CON-CPC-205-60-R16",
-        "warranty": "Garantía del vendedor: 6 meses"
+        "seller_custom_field": "FAT-MXS-195-65-R15",
+        "warranty": null
       },
-      "quantity": 2,
-      "unit_price": 100280.97,
+      "quantity": 4,
+      "unit_price": 59260.3,
       "currency_id": "ARS",
       "manufacturing_days": null,
-      "sale_fee": 11030.91
-    },
-    {
-      "item": {
-        "id": "MLA913544868",
-        "title": "Revisión y ajuste de presión",
-        "category_id": "MLA417283",
-        "seller_custom_field": "SVC-PRES"
-      },
-      "quantity": 1,
-      "unit_price": 3679.57,
-      "currency_id": "ARS",
-      "sale_fee": 404.75
+      "sale_fee": 6518.63
     }
   ],
-  "total_amount": 204241.51,
-  "paid_amount": 204241.51,
+  "total_amount": 237041.2,
+  "paid_amount": 237041.2,
   "currency_id": "ARS",
   "buyer": {
-    "id": 400852041,
-    "nickname": "JACOSTA_89",
+    "id": 400021249,
+    "nickname": "JACOSTA_68",
     "email": "joaquín.acosta@example.com",
     "phone": {
       "area_code": "261",
-      "number": "5552459",
+      "number": "5559759",
       "extension": null,
       "verified": true
     },
@@ -52,7 +39,7 @@
     "last_name": "Acosta",
     "billing_info": {
       "doc_type": "DNI",
-      "doc_number": "35180735"
+      "doc_number": "35115300"
     }
   },
   "seller": {
@@ -61,24 +48,24 @@
   },
   "payments": [
     {
-      "id": 8968804126,
-      "transaction_amount": 204241.51,
+      "id": 8994428570,
+      "transaction_amount": 237041.2,
       "currency_id": "ARS",
       "status": "approved",
-      "date_approved": "2026-04-21T03:09:16.000-03:00",
-      "payment_method_id": "account_money",
-      "payment_type": "account_money",
+      "date_approved": "2026-08-23T06:29:25.000-03:00",
+      "payment_method_id": "visa",
+      "payment_type": "credit_card",
       "installments": 6
     }
   ],
   "shipping": {
-    "id": 41214736435,
-    "status": "delivered",
+    "id": 41515891535,
+    "status": "ready_to_ship",
     "shipping_mode": "me2",
     "service_id": 308,
     "cost": 0,
-    "tracking_number": "AR862671325MLA",
-    "date_delivered": "2026-04-21T14:02:57.000-03:00",
+    "tracking_number": null,
+    "date_delivered": null,
     "receiver_address": {
       "city": {
         "name": "Rosario"
@@ -94,7 +81,6 @@
     }
   },
   "tags": [
-    "paid",
-    "delivered"
+    "paid"
   ]
 }

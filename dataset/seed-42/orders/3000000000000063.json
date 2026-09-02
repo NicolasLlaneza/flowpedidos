@@ -1,0 +1,86 @@
+{
+  "id": 3000000000000063,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-08-21T13:11:49.000-03:00",
+  "date_closed": "2026-08-21T14:40:47.000-03:00",
+  "last_updated": "2026-08-22T15:51:46.000-03:00",
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA4371830393",
+        "title": "Neumático Goodyear Eagle F1 245/40 R18",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "GDY-EF1-245-40-R18",
+        "warranty": "Garantía del vendedor: 6 meses"
+      },
+      "quantity": 2,
+      "unit_price": 196196.13,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 21581.57
+    }
+  ],
+  "total_amount": 392392.26,
+  "paid_amount": 392392.26,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400993946,
+    "nickname": "CLÓPEZ_82",
+    "email": "carlos.lópez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5558119",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Carlos",
+    "last_name": "López",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "39965992"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8922127677,
+      "transaction_amount": 392392.26,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-08-21T14:40:47.000-03:00",
+      "payment_method_id": "account_money",
+      "payment_type": "account_money",
+      "installments": 6
+    }
+  ],
+  "shipping": {
+    "id": 41497531651,
+    "status": "shipped",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": "AR118681923MLA",
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Córdoba"
+      },
+      "state": {
+        "name": "Córdoba"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "X5000"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "id": 3000000000000098,
+  "parent_id": 0,
+  "status": "completed",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-21T19:33:33.000-03:00",
+  "date_modified": "2026-08-21T19:33:33.000-03:00",
+  "date_created_gmt": "2026-08-21T22:33:33.000Z",
+  "date_modified_gmt": "2026-08-21T22:33:33.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "589520.92",
+  "customer_id": 0,
+  "order_key": "wc_order_q5mls45d2z",
+  "billing": {
+    "first_name": "Catalina",
+    "last_name": "Medina",
+    "email": "catalina.medina@example.com",
+    "phone": "+5492615556700",
+    "address_1": "Calle 2696",
+    "city": "Mendoza",
+    "state": "Mendoza",
+    "postcode": "M5500",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Catalina",
+    "last_name": "Medina",
+    "address_1": "Calle 8188",
+    "city": "Mendoza",
+    "state": "Mendoza",
+    "postcode": "M5500",
+    "country": "AR"
+  },
+  "payment_method": "visa",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_0yia1b2m5t",
+  "line_items": [
+    {
+      "id": 1238,
+      "name": "Neumático Michelin Primacy 4 225/45 R17",
+      "product_id": 200,
+      "variation_id": 0,
+      "quantity": 4,
+      "subtotal": "589520.92",
+      "total": "589520.92",
+      "sku": "MCH-PRI4-225-45-R17",
+      "price": 147380.23
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

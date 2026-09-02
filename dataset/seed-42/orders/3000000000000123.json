@@ -1,0 +1,98 @@
+{
+  "id": 3000000000000123,
+  "status": "payment_required",
+  "status_detail": null,
+  "date_created": "2026-08-07T09:06:34.000-03:00",
+  "date_closed": null,
+  "last_updated": "2026-08-09T00:03:30.000-03:00",
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA8646267248",
+        "title": "Neumático Pirelli Cinturato P1 195/65 R15",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "PIR-CP1-195-65-R15",
+        "warranty": "Garantía del vendedor: 6 meses"
+      },
+      "quantity": 4,
+      "unit_price": 75864.69,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 8345.12
+    },
+    {
+      "item": {
+        "id": "MLA971575063",
+        "title": "Servicio de instalación de neumáticos (4 ruedas)",
+        "category_id": "MLA417283",
+        "seller_custom_field": "SVC-INS-4"
+      },
+      "quantity": 1,
+      "unit_price": 11578.04,
+      "currency_id": "ARS",
+      "sale_fee": 1273.58
+    }
+  ],
+  "total_amount": 315036.8,
+  "paid_amount": 0,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400888609,
+    "nickname": "CLÓPEZ_61",
+    "email": "carlos.lópez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5559463",
+      "extension": null,
+      "verified": false
+    },
+    "first_name": "Carlos",
+    "last_name": "López",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "26686606"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8967720720,
+      "transaction_amount": 315036.8,
+      "currency_id": "ARS",
+      "status": "pending",
+      "date_approved": null,
+      "payment_method_id": "pagofacil",
+      "payment_type": "ticket",
+      "installments": 12
+    }
+  ],
+  "shipping": {
+    "id": 41819537576,
+    "status": "pending",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": null,
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Córdoba"
+      },
+      "state": {
+        "name": "Córdoba"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "X5000"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

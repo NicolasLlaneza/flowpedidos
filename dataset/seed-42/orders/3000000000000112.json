@@ -1,0 +1,73 @@
+{
+  "id": 3000000000000112,
+  "parent_id": 0,
+  "status": "completed",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-02T17:08:29.000-03:00",
+  "date_modified": "2026-08-02T17:08:29.000-03:00",
+  "date_created_gmt": "2026-08-02T20:08:29.000Z",
+  "date_modified_gmt": "2026-08-02T20:08:29.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "445987.80",
+  "customer_id": 0,
+  "order_key": "wc_order_cs1869djn1p",
+  "billing": {
+    "first_name": "Florencia",
+    "last_name": "Ruiz",
+    "email": "florencia.ruiz@example.com",
+    "phone": "+5492615550021",
+    "address_1": "Calle 1927",
+    "city": "La Plata",
+    "state": "Buenos Aires",
+    "postcode": "B1900",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Florencia",
+    "last_name": "Ruiz",
+    "address_1": "Calle 6152",
+    "city": "La Plata",
+    "state": "Buenos Aires",
+    "postcode": "B1900",
+    "country": "AR"
+  },
+  "payment_method": "visa",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_62hgmb1jbe",
+  "line_items": [
+    {
+      "id": 1478,
+      "name": "Neumático Bridgestone Turanza T005 205/55 R16",
+      "product_id": 466,
+      "variation_id": 0,
+      "quantity": 4,
+      "subtotal": "436497.6",
+      "total": "436497.6",
+      "sku": "BST-T005-205-55-R16",
+      "price": 109124.4
+    },
+    {
+      "id": 9811,
+      "name": "Servicio de instalación de neumáticos (4 ruedas)",
+      "product_id": 575,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "9490.2",
+      "total": "9490.2",
+      "sku": "SVC-INS-4",
+      "price": 9490.2
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

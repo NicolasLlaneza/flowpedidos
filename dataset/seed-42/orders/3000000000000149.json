@@ -1,0 +1,86 @@
+{
+  "id": 3000000000000149,
+  "status": "invalid_unknown_X",
+  "status_detail": null,
+  "date_created": "2026-09-01T21:11:12.000-03:00",
+  "date_closed": "2026-09-01T21:51:34.000-03:00",
+  "last_updated": "2026-09-01T06:22:17.000-03:00",
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA6289632583",
+        "title": "Neumático Bridgestone Ecopia EP150 185/65 R14 — Carcasa reforzada para condiciones severas de uso, garantía extendida del fabricante, válida en todo el territorio nacional, ideal para vehículos de gama media-alta",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "BST-EP150-185-65-R14",
+        "warranty": "Garantía del vendedor: 6 meses"
+      },
+      "quantity": 2,
+      "unit_price": 68826.92,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 7570.96
+    }
+  ],
+  "total_amount": 137653.84,
+  "paid_amount": 0,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400001304,
+    "nickname": "MROMERO_77",
+    "email": "mateo.romero@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5558712",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Mateo",
+    "last_name": "Romero",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "34643597"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8977177898,
+      "transaction_amount": 137653.84,
+      "currency_id": "ARS",
+      "status": "unknown",
+      "date_approved": null,
+      "payment_method_id": "visa",
+      "payment_type": "credit_card",
+      "installments": 1
+    }
+  ],
+  "shipping": {
+    "id": 42018017596,
+    "status": "pending",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": null,
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Las Heras"
+      },
+      "state": {
+        "name": "Mendoza"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "M5539"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

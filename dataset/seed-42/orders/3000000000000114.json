@@ -1,0 +1,73 @@
+{
+  "id": 3000000000000114,
+  "parent_id": 0,
+  "status": "completed",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-18T11:07:04.000-03:00",
+  "date_modified": "2026-08-18T11:07:04.000-03:00",
+  "date_created_gmt": "2026-08-18T14:07:04.000Z",
+  "date_modified_gmt": "2026-08-18T14:07:04.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "209514.02",
+  "customer_id": 59,
+  "order_key": "wc_order_bo9pjpj0q9v",
+  "billing": {
+    "first_name": "Martina",
+    "last_name": "Herrera",
+    "email": "martina.herrera@example.com",
+    "phone": "+5492615554523",
+    "address_1": "Calle 5450",
+    "city": "Guaymallén",
+    "state": "Mendoza",
+    "postcode": "M5519",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Martina",
+    "last_name": "Herrera",
+    "address_1": "Calle 2451",
+    "city": "Guaymallén",
+    "state": "Mendoza",
+    "postcode": "M5519",
+    "country": "AR"
+  },
+  "payment_method": "visa",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_i583tyu44d",
+  "line_items": [
+    {
+      "id": 1996,
+      "name": "Neumático Bridgestone Turanza T005 205/55 R16",
+      "product_id": 490,
+      "variation_id": 0,
+      "quantity": 2,
+      "subtotal": "201786.08",
+      "total": "201786.08",
+      "sku": "BST-T005-205-55-R16",
+      "price": 100893.04
+    },
+    {
+      "id": 6892,
+      "name": "Servicio de rotación de neumáticos",
+      "product_id": 681,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "7727.94",
+      "total": "7727.94",
+      "sku": "SVC-ROT",
+      "price": 7727.94
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

@@ -1,0 +1,99 @@
+{
+  "id": 3000000000000109,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-08-15T10:22:07.000-03:00",
+  "date_closed": "2026-08-15T10:54:52.000-03:00",
+  "last_updated": "2026-08-18T21:00:25.000-03:00",
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA7817850938",
+        "title": "Neumático Fate Maxisport 195/65 R15",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "FAT-MXS-195-65-R15",
+        "warranty": "Garantía del vendedor: 6 meses"
+      },
+      "quantity": 4,
+      "unit_price": 71567.64,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 7872.44
+    },
+    {
+      "item": {
+        "id": "MLA939594803",
+        "title": "Revisión y ajuste de presión",
+        "category_id": "MLA417283",
+        "seller_custom_field": "SVC-PRES"
+      },
+      "quantity": 1,
+      "unit_price": 5404.73,
+      "currency_id": "ARS",
+      "sale_fee": 594.52
+    }
+  ],
+  "total_amount": 291675.29,
+  "paid_amount": 291675.29,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400704157,
+    "nickname": "MROMERO_51",
+    "email": "mateo.romero@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5550055",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Mateo",
+    "last_name": "Romero",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "36068869"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8998206935,
+      "transaction_amount": 291675.29,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-08-15T10:54:52.000-03:00",
+      "payment_method_id": "pagofacil",
+      "payment_type": "ticket",
+      "installments": 3
+    }
+  ],
+  "shipping": {
+    "id": 41737820236,
+    "status": "delivered",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": "AR759781377MLA",
+    "date_delivered": "2026-08-18T21:00:25.000-03:00",
+    "receiver_address": {
+      "city": {
+        "name": "Godoy Cruz"
+      },
+      "state": {
+        "name": "Mendoza"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "M5501"
+    }
+  },
+  "tags": [
+    "paid",
+    "delivered"
+  ]
+}

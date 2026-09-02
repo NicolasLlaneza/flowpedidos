@@ -2,37 +2,36 @@
   "id": 3000000000000011,
   "status": "paid",
   "status_detail": null,
-  "date_created": "2026-04-23T06:48:36.000-03:00",
-  "date_closed": "2026-04-23T08:13:48.000-03:00",
-  "last_updated": "2026-04-24T01:38:54.000-03:00",
-  "expiration_date": null,
+  "date_created": "2026-08-13T22:37:04.000-03:00",
+  "date_closed": "2026-08-13T23:02:52.000-03:00",
+  "last_updated": "2026-08-15T21:48:18.000-03:00",
   "order_items": [
     {
       "item": {
-        "id": "MLA6828909456",
-        "title": "Neumático Pirelli Cinturato P1 195/65 R15",
+        "id": "MLA9050554136",
+        "title": "Neumático Goodyear EfficientGrip 195/55 R15",
         "category_id": "MLA1747",
         "variation_id": null,
-        "seller_custom_field": "PIR-CP1-195-65-R15",
-        "warranty": "Garantía del vendedor: 6 meses"
+        "seller_custom_field": "GDY-EFG-195-55-R15",
+        "warranty": null
       },
-      "quantity": 4,
-      "unit_price": 71710.05,
+      "quantity": 1,
+      "unit_price": 88807.51,
       "currency_id": "ARS",
       "manufacturing_days": null,
-      "sale_fee": 7888.11
+      "sale_fee": 9768.83
     }
   ],
-  "total_amount": 286840.2,
-  "paid_amount": 286840.2,
+  "total_amount": 88807.51,
+  "paid_amount": 88807.51,
   "currency_id": "ARS",
   "buyer": {
-    "id": 400625941,
-    "nickname": "FDÍAZ_39",
+    "id": 400439362,
+    "nickname": "FDÍAZ_23",
     "email": "federico.díaz@example.com",
     "phone": {
       "area_code": "261",
-      "number": "5558446",
+      "number": "5558116",
       "extension": null,
       "verified": true
     },
@@ -40,7 +39,7 @@
     "last_name": "Díaz",
     "billing_info": {
       "doc_type": "DNI",
-      "doc_number": "32315000"
+      "doc_number": "43252559"
     }
   },
   "seller": {
@@ -49,18 +48,18 @@
   },
   "payments": [
     {
-      "id": 8913913863,
-      "transaction_amount": 286840.2,
+      "id": 8998449104,
+      "transaction_amount": 88807.51,
       "currency_id": "ARS",
       "status": "approved",
-      "date_approved": "2026-04-23T08:13:48.000-03:00",
-      "payment_method_id": "visa",
-      "payment_type": "credit_card",
-      "installments": 1
+      "date_approved": "2026-08-13T23:02:52.000-03:00",
+      "payment_method_id": "account_money",
+      "payment_type": "account_money",
+      "installments": 3
     }
   ],
   "shipping": {
-    "id": 41490984591,
+    "id": 42059482176,
     "status": "ready_to_ship",
     "shipping_mode": "me2",
     "service_id": 308,
@@ -69,16 +68,16 @@
     "date_delivered": null,
     "receiver_address": {
       "city": {
-        "name": "Rosario"
+        "name": "La Plata"
       },
       "state": {
-        "name": "Santa Fe"
+        "name": "Buenos Aires"
       },
       "country": {
         "id": "AR",
         "name": "Argentina"
       },
-      "zip_code": "S2000"
+      "zip_code": "B1900"
     }
   },
   "tags": [

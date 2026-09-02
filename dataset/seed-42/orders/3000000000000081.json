@@ -1,0 +1,86 @@
+{
+  "id": 3000000000000081,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-08-11T19:29:39.000-03:00",
+  "date_closed": "2026-08-11T20:18:57.000-03:00",
+  "last_updated": "2026-08-15T13:34:57.000-03:00",
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA9339239523",
+        "title": "Neumático Pirelli Cinturato P1 195/65 R15",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "PIR-CP1-195-65-R15",
+        "warranty": null
+      },
+      "quantity": 2,
+      "unit_price": 73356.72,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 8069.24
+    }
+  ],
+  "total_amount": 146713.44,
+  "paid_amount": 146713.44,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400988993,
+    "nickname": "JPÉREZ_22",
+    "email": "juan.pérez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5551067",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Juan",
+    "last_name": "Pérez",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "30907945"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8944317304,
+      "transaction_amount": 146713.44,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-08-11T20:18:57.000-03:00",
+      "payment_method_id": "account_money",
+      "payment_type": "account_money",
+      "installments": 1
+    }
+  ],
+  "shipping": {
+    "id": 41497195104,
+    "status": "shipped",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": "AR206006348MLA",
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Las Heras"
+      },
+      "state": {
+        "name": "Mendoza"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "M5539"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

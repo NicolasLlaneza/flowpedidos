@@ -1,0 +1,73 @@
+{
+  "id": 3000000000000122,
+  "parent_id": 0,
+  "status": "pending",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-09-01T09:39:33.000-03:00",
+  "date_modified": "2026-09-01T09:39:33.000-03:00",
+  "date_created_gmt": "2026-09-01T12:39:33.000Z",
+  "date_modified_gmt": "2026-09-01T12:39:33.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "265774.81",
+  "customer_id": 401,
+  "order_key": "wc_order_ogxe0crf8gh",
+  "billing": {
+    "first_name": "María",
+    "last_name": "Gómez",
+    "email": "maría.gómez@example.com",
+    "phone": "+5492615556967",
+    "address_1": "Calle 1607",
+    "city": "Córdoba",
+    "state": "Córdoba",
+    "postcode": "X5000",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "María",
+    "last_name": "Gómez",
+    "address_1": "Calle 720",
+    "city": "Córdoba",
+    "state": "Córdoba",
+    "postcode": "X5000",
+    "country": "AR"
+  },
+  "payment_method": "mastercard",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "",
+  "line_items": [
+    {
+      "id": 3340,
+      "name": "Neumático Bridgestone Ecopia EP150 185/65 R14",
+      "product_id": 91,
+      "variation_id": 0,
+      "quantity": 4,
+      "subtotal": "260262.44",
+      "total": "260262.44",
+      "sku": "BST-EP150-185-65-R14",
+      "price": 65065.61
+    },
+    {
+      "id": 9823,
+      "name": "Servicio de rotación de neumáticos",
+      "product_id": 586,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "5512.37",
+      "total": "5512.37",
+      "sku": "SVC-ROT",
+      "price": 5512.37
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

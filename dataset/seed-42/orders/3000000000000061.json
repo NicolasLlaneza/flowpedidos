@@ -1,0 +1,86 @@
+{
+  "id": 3000000000000061,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-08-09T18:51:42.000-03:00",
+  "date_closed": "2026-08-09T19:51:27.000-03:00",
+  "last_updated": "2026-08-14T02:51:15.000-03:00",
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA3574254387",
+        "title": "Neumático Michelin Energy XM2 175/70 R13",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "MCH-EXM2-175-70-R13",
+        "warranty": "Garantía del vendedor: 6 meses"
+      },
+      "quantity": 2,
+      "unit_price": 57230.46,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 6295.35
+    }
+  ],
+  "total_amount": 114460.92,
+  "paid_amount": 114460.92,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400272163,
+    "nickname": "JPÉREZ_31",
+    "email": "juan.pérez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5550808",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Juan",
+    "last_name": "Pérez",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "35467480"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8970355637,
+      "transaction_amount": 114460.92,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-08-09T19:51:27.000-03:00",
+      "payment_method_id": "debvisa",
+      "payment_type": "debit_card",
+      "installments": 6
+    }
+  ],
+  "shipping": {
+    "id": 41563041790,
+    "status": "shipped",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": "AR275679419MLA",
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Córdoba"
+      },
+      "state": {
+        "name": "Córdoba"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "X5000"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

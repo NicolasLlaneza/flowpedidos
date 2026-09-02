@@ -1,0 +1,62 @@
+{
+  "id": 3000000000000074,
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-24T14:11:21.000-03:00",
+  "date_modified": "2026-08-24T14:11:21.000-03:00",
+  "date_created_gmt": "2026-08-24T17:11:21.000Z",
+  "date_modified_gmt": "2026-08-24T17:11:21.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "394258.66",
+  "customer_id": 21,
+  "order_key": "wc_order_zg2a7basa7",
+  "billing": {
+    "first_name": "Martina",
+    "last_name": "Herrera",
+    "email": "martina.herrera@example.com",
+    "phone": "+5492615555534",
+    "address_1": "Calle 7748",
+    "city": "Maipú",
+    "state": "Mendoza",
+    "postcode": "M5515",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Martina",
+    "last_name": "Herrera",
+    "address_1": "Calle 725",
+    "city": "Maipú",
+    "state": "Mendoza",
+    "postcode": "M5515",
+    "country": "AR"
+  },
+  "payment_method": "visa",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_rcxkj4j1z1",
+  "line_items": [
+    {
+      "id": 6372,
+      "name": "Neumático Goodyear Eagle F1 245/40 R18",
+      "product_id": 370,
+      "variation_id": 0,
+      "quantity": 2,
+      "subtotal": "394258.66",
+      "total": "394258.66",
+      "sku": "GDY-EF1-245-40-R18",
+      "price": 197129.33
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

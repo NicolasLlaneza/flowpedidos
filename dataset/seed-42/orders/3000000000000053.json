@@ -1,0 +1,86 @@
+{
+  "id": 3000000000000053,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-08-18T09:10:46.000-03:00",
+  "date_closed": "2026-08-18T10:22:58.000-03:00",
+  "last_updated": "2026-08-23T08:12:53.000-03:00",
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA8853652526",
+        "title": "Neumático Bridgestone Ecopia EP150 185/65 R14",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "BST-EP150-185-65-R14",
+        "warranty": "Garantía del vendedor: 6 meses"
+      },
+      "quantity": 2,
+      "unit_price": 75636.65,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 8320.03
+    }
+  ],
+  "total_amount": 151273.3,
+  "paid_amount": 151273.3,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400335314,
+    "nickname": "TÁLVAREZ_67",
+    "email": "tomás.álvarez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5554529",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Tomás",
+    "last_name": "Álvarez",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "35990662"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8941102628,
+      "transaction_amount": 151273.3,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-08-18T10:22:58.000-03:00",
+      "payment_method_id": "visa",
+      "payment_type": "credit_card",
+      "installments": 3
+    }
+  ],
+  "shipping": {
+    "id": 41492038631,
+    "status": "ready_to_ship",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": null,
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Córdoba"
+      },
+      "state": {
+        "name": "Córdoba"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "X5000"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

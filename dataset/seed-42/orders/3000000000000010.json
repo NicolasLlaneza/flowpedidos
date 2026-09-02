@@ -1,87 +1,62 @@
 {
   "id": 3000000000000010,
-  "status": "paid",
-  "status_detail": null,
-  "date_created": "2026-04-25T02:50:28.000-03:00",
-  "date_closed": "2026-04-25T04:31:04.000-03:00",
-  "last_updated": "2026-04-29T10:52:25.000-03:00",
-  "expiration_date": null,
-  "order_items": [
-    {
-      "item": {
-        "id": "MLA7089911825",
-        "title": "Neumático Bridgestone Turanza T005 205/55 R16",
-        "category_id": "MLA1747",
-        "variation_id": null,
-        "seller_custom_field": "BST-T005-205-55-R16",
-        "warranty": "Garantía del vendedor: 6 meses"
-      },
-      "quantity": 4,
-      "unit_price": 102663.57,
-      "currency_id": "ARS",
-      "manufacturing_days": null,
-      "sale_fee": 11292.99
-    }
-  ],
-  "total_amount": 410654.28,
-  "paid_amount": 410654.28,
-  "currency_id": "ARS",
-  "buyer": {
-    "id": 400859482,
-    "nickname": "CTORRES_85",
-    "email": "camila.torres@example.com",
-    "phone": {
-      "area_code": "261",
-      "number": "5557436",
-      "extension": null,
-      "verified": false
-    },
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-29T10:28:08.000-03:00",
+  "date_modified": "2026-08-29T10:28:08.000-03:00",
+  "date_created_gmt": "2026-08-29T13:28:08.000Z",
+  "date_modified_gmt": "2026-08-29T13:28:08.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "94232.61",
+  "customer_id": 577,
+  "order_key": "wc_order_0lskp1lrgzzo",
+  "billing": {
     "first_name": "Camila",
     "last_name": "Torres",
-    "billing_info": {
-      "doc_type": "DNI",
-      "doc_number": "26386806"
-    }
+    "email": "camila.torres@example.com",
+    "phone": "+5492615556692",
+    "address_1": "Calle 2156",
+    "city": "Las Heras",
+    "state": "Mendoza",
+    "postcode": "M5539",
+    "country": "AR"
   },
-  "seller": {
-    "id": 123456789,
-    "nickname": "NEUMATICOS_MENDOZA"
+  "shipping": {
+    "first_name": "Camila",
+    "last_name": "Torres",
+    "address_1": "Calle 4867",
+    "city": "Las Heras",
+    "state": "Mendoza",
+    "postcode": "M5539",
+    "country": "AR"
   },
-  "payments": [
+  "payment_method": "mastercard",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_0f00z4ohh1",
+  "line_items": [
     {
-      "id": 8935108228,
-      "transaction_amount": 410654.28,
-      "currency_id": "ARS",
-      "status": "approved",
-      "date_approved": "2026-04-25T04:31:04.000-03:00",
-      "payment_method_id": "account_money",
-      "payment_type": "account_money",
-      "installments": 3
+      "id": 6980,
+      "name": "Neumático Bridgestone Turanza T005 205/55 R16",
+      "product_id": 158,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "94232.61",
+      "total": "94232.61",
+      "sku": "BST-T005-205-55-R16",
+      "price": 94232.61
     }
   ],
-  "shipping": {
-    "id": 42078380167,
-    "status": "ready_to_ship",
-    "shipping_mode": "me2",
-    "service_id": 308,
-    "cost": 0,
-    "tracking_number": null,
-    "date_delivered": null,
-    "receiver_address": {
-      "city": {
-        "name": "Guaymallén"
-      },
-      "state": {
-        "name": "Mendoza"
-      },
-      "country": {
-        "id": "AR",
-        "name": "Argentina"
-      },
-      "zip_code": "M5519"
-    }
-  },
-  "tags": [
-    "paid"
-  ]
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
 }

@@ -1,0 +1,62 @@
+{
+  "id": 3000000000000086,
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-28T18:17:53.000-03:00",
+  "date_modified": "2026-08-28T18:17:53.000-03:00",
+  "date_created_gmt": "2026-08-28T21:17:53.000Z",
+  "date_modified_gmt": "2026-08-28T21:17:53.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "116406.96",
+  "customer_id": 0,
+  "order_key": "wc_order_4e0vcs9tfkt",
+  "billing": {
+    "first_name": "Sofía",
+    "last_name": "Martínez",
+    "email": "sofía.martínez@example.com",
+    "phone": "+5492615555391",
+    "address_1": "Calle 5192",
+    "city": "Córdoba",
+    "state": "Córdoba",
+    "postcode": "X5000",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Sofía",
+    "last_name": "Martínez",
+    "address_1": "Calle 130",
+    "city": "Córdoba",
+    "state": "Córdoba",
+    "postcode": "X5000",
+    "country": "AR"
+  },
+  "payment_method": "account_money",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_ohbusb3zyb",
+  "line_items": [
+    {
+      "id": 166,
+      "name": "Neumático Fate Maxisport 195/65 R15",
+      "product_id": 365,
+      "variation_id": 0,
+      "quantity": 2,
+      "subtotal": "116406.96",
+      "total": "116406.96",
+      "sku": "FAT-MXS-195-65-R15",
+      "price": 58203.48
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

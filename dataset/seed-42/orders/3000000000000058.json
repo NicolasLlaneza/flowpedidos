@@ -1,0 +1,62 @@
+{
+  "id": 3000000000000058,
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-25T20:30:32.000-03:00",
+  "date_modified": "2026-08-25T20:30:32.000-03:00",
+  "date_created_gmt": "2026-08-25T23:30:32.000Z",
+  "date_modified_gmt": "2026-08-25T23:30:32.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "339759.88",
+  "customer_id": 0,
+  "order_key": "wc_order_5kqxuq4ba",
+  "billing": {
+    "first_name": "Catalina",
+    "last_name": "Medina",
+    "email": "catalina.medina@example.com",
+    "phone": "+5492615559963",
+    "address_1": "Calle 6460",
+    "city": "Las Heras",
+    "state": "Mendoza",
+    "postcode": "M5539",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Catalina",
+    "last_name": "Medina",
+    "address_1": "Calle 3926",
+    "city": "Las Heras",
+    "state": "Mendoza",
+    "postcode": "M5539",
+    "country": "AR"
+  },
+  "payment_method": "account_money",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_10ydtn7kk8",
+  "line_items": [
+    {
+      "id": 3115,
+      "name": "Neumático Goodyear Eagle F1 245/40 R18",
+      "product_id": 104,
+      "variation_id": 0,
+      "quantity": 2,
+      "subtotal": "339759.88",
+      "total": "339759.88",
+      "sku": "GDY-EF1-245-40-R18",
+      "price": 169879.94
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

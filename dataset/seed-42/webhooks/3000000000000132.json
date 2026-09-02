@@ -1,0 +1,73 @@
+{
+  "id": 3000000000000132,
+  "parent_id": 0,
+  "status": "cancelled",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-05T10:05:34.000-03:00",
+  "date_modified": "2026-08-05T10:05:34.000-03:00",
+  "date_created_gmt": "2026-08-05T13:05:34.000Z",
+  "date_modified_gmt": "2026-08-05T13:05:34.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "295059.65",
+  "customer_id": 0,
+  "order_key": "wc_order_dws7lakzrw",
+  "billing": {
+    "first_name": "Florencia",
+    "last_name": "Ruiz",
+    "email": "florencia.ruiz@example.com",
+    "phone": "+5492615553133",
+    "address_1": "Calle 7402",
+    "city": "Godoy Cruz",
+    "state": "Mendoza",
+    "postcode": "M5501",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Florencia",
+    "last_name": "Ruiz",
+    "address_1": "Calle 693",
+    "city": "Godoy Cruz",
+    "state": "Mendoza",
+    "postcode": "M5501",
+    "country": "AR"
+  },
+  "payment_method": "account_money",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "",
+  "line_items": [
+    {
+      "id": 6355,
+      "name": "Neumático Bridgestone Ecopia EP150 185/65 R14",
+      "product_id": 85,
+      "variation_id": 0,
+      "quantity": 4,
+      "subtotal": "285264.44",
+      "total": "285264.44",
+      "sku": "BST-EP150-185-65-R14",
+      "price": 71316.11
+    },
+    {
+      "id": 178,
+      "name": "Servicio de instalación de neumáticos (4 ruedas)",
+      "product_id": 639,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "9795.21",
+      "total": "9795.21",
+      "sku": "SVC-INS-4",
+      "price": 9795.21
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

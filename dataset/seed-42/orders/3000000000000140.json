@@ -1,0 +1,68 @@
+{
+  "id": 3000000000000140,
+  "parent_id": 0,
+  "status": "refunded",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-26T15:45:31.000-03:00",
+  "date_modified": "2026-08-26T15:45:31.000-03:00",
+  "date_created_gmt": "2026-08-26T18:45:31.000Z",
+  "date_modified_gmt": "2026-08-26T18:45:31.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "5299.46",
+  "customer_id": 99,
+  "order_key": "wc_order_0m1jse3x1uii",
+  "billing": {
+    "first_name": "Emma",
+    "last_name": "Ortiz",
+    "email": "emma.ortiz@example.com",
+    "phone": "+5492615552474",
+    "address_1": "Calle 9658",
+    "city": "Rosario",
+    "state": "Santa Fe",
+    "postcode": "S2000",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Emma",
+    "last_name": "Ortiz",
+    "address_1": "Calle 1298",
+    "city": "Rosario",
+    "state": "Santa Fe",
+    "postcode": "S2000",
+    "country": "AR"
+  },
+  "payment_method": "mastercard",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "",
+  "line_items": [
+    {
+      "id": 2399,
+      "name": "Revisión y ajuste de presión",
+      "product_id": 559,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "5299.46",
+      "total": "5299.46",
+      "sku": "SVC-PRES",
+      "price": 5299.46
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": [
+    {
+      "id": 8554,
+      "reason": "Reembolso solicitado",
+      "total": "-5299.46"
+    }
+  ]
+}

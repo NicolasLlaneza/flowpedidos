@@ -1,0 +1,73 @@
+{
+  "id": 3000000000000118,
+  "parent_id": 0,
+  "status": "pending",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-15T22:21:51.000-03:00",
+  "date_modified": "2026-08-15T22:21:51.000-03:00",
+  "date_created_gmt": "2026-08-15T01:21:51.000Z",
+  "date_modified_gmt": "2026-08-15T01:21:51.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "420484.66",
+  "customer_id": 0,
+  "order_key": "wc_order_tdgede6wd3i",
+  "billing": {
+    "first_name": "Catalina",
+    "last_name": "Medina",
+    "email": "catalina.medina@example.com",
+    "phone": "+5492615551895",
+    "address_1": "Calle 5663",
+    "city": "Buenos Aires",
+    "state": "CABA",
+    "postcode": "C1425",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Catalina",
+    "last_name": "Medina",
+    "address_1": "Calle 5467",
+    "city": "Buenos Aires",
+    "state": "CABA",
+    "postcode": "C1425",
+    "country": "AR"
+  },
+  "payment_method": "visa",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "",
+  "line_items": [
+    {
+      "id": 6150,
+      "name": "Neumático Continental ContiPremium 205/60 R16",
+      "product_id": 301,
+      "variation_id": 0,
+      "quantity": 4,
+      "subtotal": "415457",
+      "total": "415457",
+      "sku": "CON-CPC-205-60-R16",
+      "price": 103864.25
+    },
+    {
+      "id": 9327,
+      "name": "Servicio de rotación de neumáticos",
+      "product_id": 674,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "5027.66",
+      "total": "5027.66",
+      "sku": "SVC-ROT",
+      "price": 5027.66
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

@@ -1,84 +1,62 @@
 {
   "id": 3000000000000046,
-  "status": "cancelled",
-  "status_detail": "buyer_canceled",
-  "date_created": "2026-05-04T23:51:23.000-03:00",
-  "date_closed": "2026-05-04T00:25:31.000-03:00",
-  "last_updated": "2026-05-04T03:56:02.000-03:00",
-  "expiration_date": null,
-  "order_items": [
-    {
-      "item": {
-        "id": "MLA909970607",
-        "title": "Servicio de alineación y balanceo (4 ruedas)",
-        "category_id": "MLA417283",
-        "seller_custom_field": "SVC-ALI-BAL-4"
-      },
-      "quantity": 1,
-      "unit_price": 21115.1,
-      "currency_id": "ARS",
-      "sale_fee": 2322.66
-    }
-  ],
-  "total_amount": 21115.1,
-  "paid_amount": 0,
-  "currency_id": "ARS",
-  "buyer": {
-    "id": 400683803,
-    "nickname": "SMARTÍNEZ_82",
-    "email": "sofía.martínez@example.com",
-    "phone": {
-      "area_code": "261",
-      "number": "5556180",
-      "extension": null,
-      "verified": false
-    },
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-17T22:15:12.000-03:00",
+  "date_modified": "2026-08-17T22:15:12.000-03:00",
+  "date_created_gmt": "2026-08-17T01:15:12.000Z",
+  "date_modified_gmt": "2026-08-17T01:15:12.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "65972.51",
+  "customer_id": 2,
+  "order_key": "wc_order_tld76ypycz",
+  "billing": {
     "first_name": "Sofía",
     "last_name": "Martínez",
-    "billing_info": {
-      "doc_type": "DNI",
-      "doc_number": "31611186"
-    }
+    "email": "sofía.martínez@example.com",
+    "phone": "+5492615559758",
+    "address_1": "Calle 8431",
+    "city": "La Plata",
+    "state": "Buenos Aires",
+    "postcode": "B1900",
+    "country": "AR"
   },
-  "seller": {
-    "id": 123456789,
-    "nickname": "NEUMATICOS_MENDOZA"
+  "shipping": {
+    "first_name": "Sofía",
+    "last_name": "Martínez",
+    "address_1": "Calle 9090",
+    "city": "La Plata",
+    "state": "Buenos Aires",
+    "postcode": "B1900",
+    "country": "AR"
   },
-  "payments": [
+  "payment_method": "account_money",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_b3aqshjlpc",
+  "line_items": [
     {
-      "id": 8906999691,
-      "transaction_amount": 21115.1,
-      "currency_id": "ARS",
-      "status": "cancelled",
-      "date_approved": null,
-      "payment_method_id": "mastercard",
-      "payment_type": "credit_card",
-      "installments": 6
+      "id": 2534,
+      "name": "Neumático Hankook Kinergy 175/65 R14",
+      "product_id": 354,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "65972.51",
+      "total": "65972.51",
+      "sku": "HNK-KIN-175-65-R14",
+      "price": 65972.51
     }
   ],
-  "shipping": {
-    "id": 41676256011,
-    "status": "cancelled",
-    "shipping_mode": "me2",
-    "service_id": 308,
-    "cost": 0,
-    "tracking_number": null,
-    "date_delivered": null,
-    "receiver_address": {
-      "city": {
-        "name": "Maipú"
-      },
-      "state": {
-        "name": "Mendoza"
-      },
-      "country": {
-        "id": "AR",
-        "name": "Argentina"
-      },
-      "zip_code": "M5515"
-    }
-  },
-  "tags": [
-    "cancelled"
-  ]
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
 }

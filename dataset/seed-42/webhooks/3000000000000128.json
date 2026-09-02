@@ -1,0 +1,73 @@
+{
+  "id": 3000000000000128,
+  "parent_id": 0,
+  "status": "cancelled",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-15T21:52:17.000-03:00",
+  "date_modified": "2026-08-15T21:52:17.000-03:00",
+  "date_created_gmt": "2026-08-15T00:52:17.000Z",
+  "date_modified_gmt": "2026-08-15T00:52:17.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "313085.21",
+  "customer_id": 0,
+  "order_key": "wc_order_y1mypb1cq9",
+  "billing": {
+    "first_name": "Valentina",
+    "last_name": "Sánchez",
+    "email": "valentina.sánchez@example.com",
+    "phone": "+5492615550632",
+    "address_1": "Calle 8088",
+    "city": "La Plata",
+    "state": "Buenos Aires",
+    "postcode": "B1900",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Valentina",
+    "last_name": "Sánchez",
+    "address_1": "Calle 941",
+    "city": "La Plata",
+    "state": "Buenos Aires",
+    "postcode": "B1900",
+    "country": "AR"
+  },
+  "payment_method": "visa",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "",
+  "line_items": [
+    {
+      "id": 8032,
+      "name": "Neumático Bridgestone Ecopia EP150 185/65 R14",
+      "product_id": 109,
+      "variation_id": 0,
+      "quantity": 4,
+      "subtotal": "308971.84",
+      "total": "308971.84",
+      "sku": "BST-EP150-185-65-R14",
+      "price": 77242.96
+    },
+    {
+      "id": 4707,
+      "name": "Revisión y ajuste de presión",
+      "product_id": 601,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "4113.37",
+      "total": "4113.37",
+      "sku": "SVC-PRES",
+      "price": 4113.37
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

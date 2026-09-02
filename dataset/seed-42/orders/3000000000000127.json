@@ -1,0 +1,98 @@
+{
+  "id": 3000000000000127,
+  "status": "cancelled",
+  "status_detail": "buyer_canceled",
+  "date_created": "2026-08-07T00:57:46.000-03:00",
+  "date_closed": "2026-08-07T02:24:09.000-03:00",
+  "last_updated": "2026-08-08T03:39:34.000-03:00",
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA6275154796",
+        "title": "Neumático Bridgestone Ecopia EP150 185/65 R14",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "BST-EP150-185-65-R14",
+        "warranty": null
+      },
+      "quantity": 2,
+      "unit_price": 65416.25,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 7195.79
+    },
+    {
+      "item": {
+        "id": "MLA906092591",
+        "title": "Servicio de rotación de neumáticos",
+        "category_id": "MLA417283",
+        "seller_custom_field": "SVC-ROT"
+      },
+      "quantity": 1,
+      "unit_price": 8535.76,
+      "currency_id": "ARS",
+      "sale_fee": 938.93
+    }
+  ],
+  "total_amount": 139368.26,
+  "paid_amount": 0,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400820704,
+    "nickname": "PGARCÍA_27",
+    "email": "pablo.garcía@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5550989",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Pablo",
+    "last_name": "García",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "44700473"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8989119311,
+      "transaction_amount": 139368.26,
+      "currency_id": "ARS",
+      "status": "cancelled",
+      "date_approved": null,
+      "payment_method_id": "account_money",
+      "payment_type": "account_money",
+      "installments": 3
+    }
+  ],
+  "shipping": {
+    "id": 42065463413,
+    "status": "cancelled",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": null,
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Las Heras"
+      },
+      "state": {
+        "name": "Mendoza"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "M5539"
+    }
+  },
+  "tags": [
+    "cancelled"
+  ]
+}
