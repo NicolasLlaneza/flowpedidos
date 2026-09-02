@@ -17,17 +17,20 @@ INSERT INTO tfi.ai_notifications (
     provider, model, prompt_version,
     prompt_tokens, completion_tokens, cost_usd, latency_ms,
     message_text, message_status, is_fallback, delivery_channel,
-    error_message
+    error_message,
+    atributos_usados
 )
 VALUES (
     NULLIF($1::text, 'null')::uuid,
     $2, NULLIF($3::text, 'null'), NULLIF($4::text, 'null'),
     NULLIF($5::text, 'null')::integer, NULLIF($6::text, 'null')::integer, NULLIF($7::text, 'null')::numeric, NULLIF($8::text, 'null')::integer,
     $9, $10, NULLIF($11::text, 'null')::boolean, NULLIF($12::text, 'null'),
-    NULLIF($13::text, 'null')
+    NULLIF($13::text, 'null'),
+    NULLIF($14::text, 'null')::jsonb
 )
-RETURNING id AS notification_id, order_id, message_text, generated_at;
+RETURNING id AS notification_id, order_id, message_text, atributos_usados, generated_at;
 -- order_id y message_text son necesarios para los nodos de despacho (07, 08).
+-- atributos_usados (v1.3, §3.3) se propaga al panel para medir anclaje contextual.
 
 -- Parámetros:
 --   $1  = {{ $json.order_id }}
@@ -43,3 +46,4 @@ RETURNING id AS notification_id, order_id, message_text, generated_at;
 --   $11 = true | false
 --   $12 = 'whatsapp' | 'email' | NULL
 --   $13 = {{ $json.error_message || null }}
+--   $14 = {{ JSON.stringify($json.atributos_usados || []) }}    -- v1.3 (§3.3)

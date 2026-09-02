@@ -1,23 +1,23 @@
 // =============================================================================
-// build-llm-prompt.js
+// build-llm-prompt.js  (v2, TFI corregido)
 // -----------------------------------------------------------------------------
-// Pegar en un nodo "Code" (modo: "Run Once for Each Item") ubicado entre la
-// persistencia de la orden y el nodo OpenAI/Anthropic.
+// Pegar en un nodo "Code" (modo: "Run Once for Each Item") entre Insert Order
+// y Call OpenAI. El estado 'error' se filtra antes de este nodo mediante un IF
+// upstream — no debería llegar acá.
 //
-// Función:
-//   - Toma el item normalizado + el order_id ya persistido
-//   - Aplica seudonimización ESTRICTA: solo el pseudonym y datos no-PII
-//     llegan al modelo (cumple cap 5.7 — privacidad por diseño)
-//   - Arma los mensajes system + user con el prompt v1
-//   - Devuelve los hiperparámetros del prompt para que el nodo LLM los use
-//
-// IMPORTANTE: este es el ÚNICO lugar donde se decide qué información ve el LLM.
-// Cualquier campo agregado acá puede filtrar PII al servicio externo.
+// Cambios vs v1 (ver prompts/v2.md):
+//   - El contexto que va al LLM NO incluye pseudonym, ni nombre, correo o
+//     teléfono. Ningún identificador de cliente cruza el límite del modelo.
+//   - Se omiten claves con valor null/undefined/'' antes de serializar, para
+//     que el modelo no pueda referirse a datos ausentes.
+//   - Se instruye al modelo a iniciar el mensaje con el token literal
+//     {{saludo}} (rehidratado por el validador posterior).
+//   - Output esperado: { mensaje, atributos_usados }.
+//   - Salvaguarda: throw si detecta que alguna PII se coló al contexto.
 // =============================================================================
 
-const PROMPT_VERSION = 'v1';
+const PROMPT_VERSION = 'v2';
 
-// Hiperparámetros del prompts/v1.md (versión inicial)
 const HYPERPARAMS = {
     temperature: 0.4,
     top_p: 0.9,
@@ -27,38 +27,71 @@ const HYPERPARAMS = {
 };
 
 const SYSTEM_MESSAGE = `Sos un asistente de comunicación post-venta para una PyME argentina que vende
-neumáticos en Mercado Libre. Tu única tarea es redactar mensajes cortos y
-cordiales para enviar al comprador después de un cambio en el estado de su
-pedido.
+neumáticos por canales de comercio electrónico. Tu única tarea es redactar
+mensajes cortos y cordiales para enviar al comprador tras un cambio de estado
+de su pedido.
 
-REGLAS ESTRICTAS:
-1. Solo usar información que esté en el contexto JSON que te entrego.
-   Si un dato falta, no lo inventes ni lo asumas: omitilo del mensaje.
-2. No incluyas tu razonamiento, disculpas por restricciones, ni meta-comentarios.
-3. No mencionés a "OpenAI", "IA", "modelo de lenguaje" ni similares.
-4. Tono: argentino neutro, cordial pero no informal. Usá "vos", no "tú" ni "usted".
-5. Longitud: máximo 4 oraciones, idealmente 2-3. Sin emojis salvo que el contexto
-   los pida explícitamente.
-6. No prometas tiempos de entrega, descuentos, ni acciones que el contexto no
-   confirme.
-7. Si el estado es "error" o el contexto está incompleto, generá un mensaje
-   genérico de "estamos revisando tu pedido" sin inventar detalles.
+REGLAS ESTRICTAS
 
-OUTPUT:
-Devolvé exclusivamente un objeto JSON válido con esta estructura:
+1. El mensaje DEBE comenzar exactamente con el token literal:
+       {{saludo}}
+   No lo reemplaces, no lo traduzcas, no antepongas ninguna palabra ni signo.
+   Un proceso posterior sustituye el token por el saludo real con el nombre
+   del cliente recuperado de la base local.
+
+2. Solo podés usar la información que aparece en el objeto JSON del user
+   message. Si un campo no está presente en el objeto, no lo inventes ni
+   asumas su valor: omitilo del mensaje.
+
+3. Nunca menciones nombre, correo, teléfono ni identificadores del cliente:
+   el contexto que recibís NO los incluye. Si los inventaras, el validador
+   posterior lo detecta y descarta tu respuesta.
+
+4. Nunca menciones "OpenAI", "IA", "modelo de lenguaje", "asistente virtual"
+   ni referencias a la implementación.
+
+5. Tono: argentino neutro, cordial pero no informal. Usá "vos", no "tú" ni
+   "usted". Sin emojis salvo que el contexto los pida.
+
+6. Longitud: máximo 4 oraciones, ideal 2-3. No prometas tiempos de entrega,
+   descuentos ni acciones que el contexto no confirme.
+
+MAPEO ESTADO → CONTENIDO
+
+Según order_status el mensaje debe orientarse así:
+
+- created:          Confirmá recepción del pedido. Sin promesa de tiempos.
+- pending_payment:  Indicá que aguardamos la confirmación del pago, sin urgencia.
+- paid:             Confirmá el pago y avisá que el pedido pasa a preparación.
+- preparing:        Avisá que el pedido se está armando.
+- shipped:          Comunicá que el pedido fue despachado. No inventes número
+                    de seguimiento si el contexto no lo trae.
+- delivered:        Confirmá la entrega y agradecé la compra.
+- cancelled:        Comunicá la cancelación del pedido de forma clara. No
+                    minimices, no digas "estamos revisando".
+- refunded:         Confirmá el reembolso.
+
+Nota: si recibís este mensaje es porque el estado NO es 'error'. El estado
+'error' se filtra antes y no llega al modelo.
+
+OUTPUT
+
+Devolvé EXCLUSIVAMENTE un objeto JSON válido con esta estructura:
+
 {
-  "message": "texto del mensaje, listo para enviar",
-  "tone": "informativo" | "cordial" | "disculpa" | "celebratorio",
-  "confidence": número entre 0 y 1
+  "mensaje": "{{saludo}}, ...",
+  "atributos_usados": ["order_status", "primary_product_name", ...]
 }
 
-confidence refleja qué tan completa es la información del contexto.
-Si tuviste que omitir datos importantes, bajá la confidence.`;
+atributos_usados es la lista de claves del contexto que efectivamente citaste
+en el mensaje. Sé preciso: sólo las que aparecen. Si mencionás "tu pedido"
+sin referirte al producto, no incluyas primary_product_name.`;
 
 // --- Helpers -----------------------------------------------------------------
+
+// Toma el ítem de mayor monto como representativo (para mensajes de 1 producto).
 function getPrimaryProductName(items) {
     if (!items || items.length === 0) return null;
-    // Tomamos el item de mayor monto (más representativo del pedido)
     const sorted = [...items].sort(
         (a, b) => (Number(b.unit_price) * Number(b.quantity)) -
                   (Number(a.unit_price) * Number(a.quantity))
@@ -66,50 +99,64 @@ function getPrimaryProductName(items) {
     return sorted[0].product_name;
 }
 
-function buildContext(input) {
-    // SOLO estos campos pueden llegar al LLM.
-    // No incluir nunca: full_name, email, phone, doc_number, billing_info, etc.
-    const ctx = {
-        customer_pseudonym: input.customer.pseudonym,
-        order_status: input.order.status,
-        items_count: (input.items || []).length,
-        primary_product_name: getPrimaryProductName(input.items),
-        channel: input.order.channel,
-        total_amount: input.order.total_amount,
-        currency: input.order.currency,
-        source_created_at: input.order.source_created_at,
-    };
+// Elimina del objeto las claves con valor null, undefined o string vacío.
+// El modelo no debe ver "campo: null" — omitirlos previene alucinaciones.
+function stripEmpty(obj) {
+    const out = {};
+    for (const [k, v] of Object.entries(obj)) {
+        if (v === null || v === undefined) continue;
+        if (typeof v === 'string' && v.trim() === '') continue;
+        out[k] = v;
+    }
+    return out;
+}
 
-    // Defensa: lanzar error si alguna PII se coló accidentalmente
-    const pii_keys = ['full_name', 'email', 'phone', 'doc_number', 'address', 'first_name', 'last_name'];
+// Construye el contexto que va al LLM. NUNCA incluir PII.
+function buildContext(input) {
+    const raw = {
+        order_status:         input.order.status,
+        channel:              input.order.channel,
+        items_count:          (input.items || []).length,
+        primary_product_name: getPrimaryProductName(input.items),
+        total_amount:         input.order.total_amount,
+        currency:             input.order.currency,
+        source_created_at:    input.order.source_created_at,
+    };
+    const ctx = stripEmpty(raw);
+
+    // Red de seguridad: nunca debe aparecer PII en el contexto que va al LLM.
+    // Si algún campo prohibido se coló (bug de un cambio futuro), abortamos
+    // antes de invocar al modelo y consumir tokens.
+    const pii_keys = [
+        'full_name', 'email', 'phone', 'doc_number', 'address',
+        'first_name', 'last_name', 'pseudonym', 'external_id',
+    ];
     const ctx_str = JSON.stringify(ctx).toLowerCase();
     for (const key of pii_keys) {
         if (ctx_str.includes(`"${key}"`)) {
-            throw new Error(`PII leak detected: campo ${key} no debe llegar al LLM`);
+            throw new Error(`PII leak detected: campo '${key}' no debe llegar al LLM`);
         }
     }
-
     return ctx;
 }
 
 function buildUserMessage(ctx) {
     return `Contexto del pedido:
-- Pseudónimo del cliente: ${ctx.customer_pseudonym}
-- Estado normalizado: ${ctx.order_status}
-- Cantidad de productos: ${ctx.items_count}
-- Producto principal: ${ctx.primary_product_name || '(no especificado)'}
-- Canal de venta: ${ctx.channel}
-- Monto total: ${ctx.total_amount} ${ctx.currency}
-- Fecha del pedido: ${ctx.source_created_at}
+${JSON.stringify(ctx, null, 2)}
 
 Generá el mensaje según las reglas del system.`;
 }
 
 // --- Main --------------------------------------------------------------------
-const input = $json;
+const input = $('Route to canonical').item.json;
 
 if (!input.customer || !input.order) {
     throw new Error('Input inválido: faltan customer u order. Verificar el normalizador.');
+}
+if (input.order.status === 'error') {
+    // Guardián secundario: si por algún motivo llegara con status=error, no
+    // gastamos tokens. La ruta primaria de filtrado está en el IF upstream.
+    throw new Error("Estado 'error' no debe llegar a Build LLM prompt.");
 }
 
 const t_build_start = Date.now();
@@ -118,27 +165,19 @@ const userMessage = buildUserMessage(context);
 
 return {
     json: {
-        // Identificadores que vamos a necesitar después
-        order_id: input.order_id,
-        customer_id: input.customer_id,
+        order_id:       $('Insert Order').item.json.order_id,
+        customer_id:    $('Upsert customer').item.json.customer_id,
         prompt_version: PROMPT_VERSION,
 
-        // Mensajes para el nodo OpenAI (algunos nodos los esperan en .messages,
-        // otros directamente; ajustar según la versión del nodo OpenAI)
         messages: [
             { role: 'system', content: SYSTEM_MESSAGE },
             { role: 'user',   content: userMessage },
         ],
-
-        // Hiperparámetros — el nodo OpenAI permite override con estos campos
         model: 'gpt-4o-mini',
         ...HYPERPARAMS,
 
-        // Métricas internas
-        prompt_build_ms: Date.now() - t_build_start,
-        // Conservamos el contexto enviado para auditoría posterior
-        sent_context: context,
-        // Para que el parser sepa cuándo arrancó la llamada
-        llm_call_started_at: new Date().toISOString(),
+        prompt_build_ms:      Date.now() - t_build_start,
+        sent_context:         context,
+        llm_call_started_at:  new Date().toISOString(),
     },
 };
