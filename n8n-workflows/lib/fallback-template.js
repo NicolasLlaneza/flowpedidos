@@ -103,6 +103,11 @@ return {
         // en las métricas de anclaje contextual sin inventar atributos.
         atributos_usados: ['template'],
 
+        // v1.3 (§4.3.1): las plantillas son 100% determinísticas y no
+        // pasan por el validador de reglas — no cuentan como pasada.
+        validator_passes: 0,
+        validator_failures: input.validator_failures || [],
+
         is_fallback: true,
         message_status: 'validated',
 
