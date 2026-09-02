@@ -155,12 +155,17 @@ function parseAndValidate(text) {
 const input = $json;
 const t_parse_start = Date.now();
 
-const order_id       = input.order_id;
-const customer_id    = input.customer_id;
-const prompt_version = input.prompt_version || 'v2';
-const provider       = input.provider || 'openai';
-const model          = input.model || 'gpt-4o-mini';
-const startedAt      = input.llm_call_started_at;
+// Identidad y contexto de la llamada — leídos desde Build LLM prompt para no
+// depender del shape del proveedor. La respuesta de OpenAI devuelve el nombre
+// completo con versión (p. ej. 'gpt-4o-mini-2024-07-18'), que no matchea la
+// clave 'gpt-4o-mini' de la tabla PRICING y hacía que cost_usd quedara nulo.
+const bp = $('Build LLM prompt').item.json;
+const order_id       = bp.order_id;
+const customer_id    = bp.customer_id;
+const prompt_version = bp.prompt_version || 'v2';
+const provider       = 'openai';
+const model          = bp.model || 'gpt-4o-mini';
+const startedAt      = bp.llm_call_started_at;
 
 const llmRaw = input.response || input.data || input.llm || input;
 const { text, usage } = extractTextAndUsage(llmRaw);

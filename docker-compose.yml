@@ -68,6 +68,12 @@ services:
       # Meta WhatsApp Business API — disponibles como $env.WHATSAPP_* en los Code nodes
       WHATSAPP_PHONE_NUMBER_ID: ${WHATSAPP_PHONE_NUMBER_ID}
       WHATSAPP_ACCESS_TOKEN: ${WHATSAPP_ACCESS_TOKEN}
+
+      # OpenAI API key — usada por el nodo HTTP Request "Call OpenAI" (v1.3)
+      # en el header Authorization, y por el reintento del nodo Rehydrate +
+      # validate (§4.3.1). El nodo LangChain OpenAI dejó de utilizarse porque
+      # no expone `usage` en su output.
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
     volumes:
       - n8n_data:/home/node/.n8n
       - ./n8n-workflows:/workflows
