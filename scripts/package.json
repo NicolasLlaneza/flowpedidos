@@ -1,0 +1,18 @@
+{
+  "name": "flowpedidos-scripts",
+  "version": "1.3.0",
+  "private": true,
+  "description": "Bloque C · scripts de setup de cuentas test (ML + WC) y verificación end-to-end",
+  "type": "module",
+  "dependencies": {
+    "pg": "^8.11.0"
+  },
+  "scripts": {
+    "env": "node env-check.mjs",
+    "wc:setup": "node wc-setup.mjs",
+    "wc:order": "node wc-simulate-checkout.mjs",
+    "ml:setup": "node ml-setup.mjs",
+    "ml:refresh": "node ml-setup.mjs --refresh",
+    "verify": "node verify-end-to-end.mjs"
+  }
+}

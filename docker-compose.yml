@@ -146,6 +146,39 @@ services:
     networks:
       - tfi-net
 
+  # ngrok — expone el webhook de n8n (localhost:5678) a internet vía un
+  # dominio público, condición necesaria para que Mercado Libre entregue
+  # las notificaciones al pipeline (C · Cuentas test end-to-end).
+  # No lo usa WooCommerce: el container tfi-wordpress y tfi-n8n comparten
+  # tfi-net, el webhook viaja por la red interna.
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: tfi-ngrok
+    restart: unless-stopped
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    # Entrypoint bash: si NGROK_STATIC_DOMAIN está definido, expone el tunnel
+    # en ese dominio persistente (URI de notificaciones de ML queda fija).
+    # Si queda vacío, ngrok asigna un dominio efímero por corrida — visible en
+    # http://localhost:4040 — y hay que actualizarlo en la app de ML.
+    entrypoint:
+      - /bin/sh
+      - -c
+      - >
+        if [ -n "$$NGROK_STATIC_DOMAIN" ]; then
+          exec ngrok http n8n:5678 --url="$$NGROK_STATIC_DOMAIN" --host-header=n8n:5678;
+        else
+          exec ngrok http n8n:5678 --host-header=n8n:5678;
+        fi
+    ports:
+      - "4040:4040"     # inspector UI: http://localhost:4040
+    depends_on:
+      n8n:
+        condition: service_healthy
+    profiles: ["ml-test"]
+    networks:
+      - tfi-net
+
 volumes:
   postgres_data:
     name: tfi_postgres_data
