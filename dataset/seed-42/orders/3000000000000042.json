@@ -1,99 +1,62 @@
 {
   "id": 3000000000000042,
-  "status": "payment_required",
-  "status_detail": null,
-  "date_created": "2026-05-02T05:47:54.000-03:00",
-  "date_closed": null,
-  "last_updated": "2026-05-06T13:11:39.000-03:00",
-  "expiration_date": null,
-  "order_items": [
-    {
-      "item": {
-        "id": "MLA2707205447",
-        "title": "Neumático Continental PowerContact 185/65 R15",
-        "category_id": "MLA1747",
-        "variation_id": null,
-        "seller_custom_field": "CON-PWC-185-65-R15",
-        "warranty": "Garantía del vendedor: 6 meses"
-      },
-      "quantity": 4,
-      "unit_price": 75086.94,
-      "currency_id": "ARS",
-      "manufacturing_days": null,
-      "sale_fee": 8259.56
-    },
-    {
-      "item": {
-        "id": "MLA987028449",
-        "title": "Servicio de rotación de neumáticos",
-        "category_id": "MLA417283",
-        "seller_custom_field": "SVC-ROT"
-      },
-      "quantity": 1,
-      "unit_price": 8953.95,
-      "currency_id": "ARS",
-      "sale_fee": 984.93
-    }
-  ],
-  "total_amount": 309301.71,
-  "paid_amount": 0,
-  "currency_id": "ARS",
-  "buyer": {
-    "id": 400981932,
-    "nickname": "MGÓMEZ_36",
-    "email": "maría.gómez@example.com",
-    "phone": {
-      "area_code": "261",
-      "number": "5554110",
-      "extension": null,
-      "verified": true
-    },
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-22T09:04:34.000-03:00",
+  "date_modified": "2026-08-22T09:04:34.000-03:00",
+  "date_created_gmt": "2026-08-22T12:04:34.000Z",
+  "date_modified_gmt": "2026-08-22T12:04:34.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "154614.49",
+  "customer_id": 0,
+  "order_key": "wc_order_bf0v72bq0lb",
+  "billing": {
     "first_name": "María",
     "last_name": "Gómez",
-    "billing_info": {
-      "doc_type": "DNI",
-      "doc_number": "30840772"
-    }
+    "email": "maría.gómez@example.com",
+    "phone": "+5492615559201",
+    "address_1": "Calle 6484",
+    "city": "Mendoza",
+    "state": "Mendoza",
+    "postcode": "M5500",
+    "country": "AR"
   },
-  "seller": {
-    "id": 123456789,
-    "nickname": "NEUMATICOS_MENDOZA"
+  "shipping": {
+    "first_name": "María",
+    "last_name": "Gómez",
+    "address_1": "Calle 8728",
+    "city": "Mendoza",
+    "state": "Mendoza",
+    "postcode": "M5500",
+    "country": "AR"
   },
-  "payments": [
+  "payment_method": "account_money",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_kclr58fv62",
+  "line_items": [
     {
-      "id": 8906048513,
-      "transaction_amount": 309301.71,
-      "currency_id": "ARS",
-      "status": "pending",
-      "date_approved": null,
-      "payment_method_id": "visa",
-      "payment_type": "credit_card",
-      "installments": 6
+      "id": 5408,
+      "name": "Neumático Michelin Primacy 4 225/45 R17",
+      "product_id": 221,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "154614.49",
+      "total": "154614.49",
+      "sku": "MCH-PRI4-225-45-R17",
+      "price": 154614.49
     }
   ],
-  "shipping": {
-    "id": 41218781082,
-    "status": "pending",
-    "shipping_mode": "me2",
-    "service_id": 308,
-    "cost": 0,
-    "tracking_number": null,
-    "date_delivered": null,
-    "receiver_address": {
-      "city": {
-        "name": "Buenos Aires"
-      },
-      "state": {
-        "name": "CABA"
-      },
-      "country": {
-        "id": "AR",
-        "name": "Argentina"
-      },
-      "zip_code": "C1425"
-    }
-  },
-  "tags": [
-    "paid"
-  ]
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
 }

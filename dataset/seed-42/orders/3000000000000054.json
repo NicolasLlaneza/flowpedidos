@@ -1,0 +1,62 @@
+{
+  "id": 3000000000000054,
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-14T05:47:54.000-03:00",
+  "date_modified": "2026-08-14T05:47:54.000-03:00",
+  "date_created_gmt": "2026-08-14T08:47:54.000Z",
+  "date_modified_gmt": "2026-08-14T08:47:54.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "91769.75",
+  "customer_id": 0,
+  "order_key": "wc_order_a6w4eiiia7f",
+  "billing": {
+    "first_name": "Martina",
+    "last_name": "Herrera",
+    "email": "martina.herrera@example.com",
+    "phone": "+5492615557907",
+    "address_1": "Calle 8565",
+    "city": "Maipú",
+    "state": "Mendoza",
+    "postcode": "M5515",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Martina",
+    "last_name": "Herrera",
+    "address_1": "Calle 2595",
+    "city": "Maipú",
+    "state": "Mendoza",
+    "postcode": "M5515",
+    "country": "AR"
+  },
+  "payment_method": "visa",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_mbkzbrkpeq",
+  "line_items": [
+    {
+      "id": 8715,
+      "name": "Neumático Goodyear EfficientGrip 195/55 R15",
+      "product_id": 453,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "91769.75",
+      "total": "91769.75",
+      "sku": "GDY-EFG-195-55-R15",
+      "price": 91769.75
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

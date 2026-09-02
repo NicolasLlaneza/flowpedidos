@@ -1,87 +1,62 @@
 {
   "id": 3000000000000028,
-  "status": "paid",
-  "status_detail": null,
-  "date_created": "2026-04-30T16:48:08.000-03:00",
-  "date_closed": "2026-04-30T18:03:39.000-03:00",
-  "last_updated": "2026-05-03T16:48:57.000-03:00",
-  "expiration_date": null,
-  "order_items": [
-    {
-      "item": {
-        "id": "MLA4111239603",
-        "title": "Neumático Michelin Primacy 4 225/45 R17",
-        "category_id": "MLA1747",
-        "variation_id": null,
-        "seller_custom_field": "MCH-PRI4-225-45-R17",
-        "warranty": null
-      },
-      "quantity": 2,
-      "unit_price": 158909.88,
-      "currency_id": "ARS",
-      "manufacturing_days": null,
-      "sale_fee": 17480.09
-    }
-  ],
-  "total_amount": 317819.76,
-  "paid_amount": 317819.76,
-  "currency_id": "ARS",
-  "buyer": {
-    "id": 400523942,
-    "nickname": "VSÁNCHEZ_15",
-    "email": "valentina.sánchez@example.com",
-    "phone": {
-      "area_code": "261",
-      "number": "5557451",
-      "extension": null,
-      "verified": true
-    },
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-11T17:54:40.000-03:00",
+  "date_modified": "2026-08-11T17:54:40.000-03:00",
+  "date_created_gmt": "2026-08-11T20:54:40.000Z",
+  "date_modified_gmt": "2026-08-11T20:54:40.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "62659.21",
+  "customer_id": 0,
+  "order_key": "wc_order_7gi56cte40r",
+  "billing": {
     "first_name": "Valentina",
     "last_name": "Sánchez",
-    "billing_info": {
-      "doc_type": "DNI",
-      "doc_number": "25032912"
-    }
+    "email": "valentina.sánchez@example.com",
+    "phone": "+5492615555124",
+    "address_1": "Calle 1913",
+    "city": "Buenos Aires",
+    "state": "CABA",
+    "postcode": "C1425",
+    "country": "AR"
   },
-  "seller": {
-    "id": 123456789,
-    "nickname": "NEUMATICOS_MENDOZA"
+  "shipping": {
+    "first_name": "Valentina",
+    "last_name": "Sánchez",
+    "address_1": "Calle 3753",
+    "city": "Buenos Aires",
+    "state": "CABA",
+    "postcode": "C1425",
+    "country": "AR"
   },
-  "payments": [
+  "payment_method": "account_money",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_3mu0m5qr7k",
+  "line_items": [
     {
-      "id": 8958003803,
-      "transaction_amount": 317819.76,
-      "currency_id": "ARS",
-      "status": "approved",
-      "date_approved": "2026-04-30T18:03:39.000-03:00",
-      "payment_method_id": "debvisa",
-      "payment_type": "debit_card",
-      "installments": 3
+      "id": 5814,
+      "name": "Neumático Michelin Energy XM2 175/70 R13",
+      "product_id": 9,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "62659.21",
+      "total": "62659.21",
+      "sku": "MCH-EXM2-175-70-R13",
+      "price": 62659.21
     }
   ],
-  "shipping": {
-    "id": 41788157866,
-    "status": "shipped",
-    "shipping_mode": "me2",
-    "service_id": 308,
-    "cost": 0,
-    "tracking_number": "AR470095816MLA",
-    "date_delivered": null,
-    "receiver_address": {
-      "city": {
-        "name": "Mendoza"
-      },
-      "state": {
-        "name": "Mendoza"
-      },
-      "country": {
-        "id": "AR",
-        "name": "Argentina"
-      },
-      "zip_code": "M5500"
-    }
-  },
-  "tags": [
-    "paid"
-  ]
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
 }

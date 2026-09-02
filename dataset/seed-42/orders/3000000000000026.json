@@ -1,87 +1,62 @@
 {
   "id": 3000000000000026,
-  "status": "paid",
-  "status_detail": null,
-  "date_created": "2026-05-20T01:34:51.000-03:00",
-  "date_closed": "2026-05-20T03:20:01.000-03:00",
-  "last_updated": "2026-05-21T09:51:32.000-03:00",
-  "expiration_date": null,
-  "order_items": [
-    {
-      "item": {
-        "id": "MLA4685926490",
-        "title": "Neumático Goodyear Eagle F1 245/40 R18",
-        "category_id": "MLA1747",
-        "variation_id": null,
-        "seller_custom_field": "GDY-EF1-245-40-R18",
-        "warranty": "Garantía del vendedor: 6 meses"
-      },
-      "quantity": 2,
-      "unit_price": 198978.4,
-      "currency_id": "ARS",
-      "manufacturing_days": null,
-      "sale_fee": 21887.62
-    }
-  ],
-  "total_amount": 397956.8,
-  "paid_amount": 397956.8,
-  "currency_id": "ARS",
-  "buyer": {
-    "id": 400050392,
-    "nickname": "SMARTÍNEZ_22",
-    "email": "sofía.martínez@example.com",
-    "phone": {
-      "area_code": "261",
-      "number": "5552393",
-      "extension": null,
-      "verified": true
-    },
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-02T12:55:13.000-03:00",
+  "date_modified": "2026-08-02T12:55:13.000-03:00",
+  "date_created_gmt": "2026-08-02T15:55:13.000Z",
+  "date_modified_gmt": "2026-08-02T15:55:13.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "111312.48",
+  "customer_id": 0,
+  "order_key": "wc_order_qro9stlgw8k",
+  "billing": {
     "first_name": "Sofía",
     "last_name": "Martínez",
-    "billing_info": {
-      "doc_type": "DNI",
-      "doc_number": "32485477"
-    }
+    "email": "sofía.martínez@example.com",
+    "phone": "+5492615555075",
+    "address_1": "Calle 5136",
+    "city": "Maipú",
+    "state": "Mendoza",
+    "postcode": "M5515",
+    "country": "AR"
   },
-  "seller": {
-    "id": 123456789,
-    "nickname": "NEUMATICOS_MENDOZA"
+  "shipping": {
+    "first_name": "Sofía",
+    "last_name": "Martínez",
+    "address_1": "Calle 6234",
+    "city": "Maipú",
+    "state": "Mendoza",
+    "postcode": "M5515",
+    "country": "AR"
   },
-  "payments": [
+  "payment_method": "mastercard",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_xvkqhqfy3q",
+  "line_items": [
     {
-      "id": 8989946270,
-      "transaction_amount": 397956.8,
-      "currency_id": "ARS",
-      "status": "approved",
-      "date_approved": "2026-05-20T03:20:01.000-03:00",
-      "payment_method_id": "account_money",
-      "payment_type": "account_money",
-      "installments": 3
+      "id": 965,
+      "name": "Neumático Bridgestone Turanza T005 205/55 R16",
+      "product_id": 69,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "111312.48",
+      "total": "111312.48",
+      "sku": "BST-T005-205-55-R16",
+      "price": 111312.48
     }
   ],
-  "shipping": {
-    "id": 41581335908,
-    "status": "shipped",
-    "shipping_mode": "me2",
-    "service_id": 308,
-    "cost": 0,
-    "tracking_number": "AR857758532MLA",
-    "date_delivered": null,
-    "receiver_address": {
-      "city": {
-        "name": "La Plata"
-      },
-      "state": {
-        "name": "Buenos Aires"
-      },
-      "country": {
-        "id": "AR",
-        "name": "Argentina"
-      },
-      "zip_code": "B1900"
-    }
-  },
-  "tags": [
-    "paid"
-  ]
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
 }

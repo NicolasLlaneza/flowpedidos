@@ -2,45 +2,44 @@
   "id": 3000000000000005,
   "status": "paid",
   "status_detail": null,
-  "date_created": "2026-05-11T23:08:14.000-03:00",
-  "date_closed": "2026-05-11T00:56:55.000-03:00",
-  "last_updated": "2026-05-11T12:11:08.000-03:00",
-  "expiration_date": null,
+  "date_created": "2026-08-22T03:41:25.000-03:00",
+  "date_closed": "2026-08-22T04:20:51.000-03:00",
+  "last_updated": "2026-08-25T19:52:38.000-03:00",
   "order_items": [
     {
       "item": {
-        "id": "MLA3663365637",
-        "title": "Neumático Michelin Energy XM2 175/70 R13",
+        "id": "MLA9245081483",
+        "title": "Neumático Fate Maxisport 195/65 R15",
         "category_id": "MLA1747",
         "variation_id": null,
-        "seller_custom_field": "MCH-EXM2-175-70-R13",
+        "seller_custom_field": "FAT-MXS-195-65-R15",
         "warranty": null
       },
       "quantity": 2,
-      "unit_price": 64268.62,
+      "unit_price": 64567.6,
       "currency_id": "ARS",
       "manufacturing_days": null,
-      "sale_fee": 7069.55
+      "sale_fee": 7102.44
     }
   ],
-  "total_amount": 128537.24,
-  "paid_amount": 128537.24,
+  "total_amount": 129135.2,
+  "paid_amount": 129135.2,
   "currency_id": "ARS",
   "buyer": {
-    "id": 400449763,
-    "nickname": "DRODRÍGUEZ_85",
+    "id": 400520316,
+    "nickname": "DRODRÍGUEZ_83",
     "email": "diego.rodríguez@example.com",
     "phone": {
       "area_code": "261",
-      "number": "5556950",
+      "number": "5551796",
       "extension": null,
-      "verified": true
+      "verified": false
     },
     "first_name": "Diego",
     "last_name": "Rodríguez",
     "billing_info": {
       "doc_type": "DNI",
-      "doc_number": "42803963"
+      "doc_number": "39131708"
     }
   },
   "seller": {
@@ -49,18 +48,18 @@
   },
   "payments": [
     {
-      "id": 8982195080,
-      "transaction_amount": 128537.24,
+      "id": 8944976274,
+      "transaction_amount": 129135.2,
       "currency_id": "ARS",
       "status": "approved",
-      "date_approved": "2026-05-11T00:56:55.000-03:00",
-      "payment_method_id": "mastercard",
+      "date_approved": "2026-08-22T04:20:51.000-03:00",
+      "payment_method_id": "visa",
       "payment_type": "credit_card",
-      "installments": 1
+      "installments": 6
     }
   ],
   "shipping": {
-    "id": 42172746416,
+    "id": 41895065205,
     "status": "ready_to_ship",
     "shipping_mode": "me2",
     "service_id": 308,

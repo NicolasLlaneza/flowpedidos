@@ -2,37 +2,36 @@
   "id": 3000000000000019,
   "status": "paid",
   "status_detail": null,
-  "date_created": "2026-05-20T00:22:01.000-03:00",
-  "date_closed": "2026-05-20T01:58:03.000-03:00",
-  "last_updated": "2026-05-22T23:04:23.000-03:00",
-  "expiration_date": null,
+  "date_created": "2026-08-07T03:10:17.000-03:00",
+  "date_closed": "2026-08-07T04:54:33.000-03:00",
+  "last_updated": "2026-08-10T15:53:30.000-03:00",
   "order_items": [
     {
       "item": {
-        "id": "MLA8560042256",
-        "title": "Neumático Fate Maxisport 195/65 R15",
+        "id": "MLA4719205728",
+        "title": "Neumático Bridgestone Ecopia EP150 185/65 R14",
         "category_id": "MLA1747",
         "variation_id": null,
-        "seller_custom_field": "FAT-MXS-195-65-R15",
+        "seller_custom_field": "BST-EP150-185-65-R14",
         "warranty": null
       },
       "quantity": 2,
-      "unit_price": 64880.39,
+      "unit_price": 77597.46,
       "currency_id": "ARS",
       "manufacturing_days": null,
-      "sale_fee": 7136.84
+      "sale_fee": 8535.72
     }
   ],
-  "total_amount": 129760.78,
-  "paid_amount": 129760.78,
+  "total_amount": 155194.92,
+  "paid_amount": 155194.92,
   "currency_id": "ARS",
   "buyer": {
-    "id": 400058794,
-    "nickname": "NSUÁREZ_12",
+    "id": 400864685,
+    "nickname": "NSUÁREZ_44",
     "email": "nicolás.suárez@example.com",
     "phone": {
       "area_code": "261",
-      "number": "5553405",
+      "number": "5556679",
       "extension": null,
       "verified": true
     },
@@ -40,7 +39,7 @@
     "last_name": "Suárez",
     "billing_info": {
       "doc_type": "DNI",
-      "doc_number": "29598574"
+      "doc_number": "37631079"
     }
   },
   "seller": {
@@ -49,27 +48,27 @@
   },
   "payments": [
     {
-      "id": 8978548434,
-      "transaction_amount": 129760.78,
+      "id": 8928674008,
+      "transaction_amount": 155194.92,
       "currency_id": "ARS",
       "status": "approved",
-      "date_approved": "2026-05-20T01:58:03.000-03:00",
+      "date_approved": "2026-08-07T04:54:33.000-03:00",
       "payment_method_id": "visa",
       "payment_type": "credit_card",
-      "installments": 3
+      "installments": 12
     }
   ],
   "shipping": {
-    "id": 41338108260,
-    "status": "shipped",
+    "id": 41686644889,
+    "status": "ready_to_ship",
     "shipping_mode": "me2",
     "service_id": 308,
     "cost": 0,
-    "tracking_number": "AR174242483MLA",
+    "tracking_number": null,
     "date_delivered": null,
     "receiver_address": {
       "city": {
-        "name": "Godoy Cruz"
+        "name": "Las Heras"
       },
       "state": {
         "name": "Mendoza"
@@ -78,7 +77,7 @@
         "id": "AR",
         "name": "Argentina"
       },
-      "zip_code": "M5501"
+      "zip_code": "M5539"
     }
   },
   "tags": [

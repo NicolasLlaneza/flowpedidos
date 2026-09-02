@@ -1,0 +1,99 @@
+{
+  "id": 3000000000000113,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-08-02T21:47:44.000-03:00",
+  "date_closed": "2026-08-02T22:53:56.000-03:00",
+  "last_updated": "2026-08-06T11:40:16.000-03:00",
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA6708015309",
+        "title": "Neumático Hankook Kinergy 175/65 R14",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "HNK-KIN-175-65-R14",
+        "warranty": null
+      },
+      "quantity": 4,
+      "unit_price": 62508.81,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 6875.97
+    },
+    {
+      "item": {
+        "id": "MLA971523628",
+        "title": "Servicio de alineación y balanceo (4 ruedas)",
+        "category_id": "MLA417283",
+        "seller_custom_field": "SVC-ALI-BAL-4"
+      },
+      "quantity": 1,
+      "unit_price": 18388.39,
+      "currency_id": "ARS",
+      "sale_fee": 2022.72
+    }
+  ],
+  "total_amount": 268423.63,
+  "paid_amount": 268423.63,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400337865,
+    "nickname": "TÁLVAREZ_68",
+    "email": "tomás.álvarez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5555109",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Tomás",
+    "last_name": "Álvarez",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "36113972"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8984543368,
+      "transaction_amount": 268423.63,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-08-02T22:53:56.000-03:00",
+      "payment_method_id": "account_money",
+      "payment_type": "account_money",
+      "installments": 1
+    }
+  ],
+  "shipping": {
+    "id": 41455313811,
+    "status": "delivered",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": "AR688908470MLA",
+    "date_delivered": "2026-08-06T11:40:16.000-03:00",
+    "receiver_address": {
+      "city": {
+        "name": "San Juan"
+      },
+      "state": {
+        "name": "San Juan"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "J5400"
+    }
+  },
+  "tags": [
+    "paid",
+    "delivered"
+  ]
+}

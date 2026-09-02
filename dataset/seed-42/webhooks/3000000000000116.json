@@ -1,0 +1,73 @@
+{
+  "id": 3000000000000116,
+  "parent_id": 0,
+  "status": "pending",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-23T05:05:57.000-03:00",
+  "date_modified": "2026-08-23T05:05:57.000-03:00",
+  "date_created_gmt": "2026-08-23T08:05:57.000Z",
+  "date_modified_gmt": "2026-08-23T08:05:57.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "121785.89",
+  "customer_id": 924,
+  "order_key": "wc_order_3ns8zmohkq2",
+  "billing": {
+    "first_name": "Agustina",
+    "last_name": "Castro",
+    "email": "agustina.castro@example.com",
+    "phone": "+5492615550434",
+    "address_1": "Calle 232",
+    "city": "San Juan",
+    "state": "San Juan",
+    "postcode": "J5400",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Agustina",
+    "last_name": "Castro",
+    "address_1": "Calle 6947",
+    "city": "San Juan",
+    "state": "San Juan",
+    "postcode": "J5400",
+    "country": "AR"
+  },
+  "payment_method": "account_money",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "",
+  "line_items": [
+    {
+      "id": 9828,
+      "name": "Neumático Michelin Energy XM2 175/70 R13",
+      "product_id": 30,
+      "variation_id": 0,
+      "quantity": 2,
+      "subtotal": "114641.78",
+      "total": "114641.78",
+      "sku": "MCH-EXM2-175-70-R13",
+      "price": 57320.89
+    },
+    {
+      "id": 8042,
+      "name": "Servicio de rotación de neumáticos",
+      "product_id": 697,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "7144.11",
+      "total": "7144.11",
+      "sku": "SVC-ROT",
+      "price": 7144.11
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

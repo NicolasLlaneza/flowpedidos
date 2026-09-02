@@ -1,0 +1,73 @@
+{
+  "id": 3000000000000110,
+  "parent_id": 0,
+  "status": "completed",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-18T17:28:56.000-03:00",
+  "date_modified": "2026-08-18T17:28:56.000-03:00",
+  "date_created_gmt": "2026-08-18T20:28:56.000Z",
+  "date_modified_gmt": "2026-08-18T20:28:56.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "377643.00",
+  "customer_id": 0,
+  "order_key": "wc_order_sj5alpj84ep",
+  "billing": {
+    "first_name": "Camila",
+    "last_name": "Torres",
+    "email": "camila.torres@example.com",
+    "phone": "+5492615558760",
+    "address_1": "Calle 4789",
+    "city": "Mendoza",
+    "state": "Mendoza",
+    "postcode": "M5500",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Camila",
+    "last_name": "Torres",
+    "address_1": "Calle 2702",
+    "city": "Mendoza",
+    "state": "Mendoza",
+    "postcode": "M5500",
+    "country": "AR"
+  },
+  "payment_method": "visa",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_7gwwcsrdxb",
+  "line_items": [
+    {
+      "id": 3909,
+      "name": "Neumático Goodyear EfficientGrip 195/55 R15",
+      "product_id": 115,
+      "variation_id": 0,
+      "quantity": 4,
+      "subtotal": "359572.76",
+      "total": "359572.76",
+      "sku": "GDY-EFG-195-55-R15",
+      "price": 89893.19
+    },
+    {
+      "id": 2980,
+      "name": "Servicio de alineación y balanceo (4 ruedas)",
+      "product_id": 662,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "18070.24",
+      "total": "18070.24",
+      "sku": "SVC-ALI-BAL-4",
+      "price": 18070.24
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

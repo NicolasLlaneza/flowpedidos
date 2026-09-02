@@ -1,0 +1,73 @@
+{
+  "id": 3000000000000134,
+  "parent_id": 0,
+  "status": "cancelled",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-09-01T22:07:20.000-03:00",
+  "date_modified": "2026-09-01T22:07:20.000-03:00",
+  "date_created_gmt": "2026-09-01T01:07:20.000Z",
+  "date_modified_gmt": "2026-09-01T01:07:20.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "302213.92",
+  "customer_id": 0,
+  "order_key": "wc_order_m2wi1dfosic",
+  "billing": {
+    "first_name": "Martina",
+    "last_name": "Herrera",
+    "email": "martina.herrera@example.com",
+    "phone": "+5492615553939",
+    "address_1": "Calle 2665",
+    "city": "Luján de Cuyo",
+    "state": "Mendoza",
+    "postcode": "M5507",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Martina",
+    "last_name": "Herrera",
+    "address_1": "Calle 8335",
+    "city": "Luján de Cuyo",
+    "state": "Mendoza",
+    "postcode": "M5507",
+    "country": "AR"
+  },
+  "payment_method": "account_money",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "",
+  "line_items": [
+    {
+      "id": 6597,
+      "name": "Neumático Bridgestone Ecopia EP150 185/65 R14",
+      "product_id": 157,
+      "variation_id": 0,
+      "quantity": 4,
+      "subtotal": "293752.08",
+      "total": "293752.08",
+      "sku": "BST-EP150-185-65-R14",
+      "price": 73438.02
+    },
+    {
+      "id": 6827,
+      "name": "Servicio de rotación de neumáticos",
+      "product_id": 650,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "8461.84",
+      "total": "8461.84",
+      "sku": "SVC-ROT",
+      "price": 8461.84
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

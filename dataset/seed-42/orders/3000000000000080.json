@@ -1,0 +1,62 @@
+{
+  "id": 3000000000000080,
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-03T05:11:20.000-03:00",
+  "date_modified": "2026-08-03T05:11:20.000-03:00",
+  "date_created_gmt": "2026-08-03T08:11:20.000Z",
+  "date_modified_gmt": "2026-08-03T08:11:20.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "196909.00",
+  "customer_id": 0,
+  "order_key": "wc_order_wga7j5mv3o",
+  "billing": {
+    "first_name": "Emma",
+    "last_name": "Ortiz",
+    "email": "emma.ortiz@example.com",
+    "phone": "+5492615550991",
+    "address_1": "Calle 4711",
+    "city": "La Plata",
+    "state": "Buenos Aires",
+    "postcode": "B1900",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Emma",
+    "last_name": "Ortiz",
+    "address_1": "Calle 4575",
+    "city": "La Plata",
+    "state": "Buenos Aires",
+    "postcode": "B1900",
+    "country": "AR"
+  },
+  "payment_method": "visa",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_jrd6nu43c8",
+  "line_items": [
+    {
+      "id": 1546,
+      "name": "Neumático Pirelli P7 205/55 R16",
+      "product_id": 498,
+      "variation_id": 0,
+      "quantity": 2,
+      "subtotal": "196909",
+      "total": "196909",
+      "sku": "PIR-P7-205-55-R16",
+      "price": 98454.5
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

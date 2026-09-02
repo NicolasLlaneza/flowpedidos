@@ -1,87 +1,62 @@
 {
   "id": 3000000000000016,
-  "status": "paid",
-  "status_detail": null,
-  "date_created": "2026-05-05T11:24:15.000-03:00",
-  "date_closed": "2026-05-05T12:40:19.000-03:00",
-  "last_updated": "2026-05-09T09:13:02.000-03:00",
-  "expiration_date": null,
-  "order_items": [
-    {
-      "item": {
-        "id": "MLA2357740571",
-        "title": "Neumático Hankook Kinergy 175/65 R14",
-        "category_id": "MLA1747",
-        "variation_id": null,
-        "seller_custom_field": "HNK-KIN-175-65-R14",
-        "warranty": null
-      },
-      "quantity": 4,
-      "unit_price": 62447.35,
-      "currency_id": "ARS",
-      "manufacturing_days": null,
-      "sale_fee": 6869.21
-    }
-  ],
-  "total_amount": 249789.4,
-  "paid_amount": 249789.4,
-  "currency_id": "ARS",
-  "buyer": {
-    "id": 400413245,
-    "nickname": "ACASTRO_40",
-    "email": "agustina.castro@example.com",
-    "phone": {
-      "area_code": "261",
-      "number": "5555328",
-      "extension": null,
-      "verified": true
-    },
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-12T22:53:12.000-03:00",
+  "date_modified": "2026-08-12T22:53:12.000-03:00",
+  "date_created_gmt": "2026-08-12T01:53:12.000Z",
+  "date_modified_gmt": "2026-08-12T01:53:12.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "73892.35",
+  "customer_id": 0,
+  "order_key": "wc_order_9xdofp0si4q",
+  "billing": {
     "first_name": "Agustina",
     "last_name": "Castro",
-    "billing_info": {
-      "doc_type": "DNI",
-      "doc_number": "37357243"
-    }
+    "email": "agustina.castro@example.com",
+    "phone": "+5492615557027",
+    "address_1": "Calle 8067",
+    "city": "Luján de Cuyo",
+    "state": "Mendoza",
+    "postcode": "M5507",
+    "country": "AR"
   },
-  "seller": {
-    "id": 123456789,
-    "nickname": "NEUMATICOS_MENDOZA"
+  "shipping": {
+    "first_name": "Agustina",
+    "last_name": "Castro",
+    "address_1": "Calle 5317",
+    "city": "Luján de Cuyo",
+    "state": "Mendoza",
+    "postcode": "M5507",
+    "country": "AR"
   },
-  "payments": [
+  "payment_method": "visa",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_7tisjdelsf",
+  "line_items": [
     {
-      "id": 8971482971,
-      "transaction_amount": 249789.4,
-      "currency_id": "ARS",
-      "status": "approved",
-      "date_approved": "2026-05-05T12:40:19.000-03:00",
-      "payment_method_id": "account_money",
-      "payment_type": "account_money",
-      "installments": 1
+      "id": 9667,
+      "name": "Neumático Goodyear EfficientGrip 195/55 R15",
+      "product_id": 376,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "73892.35",
+      "total": "73892.35",
+      "sku": "GDY-EFG-195-55-R15",
+      "price": 73892.35
     }
   ],
-  "shipping": {
-    "id": 42046731694,
-    "status": "ready_to_ship",
-    "shipping_mode": "me2",
-    "service_id": 308,
-    "cost": 0,
-    "tracking_number": null,
-    "date_delivered": null,
-    "receiver_address": {
-      "city": {
-        "name": "San Juan"
-      },
-      "state": {
-        "name": "San Juan"
-      },
-      "country": {
-        "id": "AR",
-        "name": "Argentina"
-      },
-      "zip_code": "J5400"
-    }
-  },
-  "tags": [
-    "paid"
-  ]
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
 }

@@ -1,99 +1,62 @@
 {
   "id": 3000000000000044,
-  "status": "cancelled",
-  "status_detail": "buyer_canceled",
-  "date_created": "2026-04-24T08:10:13.000-03:00",
-  "date_closed": "2026-04-24T08:54:52.000-03:00",
-  "last_updated": "2026-04-27T01:05:01.000-03:00",
-  "expiration_date": null,
-  "order_items": [
-    {
-      "item": {
-        "id": "MLA7467725999",
-        "title": "Neumático Pirelli P7 205/55 R16",
-        "category_id": "MLA1747",
-        "variation_id": null,
-        "seller_custom_field": "PIR-P7-205-55-R16",
-        "warranty": "Garantía del vendedor: 6 meses"
-      },
-      "quantity": 4,
-      "unit_price": 106896.3,
-      "currency_id": "ARS",
-      "manufacturing_days": null,
-      "sale_fee": 11758.59
-    },
-    {
-      "item": {
-        "id": "MLA939216768",
-        "title": "Servicio de alineación y balanceo (4 ruedas)",
-        "category_id": "MLA417283",
-        "seller_custom_field": "SVC-ALI-BAL-4"
-      },
-      "quantity": 1,
-      "unit_price": 20873.54,
-      "currency_id": "ARS",
-      "sale_fee": 2296.09
-    }
-  ],
-  "total_amount": 448458.74,
-  "paid_amount": 0,
-  "currency_id": "ARS",
-  "buyer": {
-    "id": 400512426,
-    "nickname": "LFERNÁNDEZ_92",
-    "email": "lucía.fernández@example.com",
-    "phone": {
-      "area_code": "261",
-      "number": "5554073",
-      "extension": null,
-      "verified": true
-    },
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-06T08:55:54.000-03:00",
+  "date_modified": "2026-08-06T08:55:54.000-03:00",
+  "date_created_gmt": "2026-08-06T11:55:54.000Z",
+  "date_modified_gmt": "2026-08-06T11:55:54.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "71684.98",
+  "customer_id": 948,
+  "order_key": "wc_order_hbc3w6xx8hp",
+  "billing": {
     "first_name": "Lucía",
     "last_name": "Fernández",
-    "billing_info": {
-      "doc_type": "DNI",
-      "doc_number": "41382785"
-    }
+    "email": "lucía.fernández@example.com",
+    "phone": "+5492615557493",
+    "address_1": "Calle 532",
+    "city": "Luján de Cuyo",
+    "state": "Mendoza",
+    "postcode": "M5507",
+    "country": "AR"
   },
-  "seller": {
-    "id": 123456789,
-    "nickname": "NEUMATICOS_MENDOZA"
+  "shipping": {
+    "first_name": "Lucía",
+    "last_name": "Fernández",
+    "address_1": "Calle 7548",
+    "city": "Luján de Cuyo",
+    "state": "Mendoza",
+    "postcode": "M5507",
+    "country": "AR"
   },
-  "payments": [
+  "payment_method": "mastercard",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_8gg3l5ltci",
+  "line_items": [
     {
-      "id": 8928779231,
-      "transaction_amount": 448458.74,
-      "currency_id": "ARS",
-      "status": "cancelled",
-      "date_approved": null,
-      "payment_method_id": "visa",
-      "payment_type": "credit_card",
-      "installments": 12
+      "id": 2713,
+      "name": "Neumático Bridgestone Ecopia EP150 185/65 R14",
+      "product_id": 57,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "71684.98",
+      "total": "71684.98",
+      "sku": "BST-EP150-185-65-R14",
+      "price": 71684.98
     }
   ],
-  "shipping": {
-    "id": 42160514861,
-    "status": "cancelled",
-    "shipping_mode": "me2",
-    "service_id": 308,
-    "cost": 0,
-    "tracking_number": null,
-    "date_delivered": null,
-    "receiver_address": {
-      "city": {
-        "name": "Buenos Aires"
-      },
-      "state": {
-        "name": "CABA"
-      },
-      "country": {
-        "id": "AR",
-        "name": "Argentina"
-      },
-      "zip_code": "C1425"
-    }
-  },
-  "tags": [
-    "cancelled"
-  ]
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
 }

@@ -2,37 +2,36 @@
   "id": 3000000000000031,
   "status": "paid",
   "status_detail": null,
-  "date_created": "2026-05-01T08:11:23.000-03:00",
-  "date_closed": "2026-05-01T08:32:58.000-03:00",
-  "last_updated": "2026-05-01T09:11:56.000-03:00",
-  "expiration_date": null,
+  "date_created": "2026-08-12T11:59:14.000-03:00",
+  "date_closed": "2026-08-12T12:18:49.000-03:00",
+  "last_updated": "2026-08-14T09:14:56.000-03:00",
   "order_items": [
     {
       "item": {
-        "id": "MLA5093704784",
-        "title": "Neumático Michelin Energy XM2 175/70 R13",
+        "id": "MLA8565301537",
+        "title": "Neumático Continental ContiPremium 205/60 R16",
         "category_id": "MLA1747",
         "variation_id": null,
-        "seller_custom_field": "MCH-EXM2-175-70-R13",
-        "warranty": "Garantía del vendedor: 6 meses"
+        "seller_custom_field": "CON-CPC-205-60-R16",
+        "warranty": null
       },
       "quantity": 4,
-      "unit_price": 65725.36,
+      "unit_price": 103190.74,
       "currency_id": "ARS",
       "manufacturing_days": null,
-      "sale_fee": 7229.79
+      "sale_fee": 11350.98
     }
   ],
-  "total_amount": 262901.44,
-  "paid_amount": 262901.44,
+  "total_amount": 412762.96,
+  "paid_amount": 412762.96,
   "currency_id": "ARS",
   "buyer": {
-    "id": 400659117,
-    "nickname": "FDÍAZ_58",
+    "id": 400491155,
+    "nickname": "FDÍAZ_88",
     "email": "federico.díaz@example.com",
     "phone": {
       "area_code": "261",
-      "number": "5558885",
+      "number": "5550347",
       "extension": null,
       "verified": true
     },
@@ -40,7 +39,7 @@
     "last_name": "Díaz",
     "billing_info": {
       "doc_type": "DNI",
-      "doc_number": "42083835"
+      "doc_number": "44859067"
     }
   },
   "seller": {
@@ -49,40 +48,39 @@
   },
   "payments": [
     {
-      "id": 8938213419,
-      "transaction_amount": 262901.44,
+      "id": 8905039133,
+      "transaction_amount": 412762.96,
       "currency_id": "ARS",
       "status": "approved",
-      "date_approved": "2026-05-01T08:32:58.000-03:00",
+      "date_approved": "2026-08-12T12:18:49.000-03:00",
       "payment_method_id": "account_money",
       "payment_type": "account_money",
-      "installments": 3
+      "installments": 1
     }
   ],
   "shipping": {
-    "id": 41218953572,
-    "status": "delivered",
+    "id": 41439379193,
+    "status": "ready_to_ship",
     "shipping_mode": "me2",
     "service_id": 308,
     "cost": 0,
-    "tracking_number": "AR212599375MLA",
-    "date_delivered": "2026-05-01T09:11:56.000-03:00",
+    "tracking_number": null,
+    "date_delivered": null,
     "receiver_address": {
       "city": {
-        "name": "San Juan"
+        "name": "Mendoza"
       },
       "state": {
-        "name": "San Juan"
+        "name": "Mendoza"
       },
       "country": {
         "id": "AR",
         "name": "Argentina"
       },
-      "zip_code": "J5400"
+      "zip_code": "M5500"
     }
   },
   "tags": [
-    "paid",
-    "delivered"
+    "paid"
   ]
 }

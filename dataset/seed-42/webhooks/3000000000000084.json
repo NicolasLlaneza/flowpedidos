@@ -1,0 +1,62 @@
+{
+  "id": 3000000000000084,
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-12T16:13:09.000-03:00",
+  "date_modified": "2026-08-12T16:13:09.000-03:00",
+  "date_created_gmt": "2026-08-12T19:13:09.000Z",
+  "date_modified_gmt": "2026-08-12T19:13:09.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "118277.24",
+  "customer_id": 89,
+  "order_key": "wc_order_wlgsgs50w5d",
+  "billing": {
+    "first_name": "Lucía",
+    "last_name": "Fernández",
+    "email": "lucía.fernández@example.com",
+    "phone": "+5492615551316",
+    "address_1": "Calle 9942",
+    "city": "Guaymallén",
+    "state": "Mendoza",
+    "postcode": "M5519",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Lucía",
+    "last_name": "Fernández",
+    "address_1": "Calle 6971",
+    "city": "Guaymallén",
+    "state": "Mendoza",
+    "postcode": "M5519",
+    "country": "AR"
+  },
+  "payment_method": "mastercard",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_6f0uedsetg",
+  "line_items": [
+    {
+      "id": 1616,
+      "name": "Neumático Hankook Kinergy 175/65 R14",
+      "product_id": 397,
+      "variation_id": 0,
+      "quantity": 2,
+      "subtotal": "118277.24",
+      "total": "118277.24",
+      "sku": "HNK-KIN-175-65-R14",
+      "price": 59138.62
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

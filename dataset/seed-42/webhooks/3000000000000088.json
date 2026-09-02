@@ -1,0 +1,62 @@
+{
+  "id": 3000000000000088,
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-23T15:42:44.000-03:00",
+  "date_modified": "2026-08-23T15:42:44.000-03:00",
+  "date_created_gmt": "2026-08-23T18:42:44.000Z",
+  "date_modified_gmt": "2026-08-23T18:42:44.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "234505.98",
+  "customer_id": 0,
+  "order_key": "wc_order_g8j9s7ox02f",
+  "billing": {
+    "first_name": "Valentina",
+    "last_name": "Sánchez",
+    "email": "valentina.sánchez@example.com",
+    "phone": "+5492615552354",
+    "address_1": "Calle 9646",
+    "city": "Rosario",
+    "state": "Santa Fe",
+    "postcode": "S2000",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Valentina",
+    "last_name": "Sánchez",
+    "address_1": "Calle 391",
+    "city": "Rosario",
+    "state": "Santa Fe",
+    "postcode": "S2000",
+    "country": "AR"
+  },
+  "payment_method": "account_money",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_vd1k5mwttw",
+  "line_items": [
+    {
+      "id": 5097,
+      "name": "Neumático Continental ContiPremium 205/60 R16",
+      "product_id": 279,
+      "variation_id": 0,
+      "quantity": 2,
+      "subtotal": "234505.98",
+      "total": "234505.98",
+      "sku": "CON-CPC-205-60-R16",
+      "price": 117252.99
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}

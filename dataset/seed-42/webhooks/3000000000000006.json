@@ -1,8 +1,62 @@
 {
-  "user_id": 123456789,
-  "topic": "orders_v2",
-  "application_id": 5503910054141466,
-  "attempts": 1,
-  "sent": "2026-04-22T12:59:04.000-03:00",
-  "received": "2026-05-20T13:29:59.858-03:00"
+  "id": 3000000000000006,
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-04T15:45:10.000-03:00",
+  "date_modified": "2026-08-04T15:45:10.000-03:00",
+  "date_created_gmt": "2026-08-04T18:45:10.000Z",
+  "date_modified_gmt": "2026-08-04T18:45:10.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "102418.04",
+  "customer_id": 0,
+  "order_key": "wc_order_y35y0d1adaa",
+  "billing": {
+    "first_name": "Sofía",
+    "last_name": "Martínez",
+    "email": "sofía.martínez@example.com",
+    "phone": "+5492615552959",
+    "address_1": "Calle 8237",
+    "city": "Luján de Cuyo",
+    "state": "Mendoza",
+    "postcode": "M5507",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Sofía",
+    "last_name": "Martínez",
+    "address_1": "Calle 1386",
+    "city": "Luján de Cuyo",
+    "state": "Mendoza",
+    "postcode": "M5507",
+    "country": "AR"
+  },
+  "payment_method": "account_money",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_rul1bkwac3",
+  "line_items": [
+    {
+      "id": 3201,
+      "name": "Neumático Pirelli P7 205/55 R16",
+      "product_id": 393,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "102418.04",
+      "total": "102418.04",
+      "sku": "PIR-P7-205-55-R16",
+      "price": 102418.04
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
 }

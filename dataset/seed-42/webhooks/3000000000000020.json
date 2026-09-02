@@ -1,9 +1,52 @@
 {
-  "resource": "/orders/3000000000000020",
-  "user_id": 123456789,
-  "topic": "orders_v2",
-  "application_id": 5503910054141466,
-  "attempts": 1,
-  "sent": "2026-04-21T04:04:17.000-03:00",
-  "received": "2026-05-20T13:29:59.863-03:00"
+  "id": 3000000000000020,
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-18T16:15:35.000-03:00",
+  "date_modified": "2026-08-18T16:15:35.000-03:00",
+  "date_created_gmt": "2026-08-18T19:15:35.000Z",
+  "date_modified_gmt": "2026-08-18T19:15:35.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "111168.29",
+  "customer_id": 0,
+  "order_key": "wc_order_hwecwiaex26",
+  "billing": {
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "phone": "2615557148"
+  },
+  "shipping": {
+    "first_name": "",
+    "last_name": ""
+  },
+  "payment_method": "account_money",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_wwwwh0cge5",
+  "line_items": [
+    {
+      "id": 9035,
+      "name": "Neumático Bridgestone Turanza T005 205/55 R16",
+      "product_id": 273,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "111168.29",
+      "total": "111168.29",
+      "sku": "BST-T005-205-55-R16",
+      "price": 111168.29
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
 }

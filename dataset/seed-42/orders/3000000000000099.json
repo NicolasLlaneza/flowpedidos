@@ -1,0 +1,87 @@
+{
+  "id": 3000000000000099,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-08-25T16:50:41.000-03:00",
+  "date_closed": "2026-08-25T16:53:36.000-03:00",
+  "last_updated": "2026-08-30T15:52:10.000-03:00",
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA2829789329",
+        "title": "Neumático Pirelli Cinturato P1 195/65 R15",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "PIR-CP1-195-65-R15",
+        "warranty": "Garantía del vendedor: 6 meses"
+      },
+      "quantity": 4,
+      "unit_price": 73413.18,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 8075.45
+    }
+  ],
+  "total_amount": 293652.72,
+  "paid_amount": 293652.72,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400018001,
+    "nickname": "NSUÁREZ_96",
+    "email": "nicolás.suárez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5556449",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Nicolás",
+    "last_name": "Suárez",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "39522220"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8987764214,
+      "transaction_amount": 293652.72,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-08-25T16:53:36.000-03:00",
+      "payment_method_id": "account_money",
+      "payment_type": "account_money",
+      "installments": 12
+    }
+  ],
+  "shipping": {
+    "id": 41581589434,
+    "status": "delivered",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": "AR879700881MLA",
+    "date_delivered": "2026-08-30T15:52:10.000-03:00",
+    "receiver_address": {
+      "city": {
+        "name": "San Juan"
+      },
+      "state": {
+        "name": "San Juan"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "J5400"
+    }
+  },
+  "tags": [
+    "paid",
+    "delivered"
+  ]
+}

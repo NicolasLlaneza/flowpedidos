@@ -1,0 +1,68 @@
+{
+  "id": 3000000000000142,
+  "parent_id": 0,
+  "status": "refunded",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-23T17:46:01.000-03:00",
+  "date_modified": "2026-08-23T17:46:01.000-03:00",
+  "date_created_gmt": "2026-08-23T20:46:01.000Z",
+  "date_modified_gmt": "2026-08-23T20:46:01.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "15188.49",
+  "customer_id": 0,
+  "order_key": "wc_order_e422c94waru",
+  "billing": {
+    "first_name": "María",
+    "last_name": "Gómez",
+    "email": "maría.gómez@example.com",
+    "phone": "+5492615556036",
+    "address_1": "Calle 7374",
+    "city": "Rosario",
+    "state": "Santa Fe",
+    "postcode": "S2000",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "María",
+    "last_name": "Gómez",
+    "address_1": "Calle 6177",
+    "city": "Rosario",
+    "state": "Santa Fe",
+    "postcode": "S2000",
+    "country": "AR"
+  },
+  "payment_method": "mastercard",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "",
+  "line_items": [
+    {
+      "id": 616,
+      "name": "Servicio de alineación y balanceo (4 ruedas)",
+      "product_id": 661,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "15188.49",
+      "total": "15188.49",
+      "sku": "SVC-ALI-BAL-4",
+      "price": 15188.49
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": [
+    {
+      "id": 8014,
+      "reason": "Reembolso solicitado",
+      "total": "-15188.49"
+    }
+  ]
+}

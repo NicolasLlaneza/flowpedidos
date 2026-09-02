@@ -1,85 +1,62 @@
 {
   "id": 3000000000000034,
-  "status": "paid",
-  "status_detail": null,
-  "date_created": "2026-05-04T00:30:28.000-03:00",
-  "date_closed": "2026-05-04T01:39:30.000-03:00",
-  "last_updated": "2026-05-06T02:41:54.000-03:00",
-  "expiration_date": null,
-  "order_items": [
-    {
-      "item": {
-        "id": "MLA958975042",
-        "title": "Revisión y ajuste de presión",
-        "category_id": "MLA417283",
-        "seller_custom_field": "SVC-PRES"
-      },
-      "quantity": 1,
-      "unit_price": 3484.98,
-      "currency_id": "ARS",
-      "sale_fee": 408.65
-    }
-  ],
-  "total_amount": 3484.98,
-  "paid_amount": 3484.98,
-  "currency_id": "ARS",
-  "buyer": {
-    "id": 400920120,
-    "nickname": "MHERRERA_44",
-    "email": "martina.herrera@example.com",
-    "phone": {
-      "area_code": "261",
-      "number": "5557032",
-      "extension": null,
-      "verified": true
-    },
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-31T00:07:03.000-03:00",
+  "date_modified": "2026-08-31T00:07:03.000-03:00",
+  "date_created_gmt": "2026-08-31T03:07:03.000Z",
+  "date_modified_gmt": "2026-08-31T03:07:03.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "3547.88",
+  "customer_id": 0,
+  "order_key": "wc_order_kr55glu4t1b",
+  "billing": {
     "first_name": "Martina",
     "last_name": "Herrera",
-    "billing_info": {
-      "doc_type": "DNI",
-      "doc_number": "33813021"
-    }
+    "email": "martina.herrera@example.com",
+    "phone": "+5492615556302",
+    "address_1": "Calle 116",
+    "city": "Buenos Aires",
+    "state": "CABA",
+    "postcode": "C1425",
+    "country": "AR"
   },
-  "seller": {
-    "id": 123456789,
-    "nickname": "NEUMATICOS_MENDOZA"
+  "shipping": {
+    "first_name": "Martina",
+    "last_name": "Herrera",
+    "address_1": "Calle 4116",
+    "city": "Buenos Aires",
+    "state": "CABA",
+    "postcode": "C1425",
+    "country": "AR"
   },
-  "payments": [
+  "payment_method": "account_money",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_mnveg4vywy",
+  "line_items": [
     {
-      "id": 8922168900,
-      "transaction_amount": 3484.98,
-      "currency_id": "ARS",
-      "status": "approved",
-      "date_approved": "2026-05-04T01:39:30.000-03:00",
-      "payment_method_id": "pagofacil",
-      "payment_type": "ticket",
-      "installments": 3
+      "id": 100,
+      "name": "Servicio de alineación y balanceo (4 ruedas)",
+      "product_id": 506,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "3547.88",
+      "total": "3547.88",
+      "sku": "SVC-ALI-BAL-4",
+      "price": 3547.88
     }
   ],
-  "shipping": {
-    "id": 41242315720,
-    "status": "delivered",
-    "shipping_mode": "me2",
-    "service_id": 308,
-    "cost": 0,
-    "tracking_number": "AR239103259MLA",
-    "date_delivered": "2026-05-06T02:41:54.000-03:00",
-    "receiver_address": {
-      "city": {
-        "name": "Maipú"
-      },
-      "state": {
-        "name": "Mendoza"
-      },
-      "country": {
-        "id": "AR",
-        "name": "Argentina"
-      },
-      "zip_code": "M5515"
-    }
-  },
-  "tags": [
-    "paid",
-    "delivered"
-  ]
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
 }

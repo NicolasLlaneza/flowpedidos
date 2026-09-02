@@ -1,0 +1,86 @@
+{
+  "id": 3000000000000073,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-08-22T03:22:25.000-03:00",
+  "date_closed": "2026-08-22T04:02:53.000-03:00",
+  "last_updated": "2026-08-24T13:57:20.000-03:00",
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA6440830958",
+        "title": "Neumático Hankook Kinergy 175/65 R14",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "HNK-KIN-175-65-R14",
+        "warranty": null
+      },
+      "quantity": 2,
+      "unit_price": 65413.85,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 7195.52
+    }
+  ],
+  "total_amount": 130827.7,
+  "paid_amount": 130827.7,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400054318,
+    "nickname": "TÁLVAREZ_48",
+    "email": "tomás.álvarez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5551066",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Tomás",
+    "last_name": "Álvarez",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "29680488"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8973165856,
+      "transaction_amount": 130827.7,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-08-22T04:02:53.000-03:00",
+      "payment_method_id": "account_money",
+      "payment_type": "account_money",
+      "installments": 6
+    }
+  ],
+  "shipping": {
+    "id": 41516189075,
+    "status": "shipped",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": "AR262358294MLA",
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Rosario"
+      },
+      "state": {
+        "name": "Santa Fe"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "S2000"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

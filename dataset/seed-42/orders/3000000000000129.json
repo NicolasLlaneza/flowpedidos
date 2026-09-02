@@ -1,0 +1,98 @@
+{
+  "id": 3000000000000129,
+  "status": "cancelled",
+  "status_detail": "buyer_canceled",
+  "date_created": "2026-08-20T02:11:28.000-03:00",
+  "date_closed": "2026-08-20T02:18:53.000-03:00",
+  "last_updated": "2026-08-23T12:22:55.000-03:00",
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA7426801267",
+        "title": "Neumático Continental ContiPremium 205/60 R16",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "CON-CPC-205-60-R16",
+        "warranty": null
+      },
+      "quantity": 4,
+      "unit_price": 103954.64,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 11435.01
+    },
+    {
+      "item": {
+        "id": "MLA905241024",
+        "title": "Servicio de instalación de neumáticos (4 ruedas)",
+        "category_id": "MLA417283",
+        "seller_custom_field": "SVC-INS-4"
+      },
+      "quantity": 1,
+      "unit_price": 8461.07,
+      "currency_id": "ARS",
+      "sale_fee": 930.72
+    }
+  ],
+  "total_amount": 424279.63,
+  "paid_amount": 0,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400602030,
+    "nickname": "MROMERO_24",
+    "email": "mateo.romero@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5559838",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Mateo",
+    "last_name": "Romero",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "40000632"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8956529997,
+      "transaction_amount": 424279.63,
+      "currency_id": "ARS",
+      "status": "cancelled",
+      "date_approved": null,
+      "payment_method_id": "mastercard",
+      "payment_type": "credit_card",
+      "installments": 1
+    }
+  ],
+  "shipping": {
+    "id": 41707882567,
+    "status": "cancelled",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": null,
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Córdoba"
+      },
+      "state": {
+        "name": "Córdoba"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "X5000"
+    }
+  },
+  "tags": [
+    "cancelled"
+  ]
+}

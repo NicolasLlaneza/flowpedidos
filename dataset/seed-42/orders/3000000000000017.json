@@ -2,37 +2,36 @@
   "id": 3000000000000017,
   "status": "paid",
   "status_detail": null,
-  "date_created": "2026-05-15T15:39:31.000-03:00",
-  "date_closed": "2026-05-15T15:54:56.000-03:00",
-  "last_updated": "2026-05-17T12:57:30.000-03:00",
-  "expiration_date": null,
+  "date_created": "2026-08-24T22:00:20.000-03:00",
+  "date_closed": "2026-08-24T23:05:12.000-03:00",
+  "last_updated": "2026-08-25T23:40:57.000-03:00",
   "order_items": [
     {
       "item": {
-        "id": "MLA7455454809",
-        "title": "Neumático Michelin Energy XM2 175/70 R13",
+        "id": "MLA1199195809",
+        "title": "Neumático Goodyear EfficientGrip 195/55 R15",
         "category_id": "MLA1747",
         "variation_id": null,
-        "seller_custom_field": "MCH-EXM2-175-70-R13",
-        "warranty": "Garantía del vendedor: 6 meses"
+        "seller_custom_field": "GDY-EFG-195-55-R15",
+        "warranty": null
       },
       "quantity": 1,
-      "unit_price": 65469.67,
+      "unit_price": 91532.92,
       "currency_id": "ARS",
       "manufacturing_days": null,
-      "sale_fee": 7201.66
+      "sale_fee": 10068.62
     }
   ],
-  "total_amount": 65469.67,
-  "paid_amount": 65469.67,
+  "total_amount": 91532.92,
+  "paid_amount": 91532.92,
   "currency_id": "ARS",
   "buyer": {
-    "id": 400072511,
-    "nickname": "JACOSTA_54",
+    "id": 400262775,
+    "nickname": "JACOSTA_70",
     "email": "joaquín.acosta@example.com",
     "phone": {
       "area_code": "261",
-      "number": "5558932",
+      "number": "5550595",
       "extension": null,
       "verified": true
     },
@@ -40,7 +39,7 @@
     "last_name": "Acosta",
     "billing_info": {
       "doc_type": "DNI",
-      "doc_number": "33422482"
+      "doc_number": "26917521"
     }
   },
   "seller": {
@@ -49,18 +48,18 @@
   },
   "payments": [
     {
-      "id": 8983785568,
-      "transaction_amount": 65469.67,
+      "id": 8995209784,
+      "transaction_amount": 91532.92,
       "currency_id": "ARS",
       "status": "approved",
-      "date_approved": "2026-05-15T15:54:56.000-03:00",
+      "date_approved": "2026-08-24T23:05:12.000-03:00",
       "payment_method_id": "debvisa",
       "payment_type": "debit_card",
-      "installments": 6
+      "installments": 1
     }
   ],
   "shipping": {
-    "id": 41284749519,
+    "id": 41718360290,
     "status": "ready_to_ship",
     "shipping_mode": "me2",
     "service_id": 308,
@@ -69,7 +68,7 @@
     "date_delivered": null,
     "receiver_address": {
       "city": {
-        "name": "Guaymallén"
+        "name": "Mendoza"
       },
       "state": {
         "name": "Mendoza"
@@ -78,7 +77,7 @@
         "id": "AR",
         "name": "Argentina"
       },
-      "zip_code": "M5519"
+      "zip_code": "M5500"
     }
   },
   "tags": [

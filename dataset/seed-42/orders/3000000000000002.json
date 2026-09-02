@@ -1,87 +1,62 @@
 {
   "id": 3000000000000002,
-  "status": "paid",
-  "status_detail": null,
-  "date_created": "2026-05-05T22:35:00.000-03:00",
-  "date_closed": "2026-05-05T23:14:01.000-03:00",
-  "last_updated": "2026-05-07T05:13:16.000-03:00",
-  "expiration_date": null,
-  "order_items": [
-    {
-      "item": {
-        "id": "MLA1244112483",
-        "title": "Neumático Continental ContiPremium 205/60 R16",
-        "category_id": "MLA1747",
-        "variation_id": null,
-        "seller_custom_field": "CON-CPC-205-60-R16",
-        "warranty": null
-      },
-      "quantity": 4,
-      "unit_price": 108258.39,
-      "currency_id": "ARS",
-      "manufacturing_days": null,
-      "sale_fee": 11908.42
-    }
-  ],
-  "total_amount": 433033.56,
-  "paid_amount": 433033.56,
-  "currency_id": "ARS",
-  "buyer": {
-    "id": 400592324,
-    "nickname": "MGÓMEZ_12",
-    "email": "maría.gómez@example.com",
-    "phone": {
-      "area_code": "261",
-      "number": "5552669",
-      "extension": null,
-      "verified": false
-    },
+  "parent_id": 0,
+  "status": "processing",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-16T17:20:57.000-03:00",
+  "date_modified": "2026-08-16T17:20:57.000-03:00",
+  "date_created_gmt": "2026-08-16T20:20:57.000Z",
+  "date_modified_gmt": "2026-08-16T20:20:57.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "61235.63",
+  "customer_id": 842,
+  "order_key": "wc_order_yyb60yx8ly",
+  "billing": {
     "first_name": "María",
     "last_name": "Gómez",
-    "billing_info": {
-      "doc_type": "DNI",
-      "doc_number": "28713780"
-    }
+    "email": "maría.gómez@example.com",
+    "phone": "+5492615550315",
+    "address_1": "Calle 4928",
+    "city": "Mendoza",
+    "state": "Mendoza",
+    "postcode": "M5500",
+    "country": "AR"
   },
-  "seller": {
-    "id": 123456789,
-    "nickname": "NEUMATICOS_MENDOZA"
+  "shipping": {
+    "first_name": "María",
+    "last_name": "Gómez",
+    "address_1": "Calle 8109",
+    "city": "Mendoza",
+    "state": "Mendoza",
+    "postcode": "M5500",
+    "country": "AR"
   },
-  "payments": [
+  "payment_method": "visa",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "ch_lozilfm08p",
+  "line_items": [
     {
-      "id": 8905139274,
-      "transaction_amount": 433033.56,
-      "currency_id": "ARS",
-      "status": "approved",
-      "date_approved": "2026-05-05T23:14:01.000-03:00",
-      "payment_method_id": "visa",
-      "payment_type": "credit_card",
-      "installments": 3
+      "id": 1938,
+      "name": "Neumático Bridgestone Ecopia EP150 185/65 R14",
+      "product_id": 392,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "61235.63",
+      "total": "61235.63",
+      "sku": "BST-EP150-185-65-R14",
+      "price": 61235.63
     }
   ],
-  "shipping": {
-    "id": 41796729513,
-    "status": "ready_to_ship",
-    "shipping_mode": "me2",
-    "service_id": 308,
-    "cost": 0,
-    "tracking_number": null,
-    "date_delivered": null,
-    "receiver_address": {
-      "city": {
-        "name": "Mendoza"
-      },
-      "state": {
-        "name": "Mendoza"
-      },
-      "country": {
-        "id": "AR",
-        "name": "Argentina"
-      },
-      "zip_code": "M5500"
-    }
-  },
-  "tags": [
-    "paid"
-  ]
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
 }

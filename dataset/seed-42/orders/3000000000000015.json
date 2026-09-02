@@ -2,37 +2,36 @@
   "id": 3000000000000015,
   "status": "paid",
   "status_detail": null,
-  "date_created": "2026-04-20T18:22:35.000-03:00",
-  "date_closed": "2026-04-20T19:54:49.000-03:00",
-  "last_updated": "2026-04-22T08:57:35.000-03:00",
-  "expiration_date": null,
+  "date_created": "2026-09-01T14:26:38.000-03:00",
+  "date_closed": "2026-09-01T16:19:53.000-03:00",
+  "last_updated": "2026-09-02T00:38:49.000-03:00",
   "order_items": [
     {
       "item": {
-        "id": "MLA7185493437",
-        "title": "Neumático Continental ContiPremium 205/60 R16",
+        "id": "MLA6826370299",
+        "title": "Neumático Goodyear EfficientGrip 195/55 R15",
         "category_id": "MLA1747",
         "variation_id": null,
-        "seller_custom_field": "CON-CPC-205-60-R16",
-        "warranty": "Garantía del vendedor: 6 meses"
+        "seller_custom_field": "GDY-EFG-195-55-R15",
+        "warranty": null
       },
-      "quantity": 2,
-      "unit_price": 108743.21,
+      "quantity": 1,
+      "unit_price": 82959.14,
       "currency_id": "ARS",
       "manufacturing_days": null,
-      "sale_fee": 11961.75
+      "sale_fee": 9125.51
     }
   ],
-  "total_amount": 217486.42,
-  "paid_amount": 217486.42,
+  "total_amount": 82959.14,
+  "paid_amount": 82959.14,
   "currency_id": "ARS",
   "buyer": {
-    "id": 400684980,
-    "nickname": "LVEGA_61",
+    "id": 400147646,
+    "nickname": "LVEGA_55",
     "email": "lautaro.vega@example.com",
     "phone": {
       "area_code": "261",
-      "number": "5558099",
+      "number": "5553075",
       "extension": null,
       "verified": true
     },
@@ -40,7 +39,7 @@
     "last_name": "Vega",
     "billing_info": {
       "doc_type": "DNI",
-      "doc_number": "34880571"
+      "doc_number": "31638435"
     }
   },
   "seller": {
@@ -49,18 +48,18 @@
   },
   "payments": [
     {
-      "id": 8966792000,
-      "transaction_amount": 217486.42,
+      "id": 8943039876,
+      "transaction_amount": 82959.14,
       "currency_id": "ARS",
       "status": "approved",
-      "date_approved": "2026-04-20T19:54:49.000-03:00",
-      "payment_method_id": "account_money",
-      "payment_type": "account_money",
-      "installments": 12
+      "date_approved": "2026-09-01T16:19:53.000-03:00",
+      "payment_method_id": "debvisa",
+      "payment_type": "debit_card",
+      "installments": 3
     }
   ],
   "shipping": {
-    "id": 41586848330,
+    "id": 41298791270,
     "status": "ready_to_ship",
     "shipping_mode": "me2",
     "service_id": 308,
@@ -69,16 +68,16 @@
     "date_delivered": null,
     "receiver_address": {
       "city": {
-        "name": "Rosario"
+        "name": "Luján de Cuyo"
       },
       "state": {
-        "name": "Santa Fe"
+        "name": "Mendoza"
       },
       "country": {
         "id": "AR",
         "name": "Argentina"
       },
-      "zip_code": "S2000"
+      "zip_code": "M5507"
     }
   },
   "tags": [

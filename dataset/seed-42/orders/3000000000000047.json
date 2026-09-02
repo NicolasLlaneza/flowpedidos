@@ -1,35 +1,37 @@
 {
   "id": 3000000000000047,
-  "status": "partially_refunded",
+  "status": "paid",
   "status_detail": null,
-  "date_created": "2026-05-18T11:28:05.000-03:00",
-  "date_closed": "2026-05-18T11:57:19.000-03:00",
-  "last_updated": "2026-05-22T12:44:39.000-03:00",
-  "expiration_date": null,
+  "date_created": "2026-08-06T12:34:04.000-03:00",
+  "date_closed": "2026-08-06T13:37:36.000-03:00",
+  "last_updated": "2026-08-08T09:57:01.000-03:00",
   "order_items": [
     {
       "item": {
-        "id": "MLA952337399",
-        "title": "Revisión y ajuste de presión",
-        "category_id": "MLA417283",
-        "seller_custom_field": "SVC-PRES"
+        "id": "MLA7192371325",
+        "title": "Neumático Pirelli P7 205/55 R16",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "PIR-P7-205-55-R16",
+        "warranty": "Garantía del vendedor: 6 meses"
       },
       "quantity": 1,
-      "unit_price": 5364.27,
+      "unit_price": 100871.66,
       "currency_id": "ARS",
-      "sale_fee": 590.07
+      "manufacturing_days": null,
+      "sale_fee": 11095.88
     }
   ],
-  "total_amount": 5364.27,
-  "paid_amount": 0,
+  "total_amount": 100871.66,
+  "paid_amount": 100871.66,
   "currency_id": "ARS",
   "buyer": {
-    "id": 400526124,
-    "nickname": "PGARCÍA_85",
+    "id": 400953961,
+    "nickname": "PGARCÍA_70",
     "email": "pablo.garcía@example.com",
     "phone": {
       "area_code": "261",
-      "number": "5559789",
+      "number": "5550107",
       "extension": null,
       "verified": true
     },
@@ -37,7 +39,7 @@
     "last_name": "García",
     "billing_info": {
       "doc_type": "DNI",
-      "doc_number": "25044365"
+      "doc_number": "27708973"
     }
   },
   "seller": {
@@ -46,19 +48,19 @@
   },
   "payments": [
     {
-      "id": 8913120382,
-      "transaction_amount": 5364.27,
+      "id": 8927433291,
+      "transaction_amount": 100871.66,
       "currency_id": "ARS",
-      "status": "refunded",
-      "date_approved": null,
-      "payment_method_id": "mastercard",
+      "status": "approved",
+      "date_approved": "2026-08-06T13:37:36.000-03:00",
+      "payment_method_id": "visa",
       "payment_type": "credit_card",
-      "installments": 3
+      "installments": 12
     }
   ],
   "shipping": {
-    "id": 41823140229,
-    "status": "shipped",
+    "id": 42191873661,
+    "status": "ready_to_ship",
     "shipping_mode": "me2",
     "service_id": 308,
     "cost": 0,
@@ -66,16 +68,16 @@
     "date_delivered": null,
     "receiver_address": {
       "city": {
-        "name": "Buenos Aires"
+        "name": "Maipú"
       },
       "state": {
-        "name": "CABA"
+        "name": "Mendoza"
       },
       "country": {
         "id": "AR",
         "name": "Argentina"
       },
-      "zip_code": "C1425"
+      "zip_code": "M5515"
     }
   },
   "tags": [

@@ -2,37 +2,36 @@
   "id": 3000000000000025,
   "status": "paid",
   "status_detail": null,
-  "date_created": "2026-04-23T01:41:58.000-03:00",
-  "date_closed": "2026-04-23T03:15:20.000-03:00",
-  "last_updated": "2026-04-24T18:34:16.000-03:00",
-  "expiration_date": null,
+  "date_created": "2026-08-03T04:04:17.000-03:00",
+  "date_closed": "2026-08-03T04:39:04.000-03:00",
+  "last_updated": "2026-08-03T10:17:56.000-03:00",
   "order_items": [
     {
       "item": {
-        "id": "MLA9936579786",
-        "title": "Neumático Pirelli P7 205/55 R16",
+        "id": "MLA5695833911",
+        "title": "Neumático Bridgestone Turanza T005 205/55 R16",
         "category_id": "MLA1747",
         "variation_id": null,
-        "seller_custom_field": "PIR-P7-205-55-R16",
-        "warranty": null
+        "seller_custom_field": "BST-T005-205-55-R16",
+        "warranty": "Garantía del vendedor: 6 meses"
       },
-      "quantity": 2,
-      "unit_price": 87231.19,
+      "quantity": 1,
+      "unit_price": 113050.84,
       "currency_id": "ARS",
       "manufacturing_days": null,
-      "sale_fee": 9595.43
+      "sale_fee": 12435.59
     }
   ],
-  "total_amount": 174462.38,
-  "paid_amount": 174462.38,
+  "total_amount": 113050.84,
+  "paid_amount": 113050.84,
   "currency_id": "ARS",
   "buyer": {
-    "id": 400979469,
-    "nickname": "DRODRÍGUEZ_97",
+    "id": 400659887,
+    "nickname": "DRODRÍGUEZ_64",
     "email": "diego.rodríguez@example.com",
     "phone": {
       "area_code": "261",
-      "number": "5558116",
+      "number": "5551349",
       "extension": null,
       "verified": true
     },
@@ -40,7 +39,7 @@
     "last_name": "Rodríguez",
     "billing_info": {
       "doc_type": "DNI",
-      "doc_number": "41225149"
+      "doc_number": "29825953"
     }
   },
   "seller": {
@@ -49,36 +48,36 @@
   },
   "payments": [
     {
-      "id": 8945375775,
-      "transaction_amount": 174462.38,
+      "id": 8971195155,
+      "transaction_amount": 113050.84,
       "currency_id": "ARS",
       "status": "approved",
-      "date_approved": "2026-04-23T03:15:20.000-03:00",
-      "payment_method_id": "debvisa",
-      "payment_type": "debit_card",
-      "installments": 12
+      "date_approved": "2026-08-03T04:39:04.000-03:00",
+      "payment_method_id": "mastercard",
+      "payment_type": "credit_card",
+      "installments": 6
     }
   ],
   "shipping": {
-    "id": 41855726232,
-    "status": "shipped",
+    "id": 41451035537,
+    "status": "ready_to_ship",
     "shipping_mode": "me2",
     "service_id": 308,
     "cost": 0,
-    "tracking_number": "AR325481282MLA",
+    "tracking_number": null,
     "date_delivered": null,
     "receiver_address": {
       "city": {
-        "name": "Rosario"
+        "name": "Córdoba"
       },
       "state": {
-        "name": "Santa Fe"
+        "name": "Córdoba"
       },
       "country": {
         "id": "AR",
         "name": "Argentina"
       },
-      "zip_code": "S2000"
+      "zip_code": "X5000"
     }
   },
   "tags": [

@@ -1,50 +1,37 @@
 {
   "id": 3000000000000043,
-  "status": "cancelled",
-  "status_detail": "buyer_canceled",
-  "date_created": "2026-04-26T20:37:03.000-03:00",
-  "date_closed": "2026-04-27T21:36:17.000-03:00",
-  "last_updated": "2026-04-28T03:54:27.000-03:00",
-  "expiration_date": null,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-08-28T16:50:21.000-03:00",
+  "date_closed": "2026-08-28T17:05:46.000-03:00",
+  "last_updated": "2026-08-30T09:46:19.000-03:00",
   "order_items": [
     {
       "item": {
-        "id": "MLA8295377221",
-        "title": "Neumático Continental PowerContact 185/65 R15",
+        "id": "MLA2995200987",
+        "title": "Neumático Michelin Primacy 4 225/45 R17",
         "category_id": "MLA1747",
         "variation_id": null,
-        "seller_custom_field": "CON-PWC-185-65-R15",
+        "seller_custom_field": "MCH-PRI4-225-45-R17",
         "warranty": null
       },
-      "quantity": 4,
-      "unit_price": 85163.8,
+      "quantity": 1,
+      "unit_price": 164898.12,
       "currency_id": "ARS",
       "manufacturing_days": null,
-      "sale_fee": 9368.02
-    },
-    {
-      "item": {
-        "id": "MLA905859842",
-        "title": "Servicio de instalación de neumáticos (4 ruedas)",
-        "category_id": "MLA417283",
-        "seller_custom_field": "SVC-INS-4"
-      },
-      "quantity": 1,
-      "unit_price": 9534.26,
-      "currency_id": "ARS",
-      "sale_fee": 1048.77
+      "sale_fee": 18138.79
     }
   ],
-  "total_amount": 350189.46,
-  "paid_amount": 0,
+  "total_amount": 164898.12,
+  "paid_amount": 164898.12,
   "currency_id": "ARS",
   "buyer": {
-    "id": 400238117,
-    "nickname": "CLÓPEZ_25",
+    "id": 400516708,
+    "nickname": "CLÓPEZ_75",
     "email": "carlos.lópez@example.com",
     "phone": {
       "area_code": "261",
-      "number": "5553830",
+      "number": "5554924",
       "extension": null,
       "verified": true
     },
@@ -52,7 +39,7 @@
     "last_name": "López",
     "billing_info": {
       "doc_type": "DNI",
-      "doc_number": "34627326"
+      "doc_number": "36795009"
     }
   },
   "seller": {
@@ -61,19 +48,19 @@
   },
   "payments": [
     {
-      "id": 8963562880,
-      "transaction_amount": 350189.46,
+      "id": 8952699955,
+      "transaction_amount": 164898.12,
       "currency_id": "ARS",
-      "status": "cancelled",
-      "date_approved": null,
+      "status": "approved",
+      "date_approved": "2026-08-28T17:05:46.000-03:00",
       "payment_method_id": "account_money",
       "payment_type": "account_money",
-      "installments": 1
+      "installments": 3
     }
   ],
   "shipping": {
-    "id": 42092592769,
-    "status": "cancelled",
+    "id": 41579072429,
+    "status": "ready_to_ship",
     "shipping_mode": "me2",
     "service_id": 308,
     "cost": 0,
@@ -81,7 +68,7 @@
     "date_delivered": null,
     "receiver_address": {
       "city": {
-        "name": "Godoy Cruz"
+        "name": "Maipú"
       },
       "state": {
         "name": "Mendoza"
@@ -90,10 +77,10 @@
         "id": "AR",
         "name": "Argentina"
       },
-      "zip_code": "M5501"
+      "zip_code": "M5515"
     }
   },
   "tags": [
-    "cancelled"
+    "paid"
   ]
 }

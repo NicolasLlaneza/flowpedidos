@@ -1,0 +1,86 @@
+{
+  "id": 3000000000000059,
+  "status": "paid",
+  "status_detail": null,
+  "date_created": "2026-08-07T03:10:00.000-03:00",
+  "date_closed": "2026-08-07T03:27:14.000-03:00",
+  "last_updated": "2026-08-08T19:07:15.000-03:00",
+  "order_items": [
+    {
+      "item": {
+        "id": "MLA6939668538",
+        "title": "Neumático Michelin Energy XM2 175/70 R13",
+        "category_id": "MLA1747",
+        "variation_id": null,
+        "seller_custom_field": "MCH-EXM2-175-70-R13",
+        "warranty": null
+      },
+      "quantity": 2,
+      "unit_price": 63327.11,
+      "currency_id": "ARS",
+      "manufacturing_days": null,
+      "sale_fee": 6965.98
+    }
+  ],
+  "total_amount": 126654.22,
+  "paid_amount": 126654.22,
+  "currency_id": "ARS",
+  "buyer": {
+    "id": 400592907,
+    "nickname": "NSUÁREZ_41",
+    "email": "nicolás.suárez@example.com",
+    "phone": {
+      "area_code": "261",
+      "number": "5554608",
+      "extension": null,
+      "verified": true
+    },
+    "first_name": "Nicolás",
+    "last_name": "Suárez",
+    "billing_info": {
+      "doc_type": "DNI",
+      "doc_number": "36539108"
+    }
+  },
+  "seller": {
+    "id": 123456789,
+    "nickname": "NEUMATICOS_MENDOZA"
+  },
+  "payments": [
+    {
+      "id": 8987358570,
+      "transaction_amount": 126654.22,
+      "currency_id": "ARS",
+      "status": "approved",
+      "date_approved": "2026-08-07T03:27:14.000-03:00",
+      "payment_method_id": "visa",
+      "payment_type": "credit_card",
+      "installments": 1
+    }
+  ],
+  "shipping": {
+    "id": 41731103151,
+    "status": "shipped",
+    "shipping_mode": "me2",
+    "service_id": 308,
+    "cost": 0,
+    "tracking_number": "AR780378939MLA",
+    "date_delivered": null,
+    "receiver_address": {
+      "city": {
+        "name": "Godoy Cruz"
+      },
+      "state": {
+        "name": "Mendoza"
+      },
+      "country": {
+        "id": "AR",
+        "name": "Argentina"
+      },
+      "zip_code": "M5501"
+    }
+  },
+  "tags": [
+    "paid"
+  ]
+}

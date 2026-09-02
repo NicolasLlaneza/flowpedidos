@@ -2,37 +2,36 @@
   "id": 3000000000000007,
   "status": "paid",
   "status_detail": null,
-  "date_created": "2026-04-20T04:15:49.000-03:00",
-  "date_closed": "2026-04-20T06:14:28.000-03:00",
-  "last_updated": "2026-04-21T01:54:18.000-03:00",
-  "expiration_date": null,
+  "date_created": "2026-08-22T22:58:54.000-03:00",
+  "date_closed": "2026-08-22T23:46:40.000-03:00",
+  "last_updated": "2026-08-22T15:32:41.000-03:00",
   "order_items": [
     {
       "item": {
-        "id": "MLA4029398883",
-        "title": "Neumático Bridgestone Ecopia EP150 185/65 R14",
+        "id": "MLA2862587106",
+        "title": "Neumático Goodyear Eagle F1 245/40 R18",
         "category_id": "MLA1747",
         "variation_id": null,
-        "seller_custom_field": "BST-EP150-185-65-R14",
-        "warranty": null
+        "seller_custom_field": "GDY-EF1-245-40-R18",
+        "warranty": "Garantía del vendedor: 6 meses"
       },
-      "quantity": 1,
-      "unit_price": 65509.69,
+      "quantity": 4,
+      "unit_price": 173437.25,
       "currency_id": "ARS",
       "manufacturing_days": null,
-      "sale_fee": 7206.07
+      "sale_fee": 19078.1
     }
   ],
-  "total_amount": 65509.69,
-  "paid_amount": 65509.69,
+  "total_amount": 693749,
+  "paid_amount": 693749,
   "currency_id": "ARS",
   "buyer": {
-    "id": 400489242,
-    "nickname": "PGARCÍA_26",
+    "id": 400223182,
+    "nickname": "PGARCÍA_47",
     "email": "pablo.garcía@example.com",
     "phone": {
       "area_code": "261",
-      "number": "5550474",
+      "number": "5556996",
       "extension": null,
       "verified": true
     },
@@ -40,7 +39,7 @@
     "last_name": "García",
     "billing_info": {
       "doc_type": "DNI",
-      "doc_number": "39167399"
+      "doc_number": "39188593"
     }
   },
   "seller": {
@@ -49,18 +48,18 @@
   },
   "payments": [
     {
-      "id": 8956096415,
-      "transaction_amount": 65509.69,
+      "id": 8936971039,
+      "transaction_amount": 693749,
       "currency_id": "ARS",
       "status": "approved",
-      "date_approved": "2026-04-20T06:14:28.000-03:00",
-      "payment_method_id": "visa",
-      "payment_type": "credit_card",
-      "installments": 3
+      "date_approved": "2026-08-22T23:46:40.000-03:00",
+      "payment_method_id": "debvisa",
+      "payment_type": "debit_card",
+      "installments": 1
     }
   ],
   "shipping": {
-    "id": 41594656333,
+    "id": 41937422417,
     "status": "ready_to_ship",
     "shipping_mode": "me2",
     "service_id": 308,
@@ -69,16 +68,16 @@
     "date_delivered": null,
     "receiver_address": {
       "city": {
-        "name": "Buenos Aires"
+        "name": "Godoy Cruz"
       },
       "state": {
-        "name": "CABA"
+        "name": "Mendoza"
       },
       "country": {
         "id": "AR",
         "name": "Argentina"
       },
-      "zip_code": "C1425"
+      "zip_code": "M5501"
     }
   },
   "tags": [

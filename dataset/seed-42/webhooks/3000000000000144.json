@@ -1,0 +1,68 @@
+{
+  "id": 3000000000000144,
+  "parent_id": 0,
+  "status": "refunded",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-13T12:48:19.000-03:00",
+  "date_modified": "2026-08-13T12:48:19.000-03:00",
+  "date_created_gmt": "2026-08-13T15:48:19.000Z",
+  "date_modified_gmt": "2026-08-13T15:48:19.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "15214.20",
+  "customer_id": 0,
+  "order_key": "wc_order_dr3hexmkeow",
+  "billing": {
+    "first_name": "Lucía",
+    "last_name": "Fernández",
+    "email": "lucía.fernández@example.com",
+    "phone": "+5492615557617",
+    "address_1": "Calle 5130",
+    "city": "Luján de Cuyo",
+    "state": "Mendoza",
+    "postcode": "M5507",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Lucía",
+    "last_name": "Fernández",
+    "address_1": "Calle 7210",
+    "city": "Luján de Cuyo",
+    "state": "Mendoza",
+    "postcode": "M5507",
+    "country": "AR"
+  },
+  "payment_method": "mastercard",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "",
+  "line_items": [
+    {
+      "id": 2163,
+      "name": "Servicio de alineación y balanceo (4 ruedas)",
+      "product_id": 513,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "15214.2",
+      "total": "15214.2",
+      "sku": "SVC-ALI-BAL-4",
+      "price": 15214.2
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": [
+    {
+      "id": 7609,
+      "reason": "Reembolso solicitado",
+      "total": "-15214.20"
+    }
+  ]
+}

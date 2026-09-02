@@ -1,0 +1,73 @@
+{
+  "id": 3000000000000126,
+  "parent_id": 0,
+  "status": "pending",
+  "currency": "ARS",
+  "version": "8.4.0",
+  "prices_include_tax": false,
+  "date_created": "2026-08-27T08:40:34.000-03:00",
+  "date_modified": "2026-08-27T08:40:34.000-03:00",
+  "date_created_gmt": "2026-08-27T11:40:34.000Z",
+  "date_modified_gmt": "2026-08-27T11:40:34.000Z",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total_tax": "0.00",
+  "total": "289232.40",
+  "customer_id": 0,
+  "order_key": "wc_order_633tlc0jt8s",
+  "billing": {
+    "first_name": "Sofía",
+    "last_name": "Martínez",
+    "email": "sofía.martínez@example.com",
+    "phone": "+5492615554267",
+    "address_1": "Calle 1829",
+    "city": "La Plata",
+    "state": "Buenos Aires",
+    "postcode": "B1900",
+    "country": "AR"
+  },
+  "shipping": {
+    "first_name": "Sofía",
+    "last_name": "Martínez",
+    "address_1": "Calle 3843",
+    "city": "La Plata",
+    "state": "Buenos Aires",
+    "postcode": "B1900",
+    "country": "AR"
+  },
+  "payment_method": "visa",
+  "payment_method_title": "Tarjeta",
+  "transaction_id": "",
+  "line_items": [
+    {
+      "id": 5869,
+      "name": "Neumático Bridgestone Ecopia EP150 185/65 R14",
+      "product_id": 90,
+      "variation_id": 0,
+      "quantity": 4,
+      "subtotal": "273346.16",
+      "total": "273346.16",
+      "sku": "BST-EP150-185-65-R14",
+      "price": 68336.54
+    },
+    {
+      "id": 2446,
+      "name": "Servicio de alineación y balanceo (4 ruedas)",
+      "product_id": 559,
+      "variation_id": 0,
+      "quantity": 1,
+      "subtotal": "15886.24",
+      "total": "15886.24",
+      "sku": "SVC-ALI-BAL-4",
+      "price": 15886.24
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": []
+}
