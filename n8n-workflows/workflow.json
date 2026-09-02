@@ -559,7 +559,7 @@
         0
       ],
       "parameters": {
-        "query": "UPDATE tfi.ai_notifications\nSET\n    message_status = $2,\n    sent_at        = CASE WHEN $2 = 'sent' THEN now() ELSE sent_at END,\n    wa_message_id  = NULLIF($3::text, 'null'),\n    error_message  = NULLIF($4::text, 'null')\nWHERE id = NULLIF($1::text, 'null')::uuid\nRETURNING id, message_status, sent_at, wa_message_id;",
+        "query": "UPDATE tfi.ai_notifications\nSET\n    message_status = $2,\n    sent_at        = CASE WHEN $2 = 'sent' THEN now() ELSE sent_at END,\n    dispatched_at  = CASE WHEN $2 = 'sent' THEN now() ELSE dispatched_at END,\n    wa_message_id  = NULLIF($3::text, 'null'),\n    error_message  = NULLIF($4::text, 'null')\nWHERE id = NULLIF($1::text, 'null')::uuid\nRETURNING id, message_status, sent_at, dispatched_at, wa_message_id;",
         "options": {
           "queryReplacement": "{{ $('Insert ai_notification').item.json.notification_id }}, {{ $json.message_status || 'sent' }}, {{ $json.wa_message_id || null }}, {{ $json.error_reason || null }}"
         },
@@ -628,7 +628,7 @@
         192
       ],
       "parameters": {
-        "query": "UPDATE tfi.ai_notifications\nSET\n    message_status = $2,\n    sent_at        = CASE WHEN $2 = 'sent' THEN now() ELSE sent_at END,\n    wa_message_id  = NULLIF($3::text, 'null'),\n    error_message  = NULLIF($4::text, 'null')\nWHERE id = NULLIF($1::text, 'null')::uuid\nRETURNING id, message_status, sent_at, wa_message_id;",
+        "query": "UPDATE tfi.ai_notifications\nSET\n    message_status = $2,\n    sent_at        = CASE WHEN $2 = 'sent' THEN now() ELSE sent_at END,\n    dispatched_at  = CASE WHEN $2 = 'sent' THEN now() ELSE dispatched_at END,\n    wa_message_id  = NULLIF($3::text, 'null'),\n    error_message  = NULLIF($4::text, 'null')\nWHERE id = NULLIF($1::text, 'null')::uuid\nRETURNING id, message_status, sent_at, dispatched_at, wa_message_id;",
         "options": {
           "queryReplacement": "={{ $('Insert ai_notification').item.json.notification_id }}, {{ 'failed' }}, {{ null }}, {{ 'no_phone' }}"
         },
