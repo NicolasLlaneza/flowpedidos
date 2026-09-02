@@ -1,0 +1,32 @@
+# =============================================================================
+# Variables nuevas para Bloque C (agregar a tu .env y a .env.example).
+# El script scripts/env-check.mjs valida que estén presentes antes de
+# correr wc-setup.mjs y ml-setup.mjs.
+# =============================================================================
+
+# --- WooCommerce (canal WC) ------------------------------------------------
+# Credenciales del admin del WordPress local (Paso 1 del scripts/README.md)
+WC_ADMIN_USER=admin
+WC_ADMIN_PASSWORD=
+
+# WooCommerce REST API — WC → Ajustes → Avanzado → REST API → Añadir clave
+# permisos Read/Write; se copia UNA SOLA VEZ al crearla
+WC_CONSUMER_KEY=
+WC_CONSUMER_SECRET=
+
+# --- Mercado Libre (canal ML) ---------------------------------------------
+# App creada en developers.mercadolibre.com.ar/panel (Paso 1 del README)
+ML_APP_CLIENT_ID=
+ML_APP_CLIENT_SECRET=
+
+# Tokens generados por scripts/ml-setup.mjs — NO completar a mano
+ML_ACCESS_TOKEN=
+ML_REFRESH_TOKEN=
+
+# --- ngrok (expone n8n a Mercado Libre) -----------------------------------
+# dashboard.ngrok.com → Auth → Your Authtoken
+NGROK_AUTHTOKEN=
+
+# opcional: dominio estático (dashboard.ngrok.com → Domains → New)
+# si queda vacío, ngrok asigna un dominio efímero por corrida
+NGROK_STATIC_DOMAIN=

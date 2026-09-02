@@ -40,6 +40,9 @@ node_modules/
 # Demo CLI
 demo/node_modules/
 
+# Test users de Mercado Libre (credenciales generadas por ml-setup.mjs)
+scripts/.ml-testusers.json
+
 # Fixtures del dataset copiados al mock por reset.mjs (runtime)
 mocks/data/orders/30*.json
 
