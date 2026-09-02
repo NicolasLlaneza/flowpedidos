@@ -67,7 +67,11 @@ const ULTIMATE_FALLBACK = {
 };
 
 const input = $json;
-const status = input.order && input.order.status;
+// El status canónico vive en Route to canonical: Build LLM prompt no lo copia
+// al reenviar hacia OpenAI, y Parse LLM Response reconstruye order sólo si
+// existió en su input (que no es el caso). Leerlo directo evita la caída al
+// ULTIMATE_FALLBACK cuando la plantilla específica del estado existía.
+const status = $('Route to canonical').item.json.order.status;
 const reason = input.fallback_reason || 'unknown';
 
 const template = TEMPLATES[status] || ULTIMATE_FALLBACK;
@@ -93,6 +97,12 @@ return {
         message_text: template.message,
         tone: template.tone,
         confidence: 1.0, // plantilla es 100% predecible
+
+        // v2 (§3.3): las plantillas no explicitan qué atributos citan; se
+        // reporta 'template' para diferenciar de una respuesta generativa
+        // en las métricas de anclaje contextual sin inventar atributos.
+        atributos_usados: ['template'],
+
         is_fallback: true,
         message_status: 'validated',
 
