@@ -37,8 +37,15 @@ if (!CLIENT_ID || !CLIENT_SECRET) {
     process.exit(1);
 }
 
-// Redirect URI de la app — DEBE coincidir con la configurada en developers.mercadolibre.com.ar
-const REDIRECT_URI = 'http://localhost:5678/rest/oauth2-credential/callback';
+// Redirect URI de la app — DEBE coincidir con la configurada en
+// developers.mercadolibre.com.ar. ML exige HTTPS para el flujo OAuth,
+// por eso usamos el dominio ngrok del env (Bloque C). El path
+// /oauth-callback no lo maneja n8n; el browser mostrará un 404 pero
+// el parámetro ?code=xxx queda en la barra de direcciones para copiar.
+const REDIRECT_URI = process.env.ML_REDIRECT_URI
+    || (process.env.NGROK_STATIC_DOMAIN
+        ? `https://${process.env.NGROK_STATIC_DOMAIN}/oauth-callback`
+        : (() => { throw new Error('Definir NGROK_STATIC_DOMAIN en .env o ML_REDIRECT_URI explícita'); })());
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 const ask = (q) => new Promise(res => rl.question(q, res));
