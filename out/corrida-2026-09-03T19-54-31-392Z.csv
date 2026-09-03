@@ -1,0 +1,6 @@
+external_id,channel,canonical_status,edge_case,http_status,fire_ms,error,ack_ms,e2e_ms,provider,is_fallback,prompt_tokens,completion_tokens,cost_usd,validator_passes,n_validator_failures,message_status,wa_simulated,db_persisted
+3000000000000001,mercadolibre,paid,,200,188,,0,1925,openai,false,743,57,0.000146,1,0,sent,true,true
+3000000000000002,woocommerce,paid,,200,76,,0,1766,openai,false,738,65,0.000150,1,0,sent,true,true
+3000000000000003,mercadolibre,paid,,200,82,,0,1880,openai,false,742,58,0.000146,1,0,sent,true,true
+3000000000000004,woocommerce,paid,,200,67,,0,1292,openai,false,736,47,0.000139,1,0,sent,true,true
+3000000000000005,mercadolibre,paid,,200,146,,0,1886,openai,false,740,59,0.000146,1,0,sent,true,true
