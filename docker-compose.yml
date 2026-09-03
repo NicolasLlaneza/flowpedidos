@@ -69,6 +69,12 @@ services:
       WHATSAPP_PHONE_NUMBER_ID: ${WHATSAPP_PHONE_NUMBER_ID}
       WHATSAPP_ACCESS_TOKEN: ${WHATSAPP_ACCESS_TOKEN}
 
+      # Modo del despacho WhatsApp para la corrida cuantitativa:
+      #   live     → llama a Meta Cloud API (default; usar para entregabilidad real)
+      #   simulate → emite wamid sintético sin llamar a Meta (evita spam-block
+      #              sobre volumen batch al mismo destinatario, ver §5.2 del TFI)
+      WHATSAPP_MODE: ${WHATSAPP_MODE:-live}
+
       # OpenAI API key — usada por el nodo HTTP Request "Call OpenAI" (v1.3)
       # en el header Authorization, y por el reintento del nodo Rehydrate +
       # validate (§4.3.1). El nodo LangChain OpenAI dejó de utilizarse porque
