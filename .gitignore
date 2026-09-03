@@ -43,6 +43,11 @@ demo/node_modules/
 # Test users de Mercado Libre (credenciales generadas por ml-setup.mjs)
 scripts/.ml-testusers.json
 
+# Salidas de scripts/run-corrida.mjs — CSVs efímeros de las corridas.
+# La corrida definitiva se commitea aparte con nombre explícito
+# (out/corrida-definitiva.csv o docs/anexo-c-corrida.csv).
+out/corrida-*.csv
+
 # Fixtures del dataset copiados al mock por reset.mjs (runtime)
 mocks/data/orders/30*.json
 
