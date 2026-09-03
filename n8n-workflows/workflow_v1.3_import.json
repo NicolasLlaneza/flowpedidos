@@ -1061,6 +1061,53 @@
       ],
       "id": "v13-rehydrate",
       "name": "Rehydrate + validate"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "v13-cond-wa",
+              "leftValue": "={{ ($env.WHATSAPP_MODE || \"live\").toLowerCase() }}",
+              "rightValue": "live",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4216,
+        0
+      ],
+      "id": "v13-if-wa-live",
+      "name": "WA live?"
+    },
+    {
+      "parameters": {
+        "jsCode": "// =============================================================================\n// simulate-wa-response.js\n// -----------------------------------------------------------------------------\n// Pegar en un nodo \"Code\" (modo: \"Run Once for Each Item\") en la rama\n// simulate del IF \"WA live?\".\n//\n// Emite una respuesta con la misma shape que devuelve Meta Cloud API para\n// que Parse WA response y Update dispatch funcionen sin cambios. NO llama\n// a la API — se usa durante la corrida cuantitativa (150 pedidos) para\n// evitar que Meta detecte patrón de spam sobre volumen batch al mismo\n// destinatario, según se declara en §5.2 del TFI corregido.\n//\n// La entregabilidad real se valida por separado sobre una muestra chica\n// con destinatarios distintos.\n// =============================================================================\n\nconst payload = $('Build WA payload').item.json;\nconst to = payload?.body?.to || 'unknown';\n\n// wamid sintético: prefijo distintivo para poder filtrar en queries\n// (SELECT ... WHERE wa_message_id LIKE 'wamid.sim_%')\nconst suffix = Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);\nconst fakeWamid = 'wamid.sim_' + suffix;\n\n// Meta responde algo así:\n//   { messaging_product: \"whatsapp\", contacts: [{...}], messages: [{ id: \"wamid.HBg...\" }] }\n// Emitimos exactamente esa shape para que Parse WA response lo tome igual.\nreturn {\n    json: {\n        messaging_product: 'whatsapp',\n        contacts: [{ input: to, wa_id: to.replace(/\\D/g, '') }],\n        messages: [{ id: fakeWamid, message_status: 'accepted' }],\n        _simulated: true,\n    },\n};\n",
+        "mode": "runOnceForEachItem"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4416,
+        220
+      ],
+      "id": "v13-wa-simulate",
+      "name": "Simulate WhatsApp response"
     }
   ],
   "connections": {
@@ -1148,7 +1195,7 @@
       "main": [
         [
           {
-            "node": "Send Whatsapp",
+            "node": "WA live?",
             "type": "main",
             "index": 0
           }
@@ -1583,6 +1630,35 @@
         [
           {
             "node": "Use Fallback?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WA live?": {
+      "main": [
+        [
+          {
+            "node": "Send Whatsapp",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Simulate WhatsApp response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simulate WhatsApp response": {
+      "main": [
+        [
+          {
+            "node": "Parse WA response",
             "type": "main",
             "index": 0
           }
