@@ -157,6 +157,7 @@ services:
     restart: unless-stopped
     environment:
       NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+      NGROK_STATIC_DOMAIN: ${NGROK_STATIC_DOMAIN:-}
     # Entrypoint bash: si NGROK_STATIC_DOMAIN está definido, expone el tunnel
     # en ese dominio persistente (URI de notificaciones de ML queda fija).
     # Si queda vacío, ngrok asigna un dominio efímero por corrida — visible en
@@ -165,10 +166,11 @@ services:
       - /bin/sh
       - -c
       - >
+        COMMON="--log=stdout --log-format=logfmt";
         if [ -n "$$NGROK_STATIC_DOMAIN" ]; then
-          exec ngrok http n8n:5678 --url="$$NGROK_STATIC_DOMAIN" --host-header=n8n:5678;
+          exec ngrok http n8n:5678 --url="$$NGROK_STATIC_DOMAIN" $$COMMON;
         else
-          exec ngrok http n8n:5678 --host-header=n8n:5678;
+          exec ngrok http n8n:5678 $$COMMON;
         fi
     ports:
       - "4040:4040"     # inspector UI: http://localhost:4040
