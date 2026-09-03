@@ -214,20 +214,39 @@ export function seedList() {
     }));
 }
 
-// --- KPIs del panel ----------------------------------------------------------
+// --- KPIs del panel (operativo + técnico, v1.3) ------------------------------
+// - pedidos_hoy / ingresos_hoy → visión PyME
+// - tasa_entrega → % de ai_notifications con message_status='sent'
+// - cost_hoy_usd → costo real acumulado del LLM en el día
+// - pedidos_total y mensajes_total → totales para vista de auditoría
 export async function getKpis(client) {
     const r = await client.query(`
+        WITH hoy AS (SELECT date_trunc('day', now()) AS d)
         SELECT
-          (SELECT count(*) FROM tfi.orders)                                              AS pedidos,
-          (SELECT coalesce(sum(total_amount),0) FROM tfi.orders WHERE status <> 'cancelled') AS ingresos,
-          (SELECT count(*) FROM tfi.orders WHERE status IN ('created','pending_payment')) AS pendientes,
-          (SELECT count(*) FROM tfi.ai_notifications)                                     AS mensajes,
-          (SELECT count(DISTINCT channel) FROM tfi.orders)                                AS canales
+          (SELECT count(*)  FROM tfi.orders o, hoy WHERE o.received_at >= hoy.d)                           AS pedidos_hoy,
+          (SELECT count(*)  FROM tfi.orders)                                                                AS pedidos_total,
+          (SELECT coalesce(sum(o.total_amount),0) FROM tfi.orders o, hoy
+             WHERE o.received_at >= hoy.d AND o.status <> 'cancelled')                                      AS ingresos_hoy,
+          (SELECT count(*)  FROM tfi.orders WHERE status IN ('created','pending_payment'))                  AS pendientes,
+          (SELECT count(*)  FROM tfi.orders WHERE status = 'error')                                         AS errores,
+          (SELECT count(*)  FROM tfi.ai_notifications)                                                      AS mensajes_total,
+          (SELECT count(*)  FROM tfi.ai_notifications WHERE message_status = 'sent')                        AS mensajes_enviados,
+          (SELECT count(*)  FROM tfi.ai_notifications WHERE is_fallback = true)                             AS mensajes_fallback,
+          (SELECT coalesce(sum(cost_usd),0) FROM tfi.ai_notifications n, hoy
+             WHERE n.generated_at >= hoy.d)                                                                 AS cost_hoy_usd,
+          (SELECT coalesce(sum(cost_usd),0) FROM tfi.ai_notifications)                                      AS cost_total_usd,
+          (SELECT count(DISTINCT channel) FROM tfi.orders)                                                  AS canales
     `);
-    return r.rows[0];
+    const k = r.rows[0];
+    const enviados = Number(k.mensajes_enviados);
+    const totalMsg = Number(k.mensajes_total);
+    k.tasa_entrega = totalMsg > 0 ? enviados / totalMsg : 0;
+    return k;
 }
 
 // --- Listado filtrable -------------------------------------------------------
+// Enriquecido con campos v1.3 que el panel técnico necesita:
+//   wa_message_id, validator_passes, cost_usd, message_status.
 export async function getOrders(client, { channel, status, q } = {}) {
     const where = [];
     const params = [];
@@ -241,13 +260,20 @@ export async function getOrders(client, { channel, status, q } = {}) {
     }
     const whereSql = where.length ? 'WHERE ' + where.join(' AND ') : '';
     const r = await client.query(`
-        SELECT o.id, o.external_id, o.channel, o.status, o.total_amount, o.currency, o.received_at,
+        SELECT o.id, o.external_id, o.channel, o.status,
+               o.total_amount, o.currency, o.received_at, o.ack_at,
+               EXTRACT(EPOCH FROM (o.ack_at - o.received_at)) * 1000 AS ack_ms,
                c.full_name AS customer_name,
                (SELECT product_name FROM tfi.order_items it WHERE it.order_id=o.id LIMIT 1) AS product,
-               (SELECT count(*) FROM tfi.order_items it WHERE it.order_id=o.id) AS items_count,
-               n.provider, n.is_fallback
+               (SELECT count(*) FROM tfi.order_items it WHERE it.order_id=o.id)             AS items_count,
+               n.provider, n.is_fallback, n.message_status,
+               n.wa_message_id,
+               n.validator_passes,
+               n.cost_usd,
+               n.dispatched_at,
+               EXTRACT(EPOCH FROM (n.dispatched_at - o.received_at)) * 1000 AS e2e_ms
         FROM tfi.orders o
-        LEFT JOIN tfi.customers c ON c.id = o.customer_id
+        LEFT JOIN tfi.customers c        ON c.id = o.customer_id
         LEFT JOIN tfi.ai_notifications n ON n.order_id = o.id
         ${whereSql}
         ORDER BY o.received_at DESC
@@ -256,18 +282,29 @@ export async function getOrders(client, { channel, status, q } = {}) {
 }
 
 // --- Detalle de un pedido con trazabilidad -----------------------------------
+// Devuelve todo lo que el panel muestra en el lado derecho: cliente, items,
+// notificación (con métricas técnicas del bloque B), audit_log completo.
 export async function getOrderDetail(client, externalId) {
     const oRes = await client.query(`
-        SELECT o.*, c.full_name AS customer_name, c.pseudonym, c.email, c.phone
+        SELECT o.*, c.full_name AS customer_name, c.pseudonym, c.email, c.phone,
+               EXTRACT(EPOCH FROM (o.ack_at - o.received_at)) * 1000 AS ack_ms
         FROM tfi.orders o LEFT JOIN tfi.customers c ON c.id=o.customer_id
         WHERE o.external_id = $1 LIMIT 1`, [externalId]);
     if (!oRes.rows.length) return null;
     const order = oRes.rows[0];
     const items = (await client.query(
-        `SELECT product_name, quantity, unit_price, delivery_status FROM tfi.order_items WHERE order_id=$1`, [order.id])).rows;
-    const notif = (await client.query(
-        `SELECT provider, model, message_text, is_fallback, cost_usd, latency_ms, generated_at
-         FROM tfi.ai_notifications WHERE order_id=$1 ORDER BY generated_at DESC LIMIT 1`, [order.id])).rows[0] || null;
+        `SELECT product_name, quantity, unit_price, delivery_status
+         FROM tfi.order_items WHERE order_id=$1`, [order.id])).rows;
+    const notif = (await client.query(`
+        SELECT provider, model, prompt_version, prompt_tokens, completion_tokens, cost_usd,
+               latency_ms, message_text, message_status, is_fallback,
+               atributos_usados, validator_passes, validator_failures,
+               wa_message_id, sent_at, dispatched_at, error_message,
+               EXTRACT(EPOCH FROM (dispatched_at - $2::timestamptz)) * 1000 AS e2e_ms,
+               (wa_message_id LIKE 'wamid.sim_%') AS wa_simulated
+        FROM tfi.ai_notifications
+        WHERE order_id=$1 ORDER BY generated_at DESC LIMIT 1`,
+        [order.id, order.received_at])).rows[0] || null;
     const audit = (await client.query(
         `SELECT event_type, severity, component, message, created_at
          FROM tfi.audit_log WHERE order_id=$1 ORDER BY created_at ASC`, [order.id])).rows;

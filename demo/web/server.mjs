@@ -1,19 +1,22 @@
 #!/usr/bin/env node
 // =============================================================================
-// server.mjs — Backend del panel operativo FlowPedidos (MVP)
+// server.mjs — Backend del panel operativo FlowPedidos (v1.3)
 // -----------------------------------------------------------------------------
-// Sirve el panel y expone la API de operación sobre el pipeline real.
+// Sirve el panel (index.html + app.js) y expone la API de sólo lectura sobre
+// el estado real del pipeline en tfi.*
 //
 // Endpoints:
 //   GET  /                    → panel (index.html)
 //   GET  /app.js              → JS del panel
-//   GET  /api/kpis            → métricas
+//   GET  /api/kpis            → métricas de negocio y técnicas
 //   GET  /api/orders          → listado filtrable (?channel=&status=&q=)
-//   GET  /api/orders/:id      → detalle con trazabilidad
-//   POST /api/seed            → ingesta el dataset (pipeline real, cachea IA)
-//   POST /api/reset           → limpia la base
+//   GET  /api/orders/:id      → detalle con trazabilidad completa
 //
 // Uso:  node web/server.mjs   → http://localhost:4000
+//
+// v1.3: se retiró el endpoint POST /api/seed (in-process sim pipeline) porque
+// el panel refleja ahora únicamente el estado real de tfi.* alimentado por
+// n8n. El endpoint POST /api/reset se conserva para limpieza durante demos.
 // =============================================================================
 
 import http from 'node:http';
@@ -21,33 +24,42 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pg from 'pg';
-import { processWebhook, getKpis, getOrders, getOrderDetail, seedList } from '../lib/orchestrator.mjs';
+import { getKpis, getOrders, getOrderDetail } from '../lib/orchestrator.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..', '..');
 process.loadEnvFile(path.join(ROOT, '.env'));
 
-const PORT = Number(process.env.DEMO_PORT) || 4000;
-const OPENAI_KEY = process.env.OPENAI_API_KEY;
+const PORT   = Number(process.env.DEMO_PORT) || 4000;
 const PGPORT = Number(process.env.PG_HOST_PORT) || 5433;
 
 const pool = new pg.Pool({
-    host: 'localhost', port: PGPORT, database: process.env.POSTGRES_DB || 'tfi',
-    user: process.env.TFI_APP_USER || 'tfi_app', password: process.env.TFI_APP_PASSWORD, max: 4,
+    host: 'localhost', port: PGPORT,
+    database: process.env.POSTGRES_DB || 'tfi',
+    user: process.env.TFI_APP_USER || 'tfi_app',
+    password: process.env.TFI_APP_PASSWORD,
+    max: 4,
 });
 const adminPool = new pg.Pool({
-    host: 'localhost', port: PGPORT, database: process.env.POSTGRES_DB || 'tfi',
-    user: process.env.POSTGRES_USER || 'n8n', password: process.env.POSTGRES_PASSWORD, max: 2,
+    host: 'localhost', port: PGPORT,
+    database: process.env.POSTGRES_DB || 'tfi',
+    user: process.env.POSTGRES_USER || 'n8n',
+    password: process.env.POSTGRES_PASSWORD,
+    max: 2,
 });
 
-let seeding = false;
-
 function json(res, code, data) {
-    res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+    res.writeHead(code, {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'no-store',
+    });
     res.end(JSON.stringify(data));
 }
 function file(res, fp, ct) {
-    res.writeHead(200, { 'Content-Type': ct, 'Cache-Control': 'no-store, no-cache, must-revalidate' });
+    res.writeHead(200, {
+        'Content-Type': ct,
+        'Cache-Control': 'no-store, no-cache, must-revalidate',
+    });
     res.end(fs.readFileSync(fp));
 }
 
@@ -60,7 +72,6 @@ const server = http.createServer(async (req, res) => {
             return file(res, path.join(__dirname, 'public', 'index.html'), 'text/html; charset=utf-8');
         if (req.method === 'GET' && p === '/app.js')
             return file(res, path.join(__dirname, 'public', 'app.js'), 'application/javascript; charset=utf-8');
-        // Estáticos .html adicionales (ej: whatsapp-mock.html)
         if (req.method === 'GET' && /^\/[a-z0-9_-]+\.html$/i.test(p)) {
             const fp = path.join(__dirname, 'public', p.slice(1));
             if (fs.existsSync(fp)) return file(res, fp, 'text/html; charset=utf-8');
@@ -76,8 +87,8 @@ const server = http.createServer(async (req, res) => {
             try {
                 const rows = await getOrders(c, {
                     channel: url.searchParams.get('channel') || undefined,
-                    status: url.searchParams.get('status') || undefined,
-                    q: url.searchParams.get('q') || undefined,
+                    status:  url.searchParams.get('status')  || undefined,
+                    q:       url.searchParams.get('q')       || undefined,
                 });
                 return json(res, 200, { orders: rows });
             } finally { c.release(); }
@@ -92,28 +103,14 @@ const server = http.createServer(async (req, res) => {
             } finally { c.release(); }
         }
 
-        if (req.method === 'POST' && p === '/api/seed') {
-            if (seeding) return json(res, 409, { error: 'seed en progreso' });
-            seeding = true;
-            const c = await pool.connect();
-            try {
-                const list = seedList();
-                let ok = 0;
-                for (const item of list) {
-                    const wh = { resource: `/orders/${item.id}`, topic: 'orders_v2', user_id: 123456789, attempts: 1 };
-                    try {
-                        const r = await processWebhook(c, wh, { apiKey: OPENAI_KEY, channel: item.channel, useCache: true });
-                        if (r.result === 'processed') ok++;
-                    } catch { /* sigue con el resto */ }
-                }
-                return json(res, 200, { seeded: ok, total: list.length });
-            } finally { c.release(); seeding = false; }
-        }
-
+        // Retenido para demos: TRUNCATE tfi.* (requiere permisos de owner)
         if (req.method === 'POST' && p === '/api/reset') {
             const c = await adminPool.connect();
             try {
-                await c.query('TRUNCATE tfi.audit_log, tfi.ai_notifications, tfi.order_items, tfi.orders, tfi.customers RESTART IDENTITY CASCADE');
+                await c.query(`TRUNCATE tfi.raw_events, tfi.audit_log,
+                                        tfi.ai_notifications, tfi.order_items,
+                                        tfi.orders, tfi.customers
+                               RESTART IDENTITY CASCADE`);
                 return json(res, 200, { ok: true });
             } finally { c.release(); }
         }
@@ -127,5 +124,5 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
     console.log(`\n  FlowPedidos · panel operativo → http://localhost:${PORT}`);
-    console.log(`  Postgres puerto ${PGPORT} · OpenAI ${OPENAI_KEY ? 'configurado' : 'FALTA'}\n`);
+    console.log(`  Postgres puerto ${PGPORT} · usuario ${process.env.TFI_APP_USER || 'tfi_app'}\n`);
 });
