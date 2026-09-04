@@ -17,7 +17,7 @@
   "total_tax": "0.00",
   "total": "61235.63",
   "customer_id": 842,
-  "order_key": "wc_order_yyb60yx8ly",
+  "order_key": "wc_order_z73m04zdls",
   "billing": {
     "first_name": "María",
     "last_name": "Gómez",
@@ -40,7 +40,7 @@
   },
   "payment_method": "visa",
   "payment_method_title": "Tarjeta",
-  "transaction_id": "ch_lozilfm08p",
+  "transaction_id": "ch_qwafpgs38d",
   "line_items": [
     {
       "id": 1938,

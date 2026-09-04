@@ -1,7 +1,7 @@
 {
   "seed": 42,
   "count": 150,
-  "generated_at": "2026-09-02T18:30:03.037Z",
+  "generated_at": "2026-09-04T00:55:44.008Z",
   "items": [
     {
       "idx": 0,
@@ -72,7 +72,7 @@
       "items_count": 1,
       "total_amount": 102418.04,
       "currency": "ARS",
-      "edge_case": "no_resource",
+      "edge_case": null,
       "webhook_target": null
     },
     {
@@ -84,8 +84,8 @@
       "items_count": 1,
       "total_amount": 693749,
       "currency": "ARS",
-      "edge_case": null,
-      "webhook_target": "/orders/3000000000000007"
+      "edge_case": "no_resource",
+      "webhook_target": null
     },
     {
       "idx": 7,
@@ -504,7 +504,7 @@
       "items_count": 1,
       "total_amount": 154614.49,
       "currency": "ARS",
-      "edge_case": "duplicate",
+      "edge_case": null,
       "webhook_target": null
     },
     {
@@ -516,8 +516,8 @@
       "items_count": 1,
       "total_amount": 164898.12,
       "currency": "ARS",
-      "edge_case": null,
-      "webhook_target": "/orders/3000000000000043"
+      "edge_case": "duplicate",
+      "webhook_target": "/orders/3000000000000042"
     },
     {
       "idx": 43,

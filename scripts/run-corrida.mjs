@@ -315,13 +315,30 @@ function reportAggregates(merged) {
     const ackW  = wilson95(ackOK, ackN);
     console.log(`  ${ackOK}/${ackN} = ${(ackW.p*100).toFixed(1)}% · Wilson 95%: [${(ackW.low*100).toFixed(1)}%, ${(ackW.high*100).toFixed(1)}%]`);
 
-    console.log('\n== H2 · precisión de normalización (persistidos / disparados) ==');
+    console.log('\n== H2 · precisión de normalización ==');
+    // Criterio: sobre el conjunto de pedidos ÚNICOS que superaron la validación
+    // estructural, ¿cuál fue normalizado y persistido con éxito?
+    //   - canonical_status='error' es un outcome válido de la normalización
+    //     (mapeo determinístico del estado desconocido de la plataforma) → cuenta
+    //     como éxito en el numerador.
+    //   - Rechazos estructurales (HTTP 400 en Validate) se excluyen de ambos lados:
+    //     no llegaron a la etapa de normalización.
+    //   - Duplicados detectados por idempotencia se excluyen también: por
+    //     definición no son "pedidos únicos", y su NO-persistencia es el
+    //     comportamiento correcto, no una falla de normalización.
+    const structuralRejects = merged.filter(r => r.http_status === 400 || r.http_status === 422).length;
+    // Detección de duplicates: fired webhooks cuyo external_id NO aparece en la DB
+    // pero que sí superaron validación (HTTP 200). El generador marca estos con
+    // edge_case='duplicate' y su webhook apunta al external_id anterior.
+    const duplicatesDetected = merged.filter(r =>
+        r.edge_case === 'duplicate' && r.http_status !== 400 && r.http_status !== 422 && !r.db_persisted
+    ).length;
     const nOK = persisted.length;
-    const nN  = merged.filter(r => r.canonical_status !== 'error' && !['no_resource','unsupported_topic'].includes(r.edge_case)).length;
-    // (exclusión edge cases estructurales que por diseño no deben persistir)
+    const nN  = merged.length - structuralRejects - duplicatesDetected;
     const normW = wilson95(nOK, nN);
     console.log(`  ${nOK}/${nN} = ${(normW.p*100).toFixed(1)}% · Wilson 95%: [${(normW.low*100).toFixed(1)}%, ${(normW.high*100).toFixed(1)}%]`);
-    console.log(`  (n excluye no_resource + unsupported_topic — por diseño no persisten)`);
+    console.log(`  rechazos estructurales excluidos (validación 400): ${structuralRejects}`);
+    console.log(`  duplicates detectados por idempotencia excluidos:  ${duplicatesDetected}`);
 
     console.log('\n== H3 · anclaje contextual del mensaje ==');
     const withMsg = persisted.filter(r => r.provider);

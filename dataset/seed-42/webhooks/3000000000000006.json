@@ -17,7 +17,7 @@
   "total_tax": "0.00",
   "total": "102418.04",
   "customer_id": 0,
-  "order_key": "wc_order_y35y0d1adaa",
+  "order_key": "wc_order_l8pqdo46e88",
   "billing": {
     "first_name": "Sofía",
     "last_name": "Martínez",
@@ -40,7 +40,7 @@
   },
   "payment_method": "account_money",
   "payment_method_title": "Tarjeta",
-  "transaction_id": "ch_rul1bkwac3",
+  "transaction_id": "ch_z92v7i3htc",
   "line_items": [
     {
       "id": 3201,

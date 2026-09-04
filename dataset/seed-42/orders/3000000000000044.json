@@ -17,7 +17,7 @@
   "total_tax": "0.00",
   "total": "71684.98",
   "customer_id": 948,
-  "order_key": "wc_order_hbc3w6xx8hp",
+  "order_key": "wc_order_pdciai8auvd",
   "billing": {
     "first_name": "Lucía",
     "last_name": "Fernández",
@@ -40,7 +40,7 @@
   },
   "payment_method": "mastercard",
   "payment_method_title": "Tarjeta",
-  "transaction_id": "ch_8gg3l5ltci",
+  "transaction_id": "ch_4gi2jugl0k",
   "line_items": [
     {
       "id": 2713,
