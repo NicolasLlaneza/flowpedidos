@@ -17,7 +17,7 @@
   "total_tax": "0.00",
   "total": "118011.76",
   "customer_id": 0,
-  "order_key": "wc_order_khkwa3zz69b",
+  "order_key": "wc_order_2pvpxqyajf2",
   "billing": {
     "first_name": "Emma",
     "last_name": "Ortiz",
@@ -40,7 +40,7 @@
   },
   "payment_method": "account_money",
   "payment_method_title": "Tarjeta",
-  "transaction_id": "ch_53f6nho09n",
+  "transaction_id": "ch_9pxpo5hqks",
   "line_items": [
     {
       "id": 6235,

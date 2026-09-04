@@ -17,7 +17,7 @@
   "total_tax": "0.00",
   "total": "394258.66",
   "customer_id": 21,
-  "order_key": "wc_order_zg2a7basa7",
+  "order_key": "wc_order_f94eiypl6lq",
   "billing": {
     "first_name": "Martina",
     "last_name": "Herrera",
@@ -40,7 +40,7 @@
   },
   "payment_method": "visa",
   "payment_method_title": "Tarjeta",
-  "transaction_id": "ch_rcxkj4j1z1",
+  "transaction_id": "ch_ety70ebnzo",
   "line_items": [
     {
       "id": 6372,

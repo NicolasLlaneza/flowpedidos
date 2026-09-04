@@ -4,8 +4,8 @@ idx,external_id,channel,canonical_status,product_type,items_count,total_amount,c
 2,3000000000000003,mercadolibre,paid,single,1,673521.68,ARS,,/orders/3000000000000003
 3,3000000000000004,woocommerce,paid,single,1,87773.58,ARS,,
 4,3000000000000005,mercadolibre,paid,single,1,129135.2,ARS,,/orders/3000000000000005
-5,3000000000000006,woocommerce,paid,single,1,102418.04,ARS,no_resource,
-6,3000000000000007,mercadolibre,paid,single,1,693749,ARS,,/orders/3000000000000007
+5,3000000000000006,woocommerce,paid,single,1,102418.04,ARS,,
+6,3000000000000007,mercadolibre,paid,single,1,693749,ARS,no_resource,
 7,3000000000000008,woocommerce,paid,single,1,58128.4,ARS,,
 8,3000000000000009,mercadolibre,paid,single,1,135786.26,ARS,,/orders/3000000000000009
 9,3000000000000010,woocommerce,paid,single,1,94232.61,ARS,,
@@ -40,8 +40,8 @@ idx,external_id,channel,canonical_status,product_type,items_count,total_amount,c
 38,3000000000000039,mercadolibre,paid,single,1,282859.92,ARS,,/orders/3000000000000039
 39,3000000000000040,woocommerce,paid,single,1,97107.57,ARS,,
 40,3000000000000041,mercadolibre,paid,single,1,241279.12,ARS,,/orders/3000000000000041
-41,3000000000000042,woocommerce,paid,single,1,154614.49,ARS,duplicate,
-42,3000000000000043,mercadolibre,paid,single,1,164898.12,ARS,,/orders/3000000000000043
+41,3000000000000042,woocommerce,paid,single,1,154614.49,ARS,,
+42,3000000000000043,mercadolibre,paid,single,1,164898.12,ARS,duplicate,/orders/3000000000000042
 43,3000000000000044,woocommerce,paid,single,1,71684.98,ARS,,
 44,3000000000000045,mercadolibre,paid,single,1,62667.4,ARS,,/orders/3000000000000045
 45,3000000000000046,woocommerce,paid,single,1,65972.51,ARS,,

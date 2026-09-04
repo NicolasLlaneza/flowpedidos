@@ -176,17 +176,20 @@ function buildSpecs(n) {
     // Canal — cuota 50/50 alternada. Preserva reproducibilidad (parityByIdx).
     const channelOf = (i) => (i % 2 === 0 ? 'mercadolibre' : 'woocommerce');
 
-    // Los siete casos límite del brief. Índices fijos para reproducibilidad
-    // y para ubicarlos en ambos canales según parity (índices pares → ML,
-    // impares → WC), cubriendo el espectro.
+    // Los siete casos límite del brief. Índices fijos para reproducibilidad.
+    // ML-only (no_resource, unsupported_topic, duplicate) van a índices pares
+    // (channelOf → mercadolibre), para que el edge case efectivamente ejercite
+    // el validador o el mecanismo de idempotencia del canal correspondiente.
+    // Los otros (null_buyer_id, high_value, low_value, no_items) se distribuyen
+    // entre ambos canales.
     const edgeCases = [
-        { idx: 5,  type: 'no_resource'        }, // WC no aplica; se degrada a no_id
-        { idx: 12, type: 'unsupported_topic'  }, // WC no aplica; se degrada a bad_action
-        { idx: 19, type: 'null_buyer_id'      },
-        { idx: 26, type: 'high_value'         },
-        { idx: 33, type: 'low_value'          },
-        { idx: 41, type: 'duplicate'          },
-        { idx: 47, type: 'no_items'           },
+        { idx: 6,  type: 'no_resource'        }, // par → ML: falta `resource` → 400
+        { idx: 12, type: 'unsupported_topic'  }, // par → ML: topic no soportado → 400
+        { idx: 19, type: 'null_buyer_id'      }, // impar → WC: ejercita D1 (synthetic:)
+        { idx: 26, type: 'high_value'         }, // par → ML: precisión numérica
+        { idx: 33, type: 'low_value'          }, // impar → WC: extremo opuesto
+        { idx: 42, type: 'duplicate'          }, // par → ML: idempotencia real (resource re-apuntado)
+        { idx: 47, type: 'no_items'           }, // impar → WC: ejercita D2
     ];
 
     for (let i = 0; i < n; i++) {

@@ -76,7 +76,7 @@
       "parameters": {
         "query": "INSERT INTO tfi.audit_log (\n    order_id, event_type, severity, component,\n    message, payload, duration_ms, retry_attempt\n)\nVALUES (\n    NULLIF($1::text, 'null')::uuid, $2, $3, $4,\n    NULLIF($5::text, 'null'), $6::jsonb,\n    NULLIF($7::text, 'null')::integer,\n    COALESCE(NULLIF($8::text, 'null')::integer, 0)\n)\nRETURNING id AS audit_id, created_at;",
         "options": {
-          "queryReplacement": "=null, {{ 'validation_failed' }}, {{ 'warning' }}, {{ 'webhook' }}, {{ 'Webhook invalido' }}, {{ JSON.stringify({errors: $('Validate webhook').item.json.errors}) }}, {{ null }}, {{ 0 }}"
+          "queryReplacement": "={{ [null, 'validation_failed', 'warning', 'webhook', 'Webhook invalido', JSON.stringify({errors: $('Validate webhook').item.json.errors || []}), null, 0] }}"
         },
         "operation": "executeQuery"
       },
@@ -200,7 +200,7 @@
       "parameters": {
         "query": "INSERT INTO tfi.audit_log (\n    order_id, event_type, severity, component,\n    message, payload, duration_ms, retry_attempt\n)\nVALUES (\n    NULLIF($1::text, 'null')::uuid, $2, $3, $4,\n    NULLIF($5::text, 'null'), $6::jsonb,\n    NULLIF($7::text, 'null')::integer,\n    COALESCE(NULLIF($8::text, 'null')::integer, 0)\n)\nRETURNING id AS audit_id, created_at;",
         "options": {
-          "queryReplacement": "={{ $('Check idempotency').item.json.existing_order_id }}, {{ 'duplicate_detected' }}, {{ 'info' }}, {{ 'persister' }}, {{ 'Webhook reenviado de orden ya procesada' }}, {{ JSON.stringify({external_id: $('Route to canonical').item.json.order.external_id}) }}, {{ null }}, {{ 0 }}"
+          "queryReplacement": "={{ [$('Check idempotency').item.json.existing_order_id, 'duplicate_detected', 'info', 'persister', 'Webhook reenviado de orden ya procesada', JSON.stringify({external_id: $('Route to canonical').item.json.order.external_id}), null, 0] }}"
         },
         "operation": "executeQuery"
       },
@@ -522,17 +522,19 @@
         "jsonBody": "={{ JSON.stringify($json.meta_body) }}   ",
         "sendBody": true,
         "specifyBody": "json",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth"
-      },
-      "credentials": {
-        "httpBearerAuth": {
-          "id": "xRSPdmDu8PnkEwWl",
-          "name": "Bearer Auth account"
-        },
-        "httpHeaderAuth": {
-          "id": "9mYf9C1iaP8glN5N",
-          "name": "Header Auth account"
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.WHATSAPP_ACCESS_TOKEN }}"
+            }
+          ]
         }
       },
       "typeVersion": 4.4
@@ -584,7 +586,7 @@
       "parameters": {
         "query": "INSERT INTO tfi.audit_log (\n    order_id, event_type, severity, component,\n    message, payload, duration_ms, retry_attempt\n)\nVALUES (\n    NULLIF($1::text, 'null')::uuid, $2, $3, $4,\n    NULLIF($5::text, 'null'), $6::jsonb,\n    NULLIF($7::text, 'null')::integer,\n    COALESCE(NULLIF($8::text, 'null')::integer, 0)\n)\nRETURNING id AS audit_id, created_at;",
         "options": {
-          "queryReplacement": "={{ $('Insert Order').item.json.order_id }}, {{ 'message_sent' }}, {{ 'info' }}, {{ 'llm' }}, {{ 'Mensaje despachado por WhatsApp' }}, {{ JSON.stringify({delivery_channel: 'whatsapp', wamid: $json.wa_message_id || null}) }}, {{ null }}, {{ 0 }}"
+          "queryReplacement": "={{ [$('Insert Order').item.json.order_id, 'message_sent', 'info', 'llm', 'Mensaje despachado por WhatsApp', JSON.stringify({delivery_channel: 'whatsapp', wamid: $json.wa_message_id || null}), null, 0] }}"
         },
         "operation": "executeQuery"
       },
@@ -607,7 +609,7 @@
       "parameters": {
         "query": "INSERT INTO tfi.audit_log (\n    order_id, event_type, severity, component,\n    message, payload, duration_ms, retry_attempt\n)\nVALUES (\n    NULLIF($1::text, 'null')::uuid, $2, $3, $4,\n    NULLIF($5::text, 'null'), $6::jsonb,\n    NULLIF($7::text, 'null')::integer,\n    COALESCE(NULLIF($8::text, 'null')::integer, 0)\n)\nRETURNING id AS audit_id, created_at;",
         "options": {
-          "queryReplacement": "={{ $('Insert Order').item.json.order_id }}, {{ 'no_phone' }}, {{ 'warning' }}, {{ 'llm' }}, {{ 'Cliente sin telefono - no se envia WhatsApp' }}, {{ JSON.stringify({}) }}, {{ null }}, {{ 0 }}"
+          "queryReplacement": "={{ [$('Insert Order').item.json.order_id, 'no_phone', 'warning', 'llm', 'Cliente sin telefono - no se envia WhatsApp', JSON.stringify({}), null, 0] }}"
         },
         "operation": "executeQuery"
       },
@@ -653,7 +655,7 @@
       "parameters": {
         "query": "INSERT INTO tfi.audit_log (\n    order_id, event_type, severity, component,\n    message, payload, duration_ms, retry_attempt\n)\nVALUES (\n    NULLIF($1::text, 'null')::uuid, $2, $3, $4,\n    NULLIF($5::text, 'null'), $6::jsonb,\n    NULLIF($7::text, 'null')::integer,\n    COALESCE(NULLIF($8::text, 'null')::integer, 0)\n)\nRETURNING id AS audit_id, created_at;",
         "options": {
-          "queryReplacement": "={{ $('Insert Order').item.json.order_id }}, {{ 'dispatch_failed' }}, {{ 'error' }}, {{ 'llm' }}, {{ 'Fallo al despachar mensaje' }}, {{ JSON.stringify({reason: 'send_failed'}) }}, {{ null }}, {{ 0 }}"
+          "queryReplacement": "={{ [$('Insert Order').item.json.order_id, 'dispatch_failed', 'error', 'llm', 'Fallo al despachar mensaje', JSON.stringify({reason: 'send_failed'}), null, 0] }}"
         },
         "operation": "executeQuery"
       },
@@ -755,7 +757,7 @@
       "parameters": {
         "query": "INSERT INTO tfi.audit_log (\n    order_id, event_type, severity, component,\n    message, payload, duration_ms, retry_attempt\n)\nVALUES (\n    NULLIF($1::text, 'null')::uuid, $2, $3, $4,\n    NULLIF($5::text, 'null'), $6::jsonb,\n    NULLIF($7::text, 'null')::integer,\n    COALESCE(NULLIF($8::text, 'null')::integer, 0)\n)\nRETURNING id AS audit_id, created_at;",
         "options": {
-          "queryReplacement": "=null, {{ 'validation_failed' }}, {{ 'warning' }}, {{ 'webhook' }}, {{ 'Webhook WC invalido' }}, {{ JSON.stringify({errors: $('Validate WC webhook').item.json.errors}) }}, {{ null }}, {{ 0 }}"
+          "queryReplacement": "={{ [null, 'validation_failed', 'warning', 'webhook', 'Webhook WC invalido', JSON.stringify({errors: $('Validate WC webhook').item.json.errors || []}), null, 0] }}"
         },
         "operation": "executeQuery"
       },
@@ -1007,7 +1009,7 @@
         "operation": "executeQuery",
         "query": "INSERT INTO tfi.audit_log (\n    order_id, event_type, severity, component,\n    message, payload, duration_ms, retry_attempt\n)\nVALUES (\n    NULLIF($1::text, 'null')::uuid, $2, $3, $4,\n    NULLIF($5::text, 'null'), $6::jsonb,\n    NULLIF($7::text, 'null')::integer,\n    COALESCE(NULLIF($8::text, 'null')::integer, 0)\n)\nRETURNING id AS audit_id, created_at;",
         "options": {
-          "queryReplacement": "={{ $('Insert Order').item.json.order_id }}, {{ 'error_state' }}, {{ 'error' }}, {{ 'persister' }}, {{ 'Pedido en estado error - no se envia comunicacion al cliente' }}, {{ JSON.stringify({channel: $('Route to canonical').item.json.order.channel, external_id: $('Route to canonical').item.json.order.external_id, applied_rules: $('Route to canonical').item.json.meta.applied_rules}) }}, {{ null }}, {{ 0 }}"
+          "queryReplacement": "={{ [$('Insert Order').item.json.order_id, 'error_state', 'error', 'persister', 'Pedido en estado error - no se envia comunicacion al cliente', JSON.stringify({channel: $('Route to canonical').item.json.order.channel, external_id: $('Route to canonical').item.json.order.external_id, applied_rules: $('Route to canonical').item.json.meta.applied_rules}), null, 0] }}"
         }
       },
       "type": "n8n-nodes-base.postgres",

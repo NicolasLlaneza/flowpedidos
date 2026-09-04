@@ -17,7 +17,7 @@
   "total_tax": "0.00",
   "total": "69880.57",
   "customer_id": 0,
-  "order_key": "wc_order_hxi2yknty7",
+  "order_key": "wc_order_l2uppzqsn",
   "billing": {
     "first_name": "Catalina",
     "last_name": "Medina",
@@ -40,7 +40,7 @@
   },
   "payment_method": "account_money",
   "payment_method_title": "Tarjeta",
-  "transaction_id": "ch_u0h9w2vf6z",
+  "transaction_id": "ch_qsoghmeacc",
   "line_items": [
     {
       "id": 7527,

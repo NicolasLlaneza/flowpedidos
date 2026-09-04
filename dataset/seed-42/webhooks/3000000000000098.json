@@ -17,7 +17,7 @@
   "total_tax": "0.00",
   "total": "589520.92",
   "customer_id": 0,
-  "order_key": "wc_order_q5mls45d2z",
+  "order_key": "wc_order_c7xavqmz7uw",
   "billing": {
     "first_name": "Catalina",
     "last_name": "Medina",
@@ -40,7 +40,7 @@
   },
   "payment_method": "visa",
   "payment_method_title": "Tarjeta",
-  "transaction_id": "ch_0yia1b2m5t",
+  "transaction_id": "ch_lrvkok305d",
   "line_items": [
     {
       "id": 1238,
