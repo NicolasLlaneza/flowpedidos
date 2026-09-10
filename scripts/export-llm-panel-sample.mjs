@@ -11,6 +11,13 @@
 // el corpus del panel de evaluación no exponga identidad de clientes ni
 // permita distinguir mensajes por la presencia de un nombre propio.
 //
+// El filtro o.external_id ~ '^[0-9]{16}$' restringe la muestra a los pedidos
+// del dataset sintético (seed=42, external_id de 16 dígitos), que es la
+// corrida definitiva ampliada — excluyendo la corrida complementaria de
+// despacho real (n=10) y las pruebas manuales de evidencia visual, que
+// insertan pedidos con external_id de otro formato y no forman parte del
+// diseño muestral declarado en la sección 3.5/3.7.
+//
 // A diferencia de una versión anterior de este script, la cuota por estado
 // ya no está hardcodeada: se calcula en tiempo de ejecución a partir del
 // conteo real por estado en tfi.ai_notifications, mediante asignación
@@ -114,6 +121,7 @@ async function main() {
            JOIN tfi.orders o ON o.id = n.order_id
           WHERE n.provider = 'openai'
             AND n.is_fallback = false
+            AND o.external_id ~ '^[0-9]{16}$'
           GROUP BY o.status`
     );
     const counts = {};
@@ -139,6 +147,7 @@ async function main() {
                JOIN tfi.orders o ON o.id = n.order_id
               WHERE n.provider = 'openai'
                 AND n.is_fallback = false
+                AND o.external_id ~ '^[0-9]{16}$'
                 AND o.status = $1
               ORDER BY n.generated_at`,
             [status]
