@@ -41,7 +41,7 @@ node_modules/
 demo/node_modules/
 
 # Test users de Mercado Libre (credenciales generadas por ml-setup.mjs)
-scripts/.ml-testusers.json
+scripts/.ml-testusers*.json
 
 # Salidas de scripts/run-corrida.mjs — CSVs efímeros de las corridas.
 # La corrida definitiva se commitea aparte con nombre explícito
