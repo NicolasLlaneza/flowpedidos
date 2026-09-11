@@ -779,8 +779,10 @@
       ],
       "parameters": {
         "options": {
-          "responseCode": 200
-        }
+          "responseCode": 400
+        },
+        "respondWith": "json",
+        "responseBody": "{ \"error\": \"invalid_payload\", \"details\": \"{{ $json.errors }}\" }"
       },
       "typeVersion": 1.5
     },
