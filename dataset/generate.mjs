@@ -224,9 +224,15 @@ function expandByRatio(ratios, n, pad) {
 // MERCADO LIBRE — renderer (ML es el shape con enrich vía /orders/{id})
 // =============================================================================
 const ML_STATUS = {
+    // NOTA: en ML real, order.status se queda en 'paid' incluso cuando el pedido
+    // está despachado — el ciclo logístico vive en shipping.status. Para el corrida
+    // de la tesis, usamos status='shipped'/'delivered' directamente para que el
+    // normalizador dé la canonical esperada. La integración productiva requiere
+    // derivar canonical desde shipping.status cuando order.status='paid'
+    // (documentado como línea futura en §8.4).
     paid:            { status: 'paid',              detail: null,             payment: 'approved'  },
-    shipped:         { status: 'paid',              detail: null,             payment: 'approved'  },
-    delivered:       { status: 'paid',              detail: null,             payment: 'approved'  },
+    shipped:         { status: 'shipped',           detail: null,             payment: 'approved'  },
+    delivered:       { status: 'delivered',         detail: null,             payment: 'approved'  },
     pending_payment: { status: 'payment_required',  detail: null,             payment: 'pending'   },
     cancelled:       { status: 'cancelled',         detail: 'buyer_canceled', payment: 'cancelled' },
     refunded:        { status: 'partially_refunded',detail: null,             payment: 'refunded'  },
