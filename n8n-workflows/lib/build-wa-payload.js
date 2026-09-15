@@ -42,10 +42,13 @@ function toE164Argentina(raw) {
     return null;
 }
 
-function buildGreeting(fullName) {
-    if (!fullName) return '';
-    const firstName = fullName.trim().split(/\s+/)[0];
-    return `Hola ${firstName}!\n`;
+// El saludo ya está incluido en message_text por rehydrate-validate.js
+// (reemplazó el token {{saludo}} por "¡Hola <nombre>!"). Este nodo NO debe
+// prependar otro saludo: hacerlo produciría el defecto de despacho de la
+// duplicación del saludo (§6.4). Se conserva la función por retro-compat
+// pero devuelve string vacío.
+function buildGreeting(_fullName) {
+    return '';
 }
 
 // --- Main --------------------------------------------------------------------
