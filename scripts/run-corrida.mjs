@@ -31,7 +31,7 @@ process.loadEnvFile(path.join(REPO, '.env'));
 // --- Config ------------------------------------------------------------------
 function parseArgs(argv) {
     const a = { seed: 42, n: null, delay: 400, wait: 60, reset: false, dryRun: false,
-                out: null, allowLive: false };
+                out: null, allowLive: false, channel: null };
     for (let i = 2; i < argv.length; i++) {
         const arg = argv[i];
         if      (arg === '--seed')      a.seed  = Number(argv[++i]);
@@ -42,6 +42,7 @@ function parseArgs(argv) {
         else if (arg === '--reset')     a.reset = true;
         else if (arg === '--dry-run')   a.dryRun = true;
         else if (arg === '--allow-live') a.allowLive = true;
+        else if (arg === '--channel')   a.channel = argv[++i]; // 'ml' | 'wc' | null
         else { console.error('arg desconocido:', arg); process.exit(1); }
     }
     return a;
@@ -178,6 +179,8 @@ async function main() {
     }
     const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
     let specs = manifest.items;
+    if (ARGS.channel === 'ml') specs = specs.filter(s => s.channel === 'mercadolibre');
+    else if (ARGS.channel === 'wc') specs = specs.filter(s => s.channel === 'woocommerce');
     if (ARGS.n) specs = specs.slice(0, ARGS.n);
 
     const byChannel = specs.reduce((a, s) => ((a[s.channel] = (a[s.channel] || 0) + 1), a), {});
