@@ -14,7 +14,7 @@
 --   tfi.raw_events                       (§4.1.1, persistencia previa al ACK)
 --
 -- Cómo aplicar:
---   docker compose exec postgres psql -U postgres -d tfi -f /migrations/04_instrumentation.sql
+--   docker compose exec -T postgres psql -U postgres -d tfi < sql/04_instrumentation.sql
 --
 -- Idempotente: puede correrse sobre base nueva o sobre base existente.
 -- ============================================================================

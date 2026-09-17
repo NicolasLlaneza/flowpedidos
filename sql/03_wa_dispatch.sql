@@ -8,7 +8,7 @@
 --   - Fase 5: webhook de estado de entrega (delivered / read) desde Meta
 --
 -- Cómo aplicar (primera vez):
---   docker compose exec postgres psql -U postgres -d tfi -f /migrations/03_wa_dispatch.sql
+--   docker compose exec -T postgres psql -U postgres -d tfi < sql/03_wa_dispatch.sql
 -- ============================================================================
 
 SET search_path TO tfi, public;
