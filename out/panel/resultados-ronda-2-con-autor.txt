@@ -1,0 +1,96 @@
+=== Panel de 10 evaluadores externos ===
+ - E1
+ - E2
+ - E3
+ - E4
+ - E5
+ - E6
+ - E7
+ - E8
+ - E9
+ - EX1
+
+=== Acuerdo entre evaluadores (corpus, n=14, k=10) ===
+Coeficiente de correlacion intraclase (Shrout y Fleiss, 1979):
+  ICC(2,10) acuerdo absoluto, promedio panel: +0.826  IC 95 % [+0.649; +0.934]   <- preespecificado en REGLAS-DECISION.md
+  ICC(2,1) acuerdo absoluto, un evaluador  : +0.323  IC 95 % [+0.156; +0.586]
+  ICC(3,1) consistencia, un evaluador      : +0.451  IC 95 % [+0.263; +0.702]   <- comparable entre rondas, sin importar k
+  ICC(3,10) consistencia, promedio panel   : +0.892  IC 95 % [+0.781; +0.959]
+  Nota: las formas (*,k) crecen con el tamano del panel por Spearman-Brown.
+        La ronda 1 reporto ICC(3,4) = 0,533, que equivale a ICC(3,1) = 0,222;
+        esa es la cifra contra la cual corresponde comparar ICC(3,1) de arriba.
+
+Alfa de Krippendorff:
+  sobre el promedio de los cuatro criterios (unidad = mensaje)
+    metrica de intervalo : +0.2887   <- comparable con la ronda 1 (-0,110)
+    metrica ordinal      : +0.2387
+  Aviso: promediar cuatro valoraciones ordinales no produce un dato ordinal.
+         Las cifras de abajo, por criterio y sobre los valores crudos de 1 a 5,
+         son las que corresponden a la escala declarada en la seccion 3.7.
+
+  por criterio, sobre los valores crudos (unidad = mensaje x criterio)
+    criterio                     ordinal   intervalo
+    Claridad                     +0.1515     +0.2017
+    Adecuación del tono          +0.2994     +0.3431
+    Relevancia contextual        +0.3185     +0.3811
+    Corrección lingüística       -0.0248     -0.0439
+    TODOS los criterios          +0.1952     +0.2486
+
+=== Desviación sistemática de nivel por evaluador ===
+  -0.84  E7  <-- desviación mayor a medio punto
+  -0.61  E1  <-- desviación mayor a medio punto
+  -0.34  E4
+  -0.34  EX1
+  +0.02  E6
+  +0.04  E2
+  +0.22  E3
+  +0.43  E9
+  +0.52  E8  <-- desviación mayor a medio punto
+  +0.89  E5  <-- desviación mayor a medio punto
+
+=== H3 · contraste global (modelo vs plantilla) ===
+n modelo = 8, n plantilla = 6
+Media modelo   : 4.472
+Media plantilla: 3.450
+Delta de Cliff : 1.000
+U de Mann-Whitney: U=48.0
+  p exacto por enumeracion : 0.000666   <- el que exige REGLAS-DECISION.md
+  p asintotico (referencia): 0.002335
+Tamano de efecto: delta de Cliff (arriba); r = Z/raiz(N) = 0.814 sobre la aproximacion normal, N=14
+
+=== H3 · contraste pareado por estado canónico ===
+estado               modelo  plantilla     dif
+cancelled              4.70       2.92   +1.78
+delivered              4.47       3.58   +0.90
+paid                   4.42       3.48   +0.94
+pending_payment        4.53       4.03   +0.50
+refunded               4.47       3.45   +1.02
+shipped                4.35       3.25   +1.10
+
+Estados a favor del modelo: 6 de 6
+Wilcoxon de rangos con signo (p exacto, n=6): W+=21.0, p=0.0312
+Correlacion biserial de rangos apareada r = (W+ - W-)/(W+ + W-) = +1.000
+
+=== Detalle por mensaje ===
+        id     origen     estado         e1         e2         e3         e4         e5         e6         e7         e8         e9        e10       prom
+       M01   template   refunded       3.50       3.00       3.25       3.00       4.75       3.00       3.50       3.75       2.75       4.00       3.45
+       M02   template pending_payment       3.75       4.75       3.25       3.75       4.75       3.50       3.25       5.00       3.75       4.50       4.03
+       M03        llm  cancelled       4.75       5.00       3.75       4.25       5.00       5.00       4.25       5.00       5.00       5.00       4.70
+       M04        llm   refunded       4.00       5.00       4.50       4.00       5.00       4.75       3.00       5.00       4.75       4.75       4.47
+       M05   template  cancelled       2.50       1.50       3.50       2.25       4.75       2.50       2.50       4.00       3.25       2.50       2.92
+       M06        llm       paid       3.00       5.00       4.50       4.50       5.00       5.00       3.00       5.00       4.25       4.50       4.38
+       M07   template       paid       2.00       2.50       5.00       2.75       5.00       3.25       3.25       3.75       5.00       2.25       3.48
+       M08        llm       paid       4.00       5.00       5.00       3.50       5.00       4.25       3.25       4.75       4.75       4.00       4.35
+       M09   template  delivered       2.00       3.00       3.50       4.00       4.75       3.75       3.25       4.00       5.00       2.50       3.58
+       M10   template    shipped       2.50       2.25       4.25       2.25       5.00       2.50       3.00       4.00       5.00       1.75       3.25
+       M11        llm pending_payment       4.00       5.00       4.75       4.25       5.00       5.00       3.25       5.00       4.50       4.50       4.53
+       M12        llm       paid       4.00       5.00       4.75       4.50       5.00       5.00       3.00       4.75       4.50       4.75       4.53
+       M13        llm  delivered       4.00       5.00       5.00       4.25       5.00       5.00       3.25       4.75       5.00       3.50       4.47
+       M14        llm    shipped       4.00       5.00       4.50       4.50       5.00       4.25       3.00       5.00       5.00       3.25       4.35
+
+=== Medias por criterio y origen ===
+criterio                     modelo  plantilla
+Claridad                       4.61       3.63
+Adecuación del tono            4.61       3.33
+Relevancia contextual          4.46       2.88
+Corrección lingüística         4.20       3.95

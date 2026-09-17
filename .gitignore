@@ -57,3 +57,15 @@ video/
 
 # Config de herramientas de dev (no es parte de la app)
 .claude/
+
+# mapeo seudónimo -> teléfono de los destinatarios verificados (dato personal)
+destinatarios-privado.csv
+
+# corridas superadas y material con datos personales: no se publican
+out/muestra-live-16.csv
+out/muestra-live-16-stats.md
+out/corrida-2026-09-0*T*.csv
+out/corrida-definitiva.csv
+out/Sin título.jpg
+Claude outputs/
+evaluadores-privado.csv
