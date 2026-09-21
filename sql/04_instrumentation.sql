@@ -45,7 +45,7 @@ ALTER TABLE tfi.ai_notifications
 COMMENT ON COLUMN tfi.ai_notifications.dispatched_at
     IS 'Instante del despacho confirmado por WhatsApp; par con orders.received_at para eficiencia operativa (§3.3)';
 COMMENT ON COLUMN tfi.ai_notifications.atributos_usados
-    IS 'Atributos del pedido que el mensaje efectivamente cita (§3.3, indicador de anclaje contextual)';
+    IS 'Claves del contexto que el modelo declara haber citado; su presencia en el texto se verifica aparte (§3.3, indicador de anclaje contextual)';
 COMMENT ON COLUMN tfi.ai_notifications.validator_passes
     IS 'Cantidad de pasadas del validador determinístico; 1 = pasó al primer intento (§4.3.1)';
 COMMENT ON COLUMN tfi.ai_notifications.validator_failures

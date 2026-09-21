@@ -26,7 +26,7 @@ webhook (Mercado Libre | WooCommerce)
    ├─ persistencia del evento crudo (raw_events)
    ├─ HTTP 200 al emisor            ◄── se responde acá, antes de procesar
    │
-   ├─ enriquecimiento (ML: consulta a la API de órdenes)
+   ├─ enriquecimiento (ML: consulta al simulador mock-marketplace, no a la API real)
    ├─ normalización al modelo canónico ─────► estado desconocido → rama de error
    ├─ verificación de idempotencia ─────────► duplicado → audit_log
    ├─ persistencia (customers, orders, order_items)
@@ -102,13 +102,23 @@ docker-compose.yml Definición de los servicios.
 
 El sistema está operativo de extremo a extremo en ambos canales, con despacho
 real contra credenciales de producción de la API de mensajería en el canal de
-WooCommerce. Tres defectos identificados y no corregidos al momento de la
+WooCommerce. Defectos identificados y no corregidos al momento de la
 entrega:
 
 - No hay política de reintentos ante el cierre de conexión del proveedor del
-  modelo. El reintento previsto no se ejecuta porque la función de red que lo
-  implementa no está disponible en el entorno de los nodos de código de n8n; el
-  pipeline degrada directamente a la plantilla estática.
+  modelo. El nodo `Call OpenAI` no declara reintento ni continuación ante error,
+  de modo que un fallo de conexión detiene la ejecución para ese pedido: no
+  degrada a la plantilla estática y el pedido queda persistido sin notificación
+  (dos casos en la corrida reportada). La corrección es conectar la salida de
+  error del nodo a la rama de plantilla.
+- El reintento posterior a un rechazo del validador tampoco se ejecuta: usa
+  `fetch`, que no está disponible en los nodos de código de n8n
+  (`retry_failed: fetch is not defined`), y la degradación opera en el primer
+  rechazo.
+- La regla 1 del validador (sin identificadores internos) compara por
+  subcadena: el único rechazo de la corrida fue un falso positivo, porque el
+  identificador `70` coincidió con la medida `175/70` del producto. La
+  corrección es exigir límites de palabra.
 - La rama de degradación a estado de error no está aislada de la inserción de
   ítems.
 - `raw_events` persiste el payload antes del ACK, pero no hay un consumidor con
@@ -133,6 +143,10 @@ empíricas del documento, de modo que puedan verificarse por reejecución.
 | Anexo H — corrida con despacho real | `out/corrida-v2.csv` |
 | Sección 3.5 — conjunto sintético | `dataset/generate.mjs`, `dataset/seed-42/manifest.csv` |
 | Sección 5.3 — canal simulado | `out/corrida-v2-ml.csv` |
+| Sección 5.4 — indicador de anclaje | `sql/export-anclaje.sql`, `scripts/analizar-anclaje.py`, `out/anclaje-resultado.txt` |
+| Secciones 5.4 y 7.4 — rechazo del caso WC-16 y conteos de control | `sql/export-defectos.sql`, `sql/export-wc16-na06.sql` |
+| Anexo A — Figura A.3 (modelo entidad-relación) | `sql/modelo-er.png`, `sql/modelo-er.dot` |
+| Sección 3.11 — respuesta real de la API de Mercado Libre | `evidencia/2000018256113704.json` |
 
 `out/README.md` y `scripts/panel/README.md` detallan archivo por archivo qué
 contiene cada uno y qué afirmación respalda.

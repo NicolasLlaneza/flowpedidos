@@ -69,3 +69,8 @@ out/corrida-definitiva.csv
 out/Sin título.jpg
 Claude outputs/
 evaluadores-privado.csv
+
+# Exportaciones con el texto completo de los mensajes (nombres reales de los destinatarios)
+out/anclaje-crudo.csv
+out/defectos.txt
+out/wc16-na06.txt

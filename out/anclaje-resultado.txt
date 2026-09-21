@@ -1,0 +1,33 @@
+=== Indicador de anclaje contextual (seccion 3.3) ===
+Mensajes generados por el modelo (excluye plantilla): 142
+Con al menos un atributo del pedido verificable en el texto: 139
+Proporcion: 97.9 %   IC Wilson 95 % = [94.0 ; 99.3]
+
+Por atributo (verificado en el texto / declarado por el modelo):
+  primary_product_name     verificado  139   declarado  142
+  total_amount             verificado    0   declarado    0
+  items_count              verificado   14   declarado   14
+  source_created_at        verificado    0   declarado    0
+
+Claves declaradas que no constituyen anclaje verificable:
+  order_status             declarado  142
+
+Mensajes que declaran un atributo anclable y no lo citan en el texto: 3 de 142 (2.1 %)
+
+--- primeros 15 casos, para inspeccion manual ---
+pedido            estado            verificados                                   no verificados
+55                paid              primary_product_name                          -
+56                pending_payment   primary_product_name                          -
+57                pending_payment   primary_product_name                          -
+58                paid              primary_product_name                          -
+59                paid              primary_product_name                          -
+60                paid              primary_product_name                          -
+61                delivered         primary_product_name                          -
+62                paid              primary_product_name                          -
+63                paid              primary_product_name                          -
+64                paid              primary_product_name                          -
+65                paid              primary_product_name                          -
+66                paid              primary_product_name                          -
+67                paid              primary_product_name                          -
+68                cancelled         primary_product_name                          -
+69                delivered         primary_product_name                          -
