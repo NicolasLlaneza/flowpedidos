@@ -1,9 +1,13 @@
 #!/usr/bin/env node
 // =============================================================================
-// generate-baseline-wc-orders.mjs · Baseline manual §3.6
+// generate-baseline-wc-orders.mjs · Muestra de tiempos del pipeline (baseline)
 // -----------------------------------------------------------------------------
-// Crea 10 pedidos reales en WooCommerce con mix de estados para el instrumento
-// de cronometrado de la línea base manual. Distribuye los pedidos sobre los
+// Crea 10 pedidos en la instalación de prueba de WooCommerce con mix de estados.
+// Se preparó en una etapa temprana como insumo para cronometrar el
+// procesamiento manual (§3.6), medición que finalmente no se realizó: el valor
+// de referencia manual proviene de la literatura. El script se usó solo para
+// generar la muestra de tiempos del pipeline (out/baseline-pipeline-stats.md).
+// Distribuye los pedidos sobre los
 // productos publicados (round-robin) y varía el estado según la distribución:
 //
 //   2 × pending      → pending_payment
