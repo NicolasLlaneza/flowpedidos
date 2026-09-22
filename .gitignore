@@ -74,3 +74,8 @@ evaluadores-privado.csv
 out/anclaje-crudo.csv
 out/defectos.txt
 out/wc16-na06.txt
+
+# Ronda 3 del panel: archivos con datos personales
+scripts/panel/ronda-3/mensajes-corrida.csv
+scripts/panel/ronda-3/respuestas-r3.csv
+scripts/panel/ronda-3/mapa-evaluadores-r3.csv
