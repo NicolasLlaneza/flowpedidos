@@ -77,5 +77,8 @@ out/wc16-na06.txt
 
 # Ronda 3 del panel: archivos con datos personales
 scripts/panel/ronda-3/mensajes-corrida.csv
+scripts/panel/ronda-3/mensajes-corrida.csv*
+scripts/panel/ronda-3/crear-form-panel-r3.gs
+scripts/panel/ronda-3/corpus_key_r3.csv
 scripts/panel/ronda-3/respuestas-r3.csv
 scripts/panel/ronda-3/mapa-evaluadores-r3.csv

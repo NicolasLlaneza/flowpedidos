@@ -59,3 +59,6 @@ eabc0aebc1fdd2eb170f4c580844a41ba0c381d7 eabc0aebc1fdd2eb170f4c580844a41ba0c381d
 f00c57dca1ec2785f7f77618abbd6bac95df04f1 2d3fbae7afbf941869a5b9e33a5eb817361cc59d
 f60f0684540ae54ab81f812389a042c7e5b3332d b2762f0b7adc39fe669f3e283b2a8663809eb685
 f630fbe377992805cc2f6022830ace123e250dff f630fbe377992805cc2f6022830ace123e250dff
+# 24/09/2026: el commit de preregistro de la ronda 3 se rehizo para quitar un archivo
+# con datos personales incluido por error; el contenido preregistrado no cambia.
+a967b34ca7222a8e2954a45881c14419fd53ea3a 849aa5652ab93575086df0fcce739bacf160c22d
