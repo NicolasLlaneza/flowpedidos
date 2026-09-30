@@ -1,0 +1,3 @@
+external_id,channel,intento,regla,detalle
+70,woocommerce,1,sin_identificadores_internos,contiene '70'
+70,woocommerce,2,retry_failed,fetch is not defined

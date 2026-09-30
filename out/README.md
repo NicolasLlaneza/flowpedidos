@@ -39,18 +39,27 @@ definitiva no llegó a disparar, según se declara en la sección 5.5.
 Muestra de despachos en vivo previa a la corrida definitiva, con sus
 estadísticos agregados.
 
-### `anclaje-resultado.txt`
-Salida de `scripts/analizar-anclaje.py` sobre los 142 mensajes que generó el
-modelo en la corrida reportada: indicador de anclaje contextual de la sección 3.3
-(139 de 142, 97,9 %) y su desglose por atributo. La entrada del script
-(`out/anclaje-crudo.csv`, producida por `sql/export-anclaje.sql`) contiene el
-texto completo de los mensajes, con los nombres de los destinatarios, y por eso
-no se versiona. Se regenera con:
+### `anclaje-resultado.txt` y `anclaje-crudo-anon.csv`
+`anclaje-resultado.txt` es la salida de `scripts/analizar-anclaje.py` sobre los
+142 mensajes que generó el modelo en la corrida reportada: indicador de anclaje
+contextual de la sección 3.3 (139 de 142, 97,9 %) y su desglose por atributo.
+
+`anclaje-crudo-anon.csv` es su entrada: la salida de `sql/export-anclaje.sql`
+con el saludo nominal reemplazado por `¡Hola [NOMBRE]!`. La base guarda el texto
+ya rehidratado, de modo que los 142 mensajes llevan el nombre y apellido del
+destinatario; el archivo original (`anclaje-crudo.csv`) no se versiona por eso.
+El reemplazo no altera el resultado: el analizador produce la misma salida sobre
+ambos archivos. Para recalcular:
 
 ```bash
-docker compose exec -T postgres psql -U n8n -d tfi -q --csv < sql/export-anclaje.sql > out/anclaje-crudo.csv
-python scripts/analizar-anclaje.py out/anclaje-crudo.csv
+python scripts/analizar-anclaje.py out/anclaje-crudo-anon.csv
 ```
+
+### `validador-rechazos.csv`
+Detalle del único rechazo del validador en la corrida reportada (pedido WC-16),
+copiado del campo `validator_failures` de `tfi.ai_notifications`: la regla 1
+rechazó el primer intento por `contiene '70'` y el reintento falló con
+`fetch is not defined`. Lo lee el tablero de `scripts/dashboard/`.
 
 ### `panel/`
 Ver `scripts/panel/README.md`. Contiene las respuestas saneadas de la segunda

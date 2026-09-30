@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FlowPedidos — Tablero operativo</title>
+<!-- Ícono embebido: el tablero se abre también con file://, donde no hay
+     servidor que resuelva /favicon.ico. Va inline para no sumar un archivo. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%232a78d6'/%3E%3Crect x='3.5' y='8' width='2.4' height='5' rx='.6' fill='%23fff'/%3E%3Crect x='6.8' y='5' width='2.4' height='8' rx='.6' fill='%23fff'/%3E%3Crect x='10.1' y='3' width='2.4' height='10' rx='.6' fill='%23fff'/%3E%3C/svg%3E">
 <style>
   :root {
     color-scheme: light;
@@ -17,6 +20,10 @@
     --s1:        #2a78d6;
     --s2:        #eb6834;
     --good:      #1a7f4b;
+    /* Colores de estado: reservados, nunca se usan como serie. Van siempre
+       acompañados de su etiqueta, nunca solos. */
+    --warn:      #b5790a;
+    --bad:       #c0392b;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -31,13 +38,15 @@
       --s1:        #3987e5;
       --s2:        #d95926;
       --good:      #47b37a;
+      --warn:      #fab219;
+      --bad:       #e06a5c;
     }
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
     --surface-0: #121211; --surface-1: #1a1a19; --border: #33332f; --grid: #2b2b28;
     --text-1: #ffffff; --text-2: #c3c2b7; --text-3: #94938a;
-    --s1: #3987e5; --s2: #d95926; --good: #47b37a;
+    --s1: #3987e5; --s2: #d95926; --good: #47b37a; --warn: #fab219; --bad: #e06a5c;
   }
   * { box-sizing: border-box; }
   body {
@@ -55,10 +64,12 @@
   .kpi .val { font-size: 25px; font-weight: 650; margin-top: 5px; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
   .kpi .sub { font-size: 12px; color: var(--text-2); margin-top: 3px; font-variant-numeric: tabular-nums; }
   .kpi.ok .val { color: var(--good); }
+  .kpi.warn .val { color: var(--warn); }
   .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 18px 18px 14px; margin-bottom: 20px; }
   .card h2 { font-size: 15px; margin: 0 0 3px; }
   .card .sub { font-size: 12.5px; color: var(--text-2); margin: 0 0 14px; }
-  .legend { display: flex; gap: 16px; align-items: center; font-size: 12.5px; color: var(--text-2); margin-bottom: 10px; }
+  .card .sub code { font-size: 12px; }
+  .legend { display: flex; gap: 16px; align-items: center; font-size: 12.5px; color: var(--text-2); margin-bottom: 10px; flex-wrap: wrap; }
   .legend span { display: inline-flex; align-items: center; gap: 6px; }
   .swatch { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
   .chart-scroll { overflow-x: auto; }
@@ -68,7 +79,7 @@
     position: fixed; pointer-events: none; opacity: 0; transition: opacity .09s;
     background: var(--surface-1); border: 1px solid var(--border); border-radius: 7px;
     padding: 7px 10px; font-size: 12.5px; color: var(--text-1);
-    box-shadow: 0 3px 12px rgb(0 0 0 / .13); font-variant-numeric: tabular-nums; z-index: 10; max-width: 240px;
+    box-shadow: 0 3px 12px rgb(0 0 0 / .13); font-variant-numeric: tabular-nums; z-index: 10; max-width: 260px;
   }
   .tip b { font-weight: 620; }
   details { margin-top: 6px; }
@@ -78,6 +89,36 @@
   th:first-child, td:first-child { text-align: left; }
   th { color: var(--text-2); font-weight: 600; }
   footer { color: var(--text-3); font-size: 12px; margin-top: 8px; }
+  .nota {
+    border-left: 2px solid var(--border); padding: 2px 0 2px 12px; margin-top: 12px;
+    font-size: 12.5px; color: var(--text-2);
+  }
+  .nota.alerta { border-left-color: var(--warn); }
+  .veredicto { font-size: 12.5px; font-weight: 600; }
+  .veredicto.si { color: var(--good); }
+  .veredicto.no { color: var(--warn); }
+  .subcard + .subcard { margin-top: 20px; }
+  .subcard h3 { font-size: 13px; margin: 0 0 2px; color: var(--text-2); font-weight: 600; }
+
+  /* Cualquier agregado del que se pueda bajar a los pedidos que lo producen */
+  .drillable { cursor: pointer; }
+  .drillable:focus-visible { outline: 2px solid var(--s1); outline-offset: 2px; border-radius: 4px; }
+  .kpi.drillable:hover { border-color: var(--s1); }
+  svg .drillable:hover { opacity: .82; }
+  .pista { font-size: 11px; color: var(--text-3); margin-top: 8px; }
+
+  #drill[hidden] { display: none; }
+  #drill { border-color: var(--s1); }
+  #drill .dh { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  #drill .dh h2 { margin: 0; }
+  #drill .cerrar {
+    background: none; border: 1px solid var(--border); border-radius: 7px; color: var(--text-2);
+    font: inherit; font-size: 12px; padding: 3px 10px; cursor: pointer;
+  }
+  #drill .cerrar:hover { color: var(--text-1); border-color: var(--text-3); }
+  .tabla-scroll { max-height: 420px; overflow: auto; margin-top: 10px; }
+  .tabla-scroll thead th { position: sticky; top: 0; background: var(--surface-1); }
+  td.fb { color: var(--warn); font-weight: 600; }
   @media (prefers-reduced-motion: reduce) { .tip { transition: none; } }
 </style>
 </head>
@@ -85,12 +126,53 @@
 <div class="wrap">
   <header>
     <h1>FlowPedidos — Tablero operativo del pipeline</h1>
-    <p>Monitoreo de la vista <code>tfi.v_order_summary</code> y de la tabla <code>tfi.ai_notifications</code>.</p>
+    <p>Monitoreo del modelo canónico y del componente generativo.</p>
     <p class="src" id="src"></p>
   </header>
 
   <section class="kpis" id="kpis" aria-label="Indicadores principales"></section>
 
+  <!-- Detalle por pedido. Se abre al pulsar cualquier agregado del tablero. -->
+  <section class="card" id="drill" hidden aria-live="polite">
+    <div class="dh">
+      <h2 id="drill-titulo"></h2>
+      <button type="button" class="cerrar" id="drill-cerrar">Cerrar</button>
+    </div>
+    <p class="sub" id="drill-sub"></p>
+    <div class="tabla-scroll">
+      <table id="drill-tabla">
+        <thead><tr>
+          <th>Pedido</th><th>Canal</th><th>Estado</th><th>Despacho</th>
+          <th>Interno</th><th>API</th><th>E2E</th><th>Mensaje</th><th>Validador</th><th>Costo</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <section class="card">
+    <h2>Confirmación de recepción al emisor</h2>
+    <p class="sub" id="ack-sub"></p>
+    <div class="chart-scroll"><svg id="c-ack" role="img" aria-label="Tiempo de confirmación contra el umbral de la plataforma de origen"></svg></div>
+    <div class="nota alerta" id="ack-nota"></div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <section class="card">
+    <h2>Normalización al modelo canónico</h2>
+    <p class="sub">El §3.3 define dos tasas complementarias, y la condicional admite a su vez
+       dos denominadores. El tablero informa todas, con su intervalo de Wilson al 95 %, en lugar
+       de resolver la elección en silencio.</p>
+    <div class="chart-scroll"><svg id="c-h2" role="img" aria-label="Tasas de normalización con intervalo de confianza contra el umbral de la hipótesis"></svg></div>
+    <details>
+      <summary>Ver datos en tabla</summary>
+      <table id="t-h2"><thead><tr><th>Tasa</th><th>Éxitos</th><th>Total</th><th>%</th><th>IC 95 %</th><th>Juicio</th></tr></thead><tbody></tbody></table>
+    </details>
+    <div class="nota" id="h2-nota"></div>
+  </section>
+
+  <!-- ===================================================================== -->
   <section class="card">
     <h2>Pedidos normalizados por estado canónico y canal de origen</h2>
     <p class="sub">Cada barra es un estado canónico; el largo es la cantidad de pedidos persistidos, segmentada por plataforma de origen.</p>
@@ -105,14 +187,34 @@
     </details>
   </section>
 
+  <!-- ===================================================================== -->
   <section class="card">
-    <h2>Distribución del tiempo de procesamiento de extremo a extremo</h2>
-    <p class="sub">Milisegundos entre <code>received_at</code> y <code>dispatched_at</code>, por pedido despachado.</p>
-    <div class="chart-scroll"><svg id="c2" role="img" aria-label="Histograma de latencia end-to-end con mediana, percentil 90 y percentil 95"></svg></div>
+    <h2>Tiempo de procesamiento de extremo a extremo</h2>
+    <p class="sub">Milisegundos entre <code>received_at</code> y <code>dispatched_at</code>, por pedido despachado.
+       Los dos modos de despacho se muestran por separado: uno viaja contra la API de mensajería
+       y el otro no, de modo que no son comparables entre sí.</p>
+    <div id="lat-panels"></div>
     <details>
       <summary>Ver datos en tabla</summary>
-      <table id="t2"><thead><tr><th>Rango (ms)</th><th>Pedidos</th></tr></thead><tbody></tbody></table>
+      <table id="t2"><thead><tr><th>Modo</th><th>Rango (ms)</th><th>Pedidos</th></tr></thead><tbody></tbody></table>
     </details>
+  </section>
+
+  <!-- ===================================================================== -->
+  <section class="card">
+    <h2>Validador determinístico de siete reglas</h2>
+    <p class="sub">Mensajes que el validador aprobó en su primer intento y detalle de cada rechazo.</p>
+    <div id="val-kpis" class="kpis" style="margin:0 0 14px"></div>
+    <div id="val-detalle"></div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <section class="card">
+    <h2>Anclaje contextual</h2>
+    <p class="sub">Segundo indicador de calidad del §3.3: proporción de mensajes que incorporan al
+       menos un atributo verificable del pedido. Se verifica por <strong>presencia textual</strong> del
+       atributo en el mensaje, y no por la declaración del modelo.</p>
+    <div id="anclaje"></div>
   </section>
 
   <footer id="foot"></footer>
@@ -120,159 +222,15 @@
 <div class="tip" id="tip" role="status" aria-live="polite"></div>
 
 <script type="application/json" id="fallback-data">
-{
- "meta": {
-  "corrida": "definitiva ampliada",
-  "fuente": "tfi.v_order_summary + tfi.ai_notifications",
-  "n_webhooks": 150
- },
- "estados": [
-  {
-   "estado": "paid",
-   "ml": 24,
-   "wc": 27
-  },
-  {
-   "estado": "shipped",
-   "ml": 18,
-   "wc": 18
-  },
-  {
-   "estado": "delivered",
-   "ml": 12,
-   "wc": 12
-  },
-  {
-   "estado": "pending_payment",
-   "ml": 6,
-   "wc": 6
-  },
-  {
-   "estado": "cancelled",
-   "ml": 6,
-   "wc": 6
-  },
-  {
-   "estado": "refunded",
-   "ml": 3,
-   "wc": 3
-  },
-  {
-   "estado": "error",
-   "ml": 3,
-   "wc": 3
-  }
- ],
- "latencia": {
-  "n": 141,
-  "mediana": 1094,
-  "p90": 1282,
-  "p95": 1434,
-  "min": 938,
-  "max": 2504,
-  "media": 1142.1,
-  "bins": [
-   {
-    "from": 900,
-    "to": 1000,
-    "count": 15
-   },
-   {
-    "from": 1000,
-    "to": 1100,
-    "count": 59
-   },
-   {
-    "from": 1100,
-    "to": 1200,
-    "count": 34
-   },
-   {
-    "from": 1200,
-    "to": 1300,
-    "count": 19
-   },
-   {
-    "from": 1300,
-    "to": 1400,
-    "count": 4
-   },
-   {
-    "from": 1400,
-    "to": 1500,
-    "count": 5
-   },
-   {
-    "from": 1500,
-    "to": 1600,
-    "count": 1
-   },
-   {
-    "from": 1600,
-    "to": 1700,
-    "count": 2
-   },
-   {
-    "from": 1700,
-    "to": 1800,
-    "count": 0
-   },
-   {
-    "from": 1800,
-    "to": 1900,
-    "count": 0
-   },
-   {
-    "from": 1900,
-    "to": 2000,
-    "count": 0
-   },
-   {
-    "from": 2000,
-    "to": 2100,
-    "count": 0
-   },
-   {
-    "from": 2100,
-    "to": 2200,
-    "count": 1
-   },
-   {
-    "from": 2200,
-    "to": 2300,
-    "count": 0
-   },
-   {
-    "from": 2300,
-    "to": 2400,
-    "count": 0
-   },
-   {
-    "from": 2400,
-    "to": 2500,
-    "count": 0
-   },
-   {
-    "from": 2500,
-    "to": 2600,
-    "count": 1
-   }
-  ]
- },
- "kpi": {
-  "webhooks": 150,
-  "rechazados_400": 2,
-  "persistidos": 147,
-  "normalizacion_pct": 100.0,
-  "mensajes": 141,
-  "fallback": 0,
-  "validador_primer_intento": 141,
-  "ack_max_ms": 0,
-  "costo_total_usd": 0.020653
- }
-}
+{"meta":{"corrida":"definitiva reportada en el Capítulo 5","fuente":"out/corrida-v2.csv (evidencia publicada)","reproducible_sin_base":true,"generado_en":"2026-09-30T01:15:09.280Z"},"kpi":{"webhooks_emitidos":150,"rechazados_400":2,"persistidos":148,"con_mensaje":143,"sin_mensaje":5,"fallback":1,"aprobados_primer_intento":142,"costo_total_usd":0.020929,"costo_por_mensaje_usd":0.000147,"mensajes_con_costo":142},"ack":{"medido_por_pedido":false,"n":30,"mediana_ms":38,"min_ms":33,"p95_ms":104,"max_ms":131,"umbral_ms":500,"instrumento":"medición externa al endpoint, 30 solicitudes (§5.2)","nota":"cota inferior: excluye el tramo del túnel público que un emisor externo sí atraviesa"},"h2":{"admision_estructural":{"exitos":148,"total":150,"pct":98.7,"low":95.3,"high":99.6,"denominador":"webhooks emitidos"},"condicional_cabecera":{"exitos":148,"total":148,"pct":100,"low":97.5,"high":100,"denominador":"pedidos admitidos; cuenta sólo la cabecera del pedido"},"condicional_con_items":{"exitos":145,"total":148,"pct":98,"low":94.2,"high":99.3,"denominador":"pedidos admitidos; exige además que los ítems persistan","procedencia":"declarado en §5.5"},"umbral_h2":95},"latencia":{"live":{"n":75,"mediana":2556,"p90":3116,"p95":3223,"min":2045,"max":3920,"media":2634.5,"bins":[{"from":2000,"to":2100,"count":1},{"from":2100,"to":2200,"count":2},{"from":2200,"to":2300,"count":3},{"from":2300,"to":2400,"count":8},{"from":2400,"to":2500,"count":15},{"from":2500,"to":2600,"count":12},{"from":2600,"to":2700,"count":11},{"from":2700,"to":2800,"count":6},{"from":2800,"to":2900,"count":5},{"from":2900,"to":3000,"count":2},{"from":3000,"to":3100,"count":0},{"from":3100,"to":3200,"count":5},{"from":3200,"to":3300,"count":3},{"from":3300,"to":3400,"count":1},{"from":3400,"to":3500,"count":0},{"from":3500,"to":3600,"count":0},{"from":3600,"to":3700,"count":0},{"from":3700,"to":3800,"count":0},{"from":3800,"to":3900,"count":0},{"from":3900,"to":4000,"count":1}]},"simulate":{"n":68,"mediana":1092,"p90":1222,"p95":1273,"min":983,"max":1387,"media":1108.5,"bins":[{"from":900,"to":1000,"count":4},{"from":1000,"to":1100,"count":34},{"from":1100,"to":1200,"count":19},{"from":1200,"to":1300,"count":8},{"from":1300,"to":1400,"count":3}]}},"estados":[{"estado":"paid","ml":24,"wc":30},{"estado":"shipped","ml":18,"wc":0},{"estado":"delivered","ml":12,"wc":20},{"estado":"pending_payment","ml":7,"wc":10},{"estado":"cancelled","ml":6,"wc":10},{"estado":"refunded","ml":3,"wc":5},{"estado":"error","ml":3,"wc":0}],"validador":{"evaluados":143,"aprobados_primer_intento":142,"con_segunda_pasada":0,"rechazos":[{"external_id":"70","channel":"woocommerce","status":"delivered","validator_passes":0,"degrado_a_plantilla":true,"reglas":[{"intento":"1","regla":"sin_identificadores_internos","detalle":"contiene '70'"},{"intento":"2","regla":"retry_failed","detalle":"fetch is not defined"}]}]},"anclaje":{"disponible":true,"origen":"publicado","procedencia":"out/anclaje-resultado.txt — salida de scripts/analizar-anclaje.py sobre la corrida del Capítulo 5","limitacion":"la entrada del script se publica en out/anclaje-crudo-anon.csv, con el saludo nominal reemplazado por [NOMBRE]; el reemplazo no altera el resultado, que un tercero puede recalcular","denominador":"mensajes que generó el modelo, antes del despacho; excluye la degradación a plantilla","evaluados":142,"con_al_menos_uno":139,"pct":97.9,"ic":{"pct":97.9,"low":94,"high":99.3},"por_atributo":[{"atributo":"primary_product_name","verificado":139,"declarado":142},{"atributo":"total_amount","verificado":0,"declarado":0},{"atributo":"items_count","verificado":14,"declarado":14},{"atributo":"source_created_at","verificado":0,"declarado":0}],"declarados_no_anclables":[{"atributo":"order_status","declarado":142}],"mensajes_con_declaracion_ausente":3,"mensajes_base":142},"columnas":["external_id","channel","status","dispatch_mode","interno_ms","dispatch_ms","e2e_ms","message_status","is_fallback","validator_passes","cost_usd","llm_latency_ms"],"pedidos":[["3000000000000001","mercadolibre","paid","simulate",1128,44,1172,"sent",false,1,0.000147,1037],["3000000000000003","mercadolibre","paid","simulate",1307,43,1349,"sent",false,1,0.000146,1205],["3000000000000005","mercadolibre","paid","simulate",1002,40,1042,"sent",false,1,0.000146,931],["3000000000000009","mercadolibre","paid","simulate",1059,38,1097,"sent",false,1,0.000147,989],["3000000000000011","mercadolibre","paid","simulate",1189,51,1240,"sent",false,1,0.000148,1110],["3000000000000015","mercadolibre","paid","simulate",1036,45,1081,"sent",false,1,0.000148,962],["3000000000000017","mercadolibre","paid","simulate",1031,37,1068,"sent",false,1,0.000148,964],["3000000000000019","mercadolibre","paid","simulate",975,35,1010,"sent",false,1,0.000147,908],["3000000000000021","mercadolibre","paid","simulate",977,38,1015,"sent",false,1,0.000141,909],["3000000000000023","mercadolibre","paid","simulate",1029,36,1065,"sent",false,1,0.000149,953],["3000000000000025","mercadolibre","paid","simulate",1344,43,1387,"sent",false,1,0.000147,1264],["3000000000000027","mercadolibre","paid","simulate",1049,50,1100,"sent",false,1,0.000148,980],["3000000000000029","mercadolibre","paid","simulate",1032,37,1069,"sent",false,1,0.000145,952],["3000000000000031","mercadolibre","paid","simulate",1025,38,1063,"sent",false,1,0.000145,958],["3000000000000033","mercadolibre","paid","simulate",950,36,985,"sent",false,1,0.000147,880],["3000000000000035","mercadolibre","paid","simulate",948,35,983,"sent",false,1,0.000146,874],["3000000000000037","mercadolibre","paid","simulate",1017,41,1058,"sent",false,1,0.000143,940],["3000000000000039","mercadolibre","paid","simulate",952,38,991,"sent",false,1,0.000145,886],["3000000000000041","mercadolibre","paid","simulate",1185,37,1222,"sent",false,1,0.000146,1114],["3000000000000042","mercadolibre","pending_payment","simulate",1047,34,1082,"sent",false,1,0.000153,977],["3000000000000045","mercadolibre","paid","simulate",950,42,992,"sent",false,1,0.000146,887],["3000000000000047","mercadolibre","paid","simulate",992,35,1027,"sent",false,1,0.000148,925],["3000000000000049","mercadolibre","paid","simulate",1031,32,1064,"sent",false,1,0.000144,957],["3000000000000051","mercadolibre","paid","simulate",1097,39,1136,"sent",false,1,0.000146,1033],["3000000000000053","mercadolibre","paid","simulate",998,37,1036,"sent",false,1,0.000147,927],["3000000000000055","mercadolibre","shipped","simulate",1047,44,1092,"sent",false,1,0.000148,975],["3000000000000057","mercadolibre","shipped","simulate",1066,35,1101,"sent",false,1,0.000145,996],["3000000000000059","mercadolibre","shipped","simulate",1024,45,1069,"sent",false,1,0.000145,954],["3000000000000061","mercadolibre","shipped","simulate",1036,38,1073,"sent",false,1,0.000145,947],["3000000000000063","mercadolibre","shipped","simulate",1039,52,1091,"sent",false,1,0.000147,973],["3000000000000065","mercadolibre","shipped","simulate",1176,40,1216,"sent",false,1,0.000148,1109],["3000000000000067","mercadolibre","shipped","simulate",959,49,1008,"sent",false,1,0.000145,890],["3000000000000069","mercadolibre","shipped","simulate",999,34,1034,"sent",false,1,0.000148,933],["3000000000000071","mercadolibre","shipped","simulate",1000,62,1062,"sent",false,1,0.000147,928],["3000000000000073","mercadolibre","shipped","simulate",1190,39,1229,"sent",false,1,0.000145,1102],["3000000000000075","mercadolibre","shipped","simulate",1035,45,1080,"sent",false,1,0.000145,964],["3000000000000077","mercadolibre","shipped","simulate",965,38,1003,"sent",false,1,0.000145,901],["3000000000000079","mercadolibre","shipped","simulate",997,42,1039,"sent",false,1,0.000148,921],["3000000000000081","mercadolibre","shipped","simulate",1068,34,1102,"sent",false,1,0.000149,1004],["3000000000000083","mercadolibre","shipped","simulate",1067,34,1101,"sent",false,1,0.000148,1002],["3000000000000085","mercadolibre","shipped","simulate",1032,39,1071,"sent",false,1,0.000148,959],["3000000000000087","mercadolibre","shipped","simulate",974,36,1010,"sent",false,1,0.000147,892],["3000000000000089","mercadolibre","shipped","simulate",1023,32,1055,"sent",false,1,0.000147,960],["3000000000000091","mercadolibre","delivered","simulate",1060,37,1097,"sent",false,1,0.000151,990],["3000000000000093","mercadolibre","delivered","simulate",1055,39,1094,"sent",false,1,0.000152,987],["3000000000000095","mercadolibre","delivered","simulate",1010,34,1044,"sent",false,1,0.000151,921],["3000000000000097","mercadolibre","delivered","simulate",1046,42,1088,"sent",false,1,0.000153,979],["3000000000000099","mercadolibre","delivered","simulate",1004,35,1039,"sent",false,1,0.000154,934],["3000000000000101","mercadolibre","delivered","simulate",1267,48,1315,"sent",false,1,0.000151,1199],["3000000000000103","mercadolibre","delivered","simulate",1185,34,1219,"sent",false,1,0.000154,1118],["3000000000000105","mercadolibre","delivered","simulate",956,52,1008,"sent",false,1,0.000144,890],["3000000000000107","mercadolibre","delivered","simulate",1137,32,1170,"sent",false,1,0.000152,1065],["3000000000000109","mercadolibre","delivered","simulate",1241,48,1290,"sent",false,1,0.000154,1173],["3000000000000111","mercadolibre","delivered","simulate",1078,35,1114,"sent",false,1,0.000154,1011],["3000000000000113","mercadolibre","delivered","simulate",1116,41,1157,"sent",false,1,0.000154,1047],["3000000000000115","mercadolibre","pending_payment","simulate",1128,33,1162,"sent",false,1,0.000154,1062],["3000000000000117","mercadolibre","pending_payment","simulate",1118,38,1156,"sent",false,1,0.000158,1048],["3000000000000119","mercadolibre","pending_payment","simulate",1116,34,1150,"sent",false,1,0.000158,1050],["3000000000000121","mercadolibre","pending_payment","simulate",1103,35,1138,"sent",false,1,0.000153,1029],["3000000000000123","mercadolibre","pending_payment","simulate",1174,34,1207,"sent",false,1,0.000158,1106],["3000000000000125","mercadolibre","pending_payment","simulate",1115,35,1150,"sent",false,1,0.000154,1042],["3000000000000127","mercadolibre","cancelled","simulate",1052,37,1089,"sent",false,1,0.000157,956],["3000000000000129","mercadolibre","cancelled","simulate",1098,37,1136,"sent",false,1,0.000154,1026],["3000000000000131","mercadolibre","cancelled","simulate",1178,46,1223,"sent",false,1,0.000157,1108],["3000000000000133","mercadolibre","cancelled","simulate",1148,35,1182,"sent",false,1,0.000154,1080],["3000000000000135","mercadolibre","cancelled","simulate",1069,50,1119,"sent",false,1,0.000154,1003],["3000000000000137","mercadolibre","cancelled","simulate",1105,35,1140,"sent",false,1,0.000148,1034],["3000000000000139","mercadolibre","refunded","simulate",1072,47,1118,"sent",false,1,0.000149,997],["3000000000000141","mercadolibre","refunded","live",null,null,null,null,null,null,null,null],["3000000000000143","mercadolibre","refunded","live",null,null,null,null,null,null,null,null],["3000000000000145","mercadolibre","error","live",null,null,null,null,null,null,null,null],["3000000000000147","mercadolibre","error","live",null,null,null,null,null,null,null,null],["3000000000000149","mercadolibre","error","live",null,null,null,null,null,null,null,null],["55","woocommerce","paid","live",1381,1588,2968,"sent",false,1,0.000147,1255],["56","woocommerce","pending_payment","live",1339,1444,2783,"sent",false,1,0.000147,1217],["57","woocommerce","pending_payment","live",1248,1294,2542,"sent",false,1,0.000145,1123],["58","woocommerce","paid","live",1814,1513,3327,"sent",false,1,0.000145,1691],["59","woocommerce","paid","live",1117,1406,2522,"sent",false,1,0.000144,1002],["60","woocommerce","paid","live",1057,1211,2268,"sent",false,1,0.000144,951],["61","woocommerce","delivered","live",1398,1712,3110,"sent",false,1,0.000146,1281],["62","woocommerce","paid","live",1054,1405,2460,"sent",false,1,0.000144,942],["63","woocommerce","paid","live",1094,1648,2742,"sent",false,1,0.000144,990],["64","woocommerce","paid","live",1169,1370,2539,"sent",false,1,0.000147,1062],["65","woocommerce","paid","live",1188,1493,2681,"sent",false,1,0.000144,1096],["66","woocommerce","paid","live",1454,948,2402,"sent",false,1,0.000144,1362],["67","woocommerce","paid","live",1033,1359,2392,"sent",false,1,0.000146,939],["68","woocommerce","cancelled","live",1209,920,2130,"sent",false,1,0.000147,1101],["69","woocommerce","delivered","live",1249,1286,2535,"sent",false,1,0.000148,1153],["70","woocommerce","delivered","live",1513,1606,3119,"sent",true,0,0,0],["71","woocommerce","refunded","live",1348,1440,2787,"sent",false,1,0.000141,1246],["72","woocommerce","paid","live",1186,1240,2426,"sent",false,1,0.000144,1073],["73","woocommerce","paid","live",1279,1277,2556,"sent",false,1,0.000145,1182],["74","woocommerce","cancelled","live",1806,1393,3199,"sent",false,1,0.000147,1718],["75","woocommerce","cancelled","live",1085,1415,2500,"sent",false,1,0.000146,991],["76","woocommerce","delivered","live",1434,1412,2846,"sent",false,1,0.000147,1339],["77","woocommerce","paid","live",1066,1318,2383,"sent",false,1,0.000144,971],["78","woocommerce","delivered","live",1659,1473,3133,"sent",false,1,0.000148,1572],["79","woocommerce","delivered","live",1184,1505,2690,"sent",false,1,0.000146,1083],["80","woocommerce","pending_payment","live",1806,862,2668,"sent",false,1,0.000147,1711],["81","woocommerce","paid","live",1100,1321,2421,"sent",false,1,0.000144,1005],["82","woocommerce","paid","live",1357,1412,2769,"sent",false,1,0.000145,1268],["83","woocommerce","paid","live",1151,1396,2547,"sent",false,1,0.000144,1032],["84","woocommerce","refunded","live",1189,856,2045,"sent",false,1,0.000149,1092],["85","woocommerce","delivered","live",1197,1365,2562,"sent",false,1,0.000146,1109],["86","woocommerce","delivered","live",1728,1564,3292,"sent",false,1,0.000148,1629],["87","woocommerce","cancelled","live",1044,1433,2477,"sent",false,1,0.000146,959],["88","woocommerce","paid","live",1053,1351,2403,"sent",false,1,0.000144,956],["89","woocommerce","delivered","live",1055,1324,2380,"sent",false,1,0.000148,965],["90","woocommerce","paid","live",1317,1473,2790,"sent",false,1,0.000144,1216],["91","woocommerce","paid","live",1141,1514,2656,"sent",false,1,0.000147,1053],["92","woocommerce","delivered","live",1151,1275,2426,"sent",false,1,0.000148,1064],["93","woocommerce","pending_payment","live",1177,1382,2559,"sent",false,1,0.000145,1080],["94","woocommerce","paid","live",1670,2251,3920,"sent",false,1,0.000147,1573],["95","woocommerce","paid","live",1135,1496,2632,"sent",false,1,0.000144,1049],["96","woocommerce","delivered","live",1059,1246,2306,"sent",false,1,0.000148,973],["97","woocommerce","pending_payment","live",1273,1329,2603,"sent",false,1,0.000144,1175],["98","woocommerce","delivered","live",1377,1431,2808,"sent",false,1,0.000148,1286],["99","woocommerce","cancelled","live",1309,1386,2696,"sent",false,1,0.000146,1212],["100","woocommerce","pending_payment","live",1039,1253,2292,"sent",false,1,0.000144,932],["101","woocommerce","paid","live",1069,1360,2429,"sent",false,1,0.000144,978],["102","woocommerce","cancelled","live",1909,1356,3265,"sent",false,1,0.000146,1824],["103","woocommerce","refunded","live",1511,1145,2655,"sent",false,1,0.000148,1425],["104","woocommerce","cancelled","live",1151,1489,2640,"sent",false,1,0.000147,1059],["105","woocommerce","pending_payment","live",1215,1621,2836,"sent",false,1,0.000145,1125],["106","woocommerce","pending_payment","live",1295,1055,2350,"sent",false,1,0.000144,1207],["107","woocommerce","cancelled","live",1256,1336,2592,"sent",false,1,0.000147,1169],["108","woocommerce","paid","live",1129,1982,3111,"sent",false,1,0.000144,1036],["109","woocommerce","refunded","live",1308,1534,2842,"sent",false,1,0.000148,1220],["110","woocommerce","paid","live",1081,1320,2400,"sent",false,1,0.000144,993],["111","woocommerce","delivered","live",1458,1442,2900,"sent",false,1,0.000148,1366],["112","woocommerce","delivered","live",1205,1291,2496,"sent",false,1,0.000146,1114],["113","woocommerce","paid","live",1085,1340,2425,"sent",false,1,0.000144,999],["114","woocommerce","cancelled","live",1067,1378,2445,"sent",false,1,0.000146,978],["115","woocommerce","paid","live",1763,1442,3205,"sent",false,1,0.000147,1673],["116","woocommerce","paid","live",926,1407,2333,"sent",false,1,0.000138,844],["117","woocommerce","refunded","live",1155,1298,2454,"sent",false,1,0.000149,1071],["118","woocommerce","paid","live",1124,1512,2636,"sent",false,1,0.000147,1040],["119","woocommerce","delivered","live",1385,1446,2831,"sent",false,1,0.000148,1298],["120","woocommerce","pending_payment","live",1067,1276,2343,"sent",false,1,0.000145,980],["121","woocommerce","paid","live",1031,1276,2307,"sent",false,1,0.000147,944],["122","woocommerce","pending_payment","live",1184,1001,2185,"sent",false,1,0.000147,1092],["123","woocommerce","cancelled","live",1312,1425,2737,"sent",false,1,0.000146,1215],["124","woocommerce","paid","live",1222,1279,2501,"sent",false,1,0.000147,1133],["125","woocommerce","delivered","live",1120,1354,2474,"sent",false,1,0.000148,1022],["126","woocommerce","delivered","live",1257,1361,2618,"sent",false,1,0.000148,1172],["127","woocommerce","delivered","live",1076,1415,2492,"sent",false,1,0.000146,992],["128","woocommerce","delivered","live",1356,888,2244,"sent",false,1,0.000148,1266],["129","woocommerce","delivered","live",1234,1317,2551,"sent",false,1,0.000146,1141]]}
 </script>
 <script>
+// =============================================================================
+// Tablero operativo · sin dependencias, sin build.
+// Lee dashboard-data.json por fetch; si no está (por ejemplo al abrir el
+// archivo con file://), cae a los datos embebidos, que el propio exportador
+// mantiene sincronizados con `--embed`.
+// =============================================================================
 const tip = document.getElementById('tip');
 function showTip(e, html) {
   tip.innerHTML = html; tip.style.opacity = '1';
@@ -285,30 +243,323 @@ function showTip(e, html) {
 const hideTip = () => { tip.style.opacity = '0'; };
 const NS = 'http://www.w3.org/2000/svg';
 const el = (n, a = {}) => { const x = document.createElementNS(NS, n); for (const k in a) x.setAttribute(k, a[k]); return x; };
-const fmt = n => n.toLocaleString('es-AR');
-const LABEL = { paid:'Pagado', shipped:'Enviado', delivered:'Entregado', pending_payment:'Pago pendiente',
-                cancelled:'Cancelado', refunded:'Reembolsado', error:'Error (degradado)' };
+const fmt = n => (n == null ? '—' : Number(n).toLocaleString('es-AR'));
+// El documento está escrito en español y reporta «USD 0,020929». La figura debe
+// decir lo mismo: coma decimal como el resto del tablero, y la precisión que el
+// Capítulo 5 publica, no una versión truncada que obligue a explicar por qué
+// los dígitos no coinciden con la tabla.
+const usd = n => (n == null ? '—'
+  : 'USD ' + Number(n).toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 6 }));
+// Todo decimal del tablero pasa por acá, por el mismo motivo: interpolar el
+// número crudo imprimía «97.9 %» con punto en unas tarjetas mientras fmt()
+// daba «1.148» con separador es-AR en otras, dentro de la misma figura.
+const dec = (n, d = 1) => (n == null ? '—'
+  : Number(n).toLocaleString('es-AR', { minimumFractionDigits: d, maximumFractionDigits: d }));
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]));
 
-function kpis(d) {
-  const k = d.kpi, box = document.getElementById('kpis');
-  const items = [
-    ['Confirmación al emisor', k.ack_max_ms + ' ms', 'máximo sobre ' + fmt(k.persistidos) + ' pedidos · límite de plataforma: 500 ms', true],
-    ['Normalización al canónico', '100 %', fmt(k.persistidos) + ' de ' + fmt(k.persistidos) + ' pedidos únicos', true],
-    ['Mediana de extremo a extremo', fmt(d.latencia.mediana) + ' ms', 'p90 ' + fmt(d.latencia.p90) + ' ms · p95 ' + fmt(d.latencia.p95) + ' ms', false],
-    ['Generación cognitiva', fmt(k.mensajes) + ' mensajes', k.fallback + ' degradaciones a plantilla', true],
-    ['Validador de 7 reglas', '100 %', fmt(k.validador_primer_intento) + ' aprobados en primer intento', true],
-    ['Costo del modelo', 'USD ' + k.costo_total_usd.toFixed(4), 'total de la corrida · USD ' + (k.costo_total_usd / k.mensajes).toFixed(6) + ' por mensaje', false],
-  ];
-  box.innerHTML = items.map(([l, v, s, ok]) =>
-    `<div class="kpi${ok ? ' ok' : ''}"><div class="lab">${l}</div><div class="val">${v}</div><div class="sub">${s}</div></div>`).join('');
+const LABEL = { paid:'Pagado', shipped:'Enviado', delivered:'Entregado', pending_payment:'Pago pendiente',
+                cancelled:'Cancelado', refunded:'Reembolsado', error:'Error (rama con falla)' };
+const MODO = { live: 'Despacho real contra la API de mensajería', simulate: 'Despacho simulado' };
+const TASA = {
+  admision_estructural: 'Admisión estructural',
+  condicional_cabecera: 'Condicional · sólo cabecera del pedido',
+  condicional_con_items: 'Condicional · exige persistencia de ítems',
+};
+
+// =============================================================================
+// Detalle por pedido
+// -----------------------------------------------------------------------------
+// Cada agregado del tablero se puede abrir para ver los pedidos que lo
+// producen. Es lo que vuelve verificable una cifra: quien lee «1 degradación a
+// plantilla» ve cuál pedido fue y con qué regla, sin abrir un CSV.
+// =============================================================================
+let PEDIDOS = [];
+
+function hidratarPedidos(d) {
+  const cols = d.columnas || [];
+  PEDIDOS = (d.pedidos || []).map(fila => Object.fromEntries(cols.map((c, i) => [c, fila[i]])));
 }
 
+const ms = v => (v == null ? '—' : fmt(Math.round(v)) + ' ms');
+const CANAL = { mercadolibre: 'Mercado Libre', woocommerce: 'WooCommerce' };
+
+function abrirDetalle(titulo, sub, filtro) {
+  const filas = PEDIDOS.filter(filtro);
+  const sec = document.getElementById('drill');
+  document.getElementById('drill-titulo').textContent = titulo;
+  document.getElementById('drill-sub').textContent =
+    `${fmt(filas.length)} pedido${filas.length === 1 ? '' : 's'}${sub ? ' · ' + sub : ''}`;
+  document.querySelector('#drill-tabla tbody').innerHTML = filas.map(p => {
+    const val = p.message_status == null ? '—'
+      : (p.is_fallback ? 'degradó a plantilla' : 'pasada ' + (p.validator_passes ?? '—'));
+    return `<tr>
+      <td>#${esc(p.external_id)}</td>
+      <td>${esc(CANAL[p.channel] || p.channel || '—')}</td>
+      <td>${esc(LABEL[p.status] || p.status || '—')}</td>
+      <td>${p.dispatch_mode ? esc(MODO_CORTO[p.dispatch_mode] || p.dispatch_mode) : '—'}</td>
+      <td>${ms(p.interno_ms)}</td>
+      <td>${ms(p.dispatch_ms)}</td>
+      <td>${ms(p.e2e_ms)}</td>
+      <td>${p.message_status ? esc(p.message_status) : 'sin notificación'}</td>
+      <td${p.is_fallback ? ' class="fb"' : ''}>${esc(val)}</td>
+      <td>${p.cost_usd == null ? '—' : usd(p.cost_usd)}</td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="10">Sin pedidos para este corte.</td></tr>`;
+  sec.hidden = false;
+  sec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+const MODO_CORTO = { live: 'real', simulate: 'simulado' };
+
+/** Vuelve un nodo operable con mouse y con teclado, y le da rol de botón. */
+function drillable(nodo, titulo, sub, filtro) {
+  if (!PEDIDOS.length) return nodo;
+  nodo.classList.add('drillable');
+  nodo.setAttribute('role', 'button');
+  nodo.setAttribute('tabindex', '0');
+  nodo.setAttribute('aria-label', `${titulo} — ver pedidos`);
+  const abrir = () => abrirDetalle(titulo, sub, filtro);
+  nodo.addEventListener('click', abrir);
+  nodo.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); abrir(); }
+  });
+  return nodo;
+}
+
+document.getElementById('drill-cerrar').addEventListener('click', () => {
+  document.getElementById('drill').hidden = true;
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('drill').hidden = true;
+});
+
+// --- Indicadores -------------------------------------------------------------
+function kpis(d) {
+  const k = d.kpi, a = d.ack || {}, box = document.getElementById('kpis');
+  // El ámbar significa una sola cosa: acá hay algo que mirar. Atarlo a
+  // cualquier valor distinto de cero pintaba de advertencia los dos resultados
+  // principales —los 148 pedidos persistidos y los 143 mensajes generados— y
+  // dejaba en verde la tarjeta del validador, que describe el mismo hecho que
+  // volvía ámbar a la de generación. Sólo los pedidos sin notificación lo
+  // ameritan: son los únicos donde el cliente no recibió nada.
+  //
+  // La degradación a plantilla NO es una anomalía: es la degradación elegante
+  // del §4.3.1 operando, y la figura no debe presentarla como una falla.
+  const atencion = k.sin_mensaje ? 'warn' : 'ok';
+  // La confirmación al emisor NO se mide por pedido: el campo del esquema es
+  // nulo por construcción (§5.2). Se informa la medición externa y se dice
+  // cuántas observaciones la respaldan, en lugar de mostrar un cero.
+  const ackOk = a.max_ms != null && a.umbral_ms != null && a.max_ms < a.umbral_ms;
+  const items = [
+    ['Confirmación al emisor',
+      a.mediana_ms != null ? fmt(a.mediana_ms) + ' ms' : 'no medido',
+      a.mediana_ms != null
+        ? 'mediana de ' + fmt(a.n) + ' mediciones externas · máx ' + fmt(a.max_ms) + ' ms · umbral ' + fmt(a.umbral_ms) + ' ms'
+        : 'el campo por pedido es nulo por construcción',
+      ackOk ? 'ok' : '', null],
+    ['Pedidos persistidos', fmt(k.persistidos),
+      fmt(k.con_mensaje) + ' con mensaje · ' + fmt(k.sin_mensaje) + ' sin notificación',
+      'ok',
+      ['Pedidos persistidos', 'todos los pedidos que superaron la validación estructural', () => true]],
+    ['Sin notificación', fmt(k.sin_mensaje),
+      'pedidos persistidos que no generaron mensaje', atencion,
+      ['Pedidos sin notificación', 'quedaron registrados y auditados, pero el cliente no recibió nada',
+        p => p.message_status == null]],
+    ['Generación cognitiva', fmt(k.con_mensaje) + ' mensajes',
+      k.fallback
+        ? fmt(k.fallback) + (k.fallback === 1 ? ' degradación' : ' degradaciones') + ' a plantilla'
+        : 'sin degradaciones a plantilla',
+      'ok',
+      ['Mensajes generados', 'pedidos que alcanzaron la etapa de generación', p => p.message_status != null]],
+    ['Validador de 7 reglas',
+      k.con_mensaje ? dec(k.aprobados_primer_intento / k.con_mensaje * 100) + ' %' : '—',
+      fmt(k.aprobados_primer_intento) + ' de ' + fmt(k.con_mensaje) + ' en primer intento', 'ok',
+      ['Rechazados por el validador', 'degradaron a la plantilla de respaldo', p => p.is_fallback === true]],
+    ['Costo del modelo', usd(k.costo_total_usd),
+      k.costo_por_mensaje_usd != null ? usd(k.costo_por_mensaje_usd) + ' por mensaje' : '', '', null],
+  ];
+  box.replaceChildren();
+  for (const [l, v, s, cls, drill] of items) {
+    const div = document.createElement('div');
+    div.className = 'kpi' + (cls ? ' ' + cls : '');
+    div.innerHTML = `<div class="lab">${esc(l)}</div><div class="val">${v}</div><div class="sub">${esc(s)}</div>`;
+    if (drill) drillable(div, drill[0], drill[1], drill[2]);
+    box.append(div);
+  }
+  if (PEDIDOS.length) {
+    const pista = document.createElement('p');
+    pista.className = 'pista';
+    pista.style.gridColumn = '1 / -1';
+    pista.textContent = 'Los indicadores, las barras y las tasas se pueden abrir para ver los pedidos que los producen.';
+    box.append(pista);
+  }
+}
+
+// --- Confirmación al emisor contra el umbral ---------------------------------
+// Forma: una escala con el rango observado y el umbral externo. El punto es la
+// distancia al límite, no la distribución, así que una escala con marcas lo
+// dice mejor que un histograma.
+function chartAck(d) {
+  const a = d.ack || {};
+  const sub = document.getElementById('ack-sub'), nota = document.getElementById('ack-nota');
+  const svg = document.getElementById('c-ack');
+  svg.replaceChildren();
+  if (a.mediana_ms == null) {
+    sub.textContent = 'Sin medición disponible.';
+    nota.textContent = '';
+    return;
+  }
+  sub.innerHTML = 'La plataforma de origen exige responder por debajo de los '
+    + fmt(a.umbral_ms) + ' ms. El campo <code>ack_at</code> del esquema no sirve para medirlo: '
+    + 'la misma sentencia de inserción asigna recepción y confirmación, de modo que su diferencia '
+    + 'es nula por construcción. Lo que se grafica es la medición externa al endpoint.';
+
+  const W = 820, H = 118, L = 18, R = 18, ejeY = 64;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('width', W); svg.setAttribute('height', H);
+  const max = Math.max(a.umbral_ms * 1.12, a.max_ms * 1.2);
+  const X = v => L + (v / max) * (W - L - R);
+
+  svg.append(el('line', { x1: L, x2: W - R, y1: ejeY, y2: ejeY, stroke: 'var(--grid)', 'stroke-width': 2 }));
+
+  // Rango observado. Las tres marcas del rango caen muy juntas contra una escala
+  // que llega al umbral, de modo que rotularlas por separado las superpone: se
+  // marca el rango como banda, se rotula sólo la mediana sobre el eje, y los
+  // extremos se informan como texto al pie y en el tooltip.
+  svg.append(el('rect', { x: X(a.min_ms), y: ejeY - 9, width: Math.max(X(a.max_ms) - X(a.min_ms), 2),
+                          height: 18, fill: 'var(--s1)', opacity: .22, rx: 3 }));
+  for (const v of [a.min_ms, a.max_ms]) {
+    svg.append(el('line', { x1: X(v), x2: X(v), y1: ejeY - 9, y2: ejeY + 9,
+                            stroke: 'var(--s1)', 'stroke-width': 1.5, opacity: .75 }));
+  }
+  svg.append(el('line', { x1: X(a.mediana_ms), x2: X(a.mediana_ms), y1: ejeY - 13, y2: ejeY + 13,
+                          stroke: 'var(--s1)', 'stroke-width': 3 }));
+  const tm = el('text', { x: X(a.mediana_ms), y: ejeY - 19, fill: 'var(--text-2)', 'font-size': 11.5, 'text-anchor': 'start' });
+  tm.textContent = `mediana ${fmt(a.mediana_ms)} ms`; svg.append(tm);
+
+  // Umbral: línea punteada, que es el idioma de una referencia y no de una grilla
+  svg.append(el('line', { x1: X(a.umbral_ms), x2: X(a.umbral_ms), y1: ejeY - 30, y2: ejeY + 22,
+                          stroke: 'var(--bad)', 'stroke-width': 2, 'stroke-dasharray': '5 4' }));
+  const tu = el('text', { x: X(a.umbral_ms) - 6, y: ejeY - 34, fill: 'var(--bad)', 'font-size': 11.5, 'text-anchor': 'end' });
+  tu.textContent = `umbral de la plataforma ${fmt(a.umbral_ms)} ms`; svg.append(tu);
+
+  // Extremos al pie, alineados bajo la banda: no compiten por el mismo espacio
+  const tr = el('text', { x: X(a.min_ms), y: ejeY + 26, fill: 'var(--text-3)', 'font-size': 11, 'text-anchor': 'start' });
+  tr.textContent = `rango observado ${fmt(a.min_ms)}–${fmt(a.max_ms)} ms · ${fmt(a.n)} mediciones`;
+  svg.append(tr);
+  const t0 = el('text', { x: L, y: ejeY + 26, fill: 'var(--text-3)', 'font-size': 11, 'text-anchor': 'start' });
+  t0.textContent = '0'; if (X(a.min_ms) - L > 16) svg.append(t0);
+
+  const hit = el('rect', { x: L, y: ejeY - 30, width: W - L - R, height: 56, fill: 'transparent' });
+  hit.addEventListener('mousemove', e => showTip(e,
+    `<b>Confirmación al emisor</b><br>mediana ${fmt(a.mediana_ms)} ms · p95 ${fmt(a.p95_ms)} ms<br>` +
+    `rango ${fmt(a.min_ms)}–${fmt(a.max_ms)} ms sobre ${fmt(a.n)} solicitudes`));
+  hit.addEventListener('mouseleave', hideTip);
+  svg.append(hit);
+
+  const margen = dec(a.umbral_ms / a.max_ms);
+  nota.innerHTML = `<strong>Alcance de la medición.</strong> ${esc(a.instrumento)}. `
+    + `${esc(a.nota)}. El peor caso registrado deja un margen de ${margen}× contra el umbral.`;
+}
+
+// --- Las tasas de normalización con su intervalo ------------------------------
+// Forma: punto con intervalo. Es la representación que corresponde a una
+// proporción con incertidumbre; una barra sugeriría una precisión que el
+// intervalo desmiente.
+function chartH2(d) {
+  const h2 = d.h2 || {}, umbral = h2.umbral_h2 ?? 95;
+  const filas = Object.entries(h2).filter(([k]) => k !== 'umbral_h2');
+  const svg = document.getElementById('c-h2'); svg.replaceChildren();
+  const tb = document.querySelector('#t-h2 tbody');
+  if (!filas.length) { tb.innerHTML = ''; document.getElementById('h2-nota').textContent = ''; return; }
+
+  const W = 880, rowH = 46, T = 26, B = 34, L = 320, R = 58;
+  const H = T + filas.length * rowH + B;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('width', W); svg.setAttribute('height', H);
+
+  const lo = Math.min(90, ...filas.map(([, v]) => v.low ?? 100)) - 1;
+  const X = p => L + ((p - lo) / (100 - lo)) * (W - L - R);
+
+  for (let p = Math.ceil(lo / 2) * 2; p <= 100; p += 2) {
+    svg.append(el('line', { x1: X(p), x2: X(p), y1: T - 6, y2: T + filas.length * rowH, stroke: 'var(--grid)', 'stroke-width': 1 }));
+    if (p % 4 === 0) {
+      const t = el('text', { x: X(p), y: H - 14, fill: 'var(--text-3)', 'font-size': 11, 'text-anchor': 'middle' });
+      t.textContent = p + ' %'; svg.append(t);
+    }
+  }
+  // Umbral de la hipótesis
+  svg.append(el('line', { x1: X(umbral), x2: X(umbral), y1: T - 14, y2: T + filas.length * rowH,
+                          stroke: 'var(--bad)', 'stroke-width': 2, 'stroke-dasharray': '5 4' }));
+  const tu = el('text', { x: X(umbral), y: T - 18, fill: 'var(--bad)', 'font-size': 11.5, 'text-anchor': 'middle' });
+  tu.textContent = `umbral H2 · ${umbral} %`; svg.append(tu);
+
+  filas.forEach(([clave, v], i) => {
+    const y = T + i * rowH + rowH / 2;
+    const valida = v.low > umbral;
+    const color = valida ? 'var(--good)' : 'var(--warn)';
+
+    const lab = el('text', { x: L - 12, y: y - 2, fill: 'var(--text-2)', 'font-size': 12.5, 'text-anchor': 'end' });
+    lab.textContent = TASA[clave] || clave; svg.append(lab);
+    const sub = el('text', { x: L - 12, y: y + 13, fill: 'var(--text-3)', 'font-size': 11, 'text-anchor': 'end' });
+    sub.textContent = `${fmt(v.exitos)} / ${fmt(v.total)}${v.procedencia ? ' · ' + v.procedencia : ''}`; svg.append(sub);
+
+    svg.append(el('line', { x1: X(v.low), x2: X(Math.min(v.high, 100)), y1: y, y2: y, stroke: color, 'stroke-width': 3, 'stroke-linecap': 'round' }));
+    for (const b of [v.low, Math.min(v.high, 100)]) {
+      svg.append(el('line', { x1: X(b), x2: X(b), y1: y - 6, y2: y + 6, stroke: color, 'stroke-width': 2 }));
+    }
+    svg.append(el('circle', { cx: X(v.pct), cy: y, r: 6, fill: color, stroke: 'var(--surface-1)', 'stroke-width': 2 }));
+
+    const val = el('text', { x: W - R + 8, y: y + 4, fill: 'var(--text-2)', 'font-size': 12.5 });
+    val.textContent = v.pct + ' %'; svg.append(val);
+
+    const hit = el('rect', { x: L, y: y - rowH / 2, width: W - L - R, height: rowH, fill: 'transparent' });
+    hit.addEventListener('mousemove', e => showTip(e,
+      `<b>${esc(TASA[clave] || clave)}</b><br>${fmt(v.exitos)} de ${fmt(v.total)} = ${dec(v.pct)} %<br>` +
+      `IC 95 % de Wilson [${dec(v.low)} ; ${dec(v.high)}]<br>` +
+      (valida ? 'el límite inferior supera el umbral' : 'el intervalo contiene el umbral') +
+      `<br><span style="color:var(--text-3)">${esc(v.denominador)}</span>` +
+      (PEDIDOS.length ? `<br><span style="color:var(--text-3)">clic para ver los pedidos</span>` : '')));
+    hit.addEventListener('mouseleave', hideTip);
+    // Se abre lo que explica la cifra: cuando la tasa no llega al cien por
+    // ciento, lo informativo son los pedidos que faltan, no los que entran.
+    const faltan = v.total - v.exitos;
+    if (clave === 'condicional_con_items' && faltan) {
+      drillable(hit, 'Pedidos cuya persistencia de ítems no se completó',
+                'son los que separan una tasa de la otra', p => p.status === 'error');
+    } else if (clave === 'admision_estructural') {
+      drillable(hit, 'Pedidos admitidos por la validación estructural',
+                `${fmt(faltan)} webhook(s) quedaron fuera por venir mal formados a propósito, y no figuran acá porque no produjeron pedido`,
+                () => true);
+    } else {
+      drillable(hit, TASA[clave] || clave, esc(v.denominador), () => true);
+    }
+    svg.append(hit);
+  });
+
+  tb.innerHTML = filas.map(([clave, v]) => {
+    const valida = v.low > umbral;
+    return `<tr><td>${esc(TASA[clave] || clave)}</td><td>${fmt(v.exitos)}</td><td>${fmt(v.total)}</td>` +
+           `<td>${dec(v.pct)} %</td><td>[${dec(v.low)} ; ${dec(v.high)}]</td>` +
+           `<td class="veredicto ${valida ? 'si' : 'no'}">${valida ? 'valida' : 'compatible'}</td></tr>`;
+  }).join('');
+
+  const conItems = h2.condicional_con_items;
+  document.getElementById('h2-nota').innerHTML = conItems
+    ? `<strong>Por qué importa el denominador.</strong> Contando sólo la cabecera del pedido la tasa es `
+      + `${h2.condicional_cabecera.pct} % y su intervalo supera el umbral. Exigiendo además que los ítems `
+      + `persistan es ${dec(conItems.pct)} %, y el intervalo [${dec(conItems.low)} ; ${dec(conItems.high)}] contiene al `
+      + `umbral del ${umbral} %: por la regla de decisión del §3.10 el resultado pasa de «validado» a `
+      + `«compatible con la hipótesis sin evidencia suficiente». <code>order_items</code> es una de las tres `
+      + `entidades de negocio del modelo canónico, de modo que la elección no es indiferente y corresponde declararla.`
+    : '';
+}
+
+// --- Estados -----------------------------------------------------------------
 function chartEstados(d) {
-  const rows = d.estados, svg = document.getElementById('c1');
+  const rows = d.estados || [], svg = document.getElementById('c1');
+  svg.replaceChildren();
+  if (!rows.length) return;
   const W = 820, rowH = 34, padT = 8, padB = 30, L = 132, R = 58;
   const H = padT + rows.length * rowH + padB;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('width', W); svg.setAttribute('height', H);
-  svg.replaceChildren();
   const max = Math.max(...rows.map(r => r.ml + r.wc));
   const plot = W - L - R, x = v => v / max * plot;
 
@@ -319,8 +570,13 @@ function chartEstados(d) {
   }
   rows.forEach((r, i) => {
     const y = padT + i * rowH, h = 17, yy = y + (rowH - h) / 2;
-    const lab = el('text', { x: L - 10, y: yy + h / 2 + 4, fill: 'var(--text-2)', 'font-size': 12.5, 'text-anchor': 'end' });
-    lab.textContent = LABEL[r.estado] || r.estado; svg.append(lab);
+    // Un estado ajeno al modelo canónico del §3.2 se grafica igual —descartarlo
+    // hacía que las barras no sumaran el total de pedidos— pero se marca, para
+    // que no se lea como un estado más del modelo.
+    const lab = el('text', { x: L - 10, y: yy + h / 2 + 4,
+      fill: r.fuera_del_modelo ? 'var(--warn)' : 'var(--text-2)',
+      'font-size': 12.5, 'text-anchor': 'end' });
+    lab.textContent = (LABEL[r.estado] || r.estado) + (r.fuera_del_modelo ? ' ⚠' : ''); svg.append(lab);
     const segs = [['ml', 'Mercado Libre', 'var(--s1)'], ['wc', 'WooCommerce', 'var(--s2)']];
     let acc = 0;
     segs.forEach(([key, name, color], si) => {
@@ -330,19 +586,60 @@ function chartEstados(d) {
         fill: color, rx: si === segs.length - 1 ? 4 : 0 });
       rect.addEventListener('mousemove', e => showTip(e, `<b>${LABEL[r.estado]}</b><br>${name}: ${v} pedidos`));
       rect.addEventListener('mouseleave', hideTip);
+      const canal = key === 'ml' ? 'mercadolibre' : 'woocommerce';
+      drillable(rect, `${LABEL[r.estado] || r.estado} · ${name}`, 'por estado canónico y canal de origen',
+                p => p.status === r.estado && p.channel === canal);
       svg.append(rect); acc += v;
     });
     const tot = el('text', { x: L + x(r.ml + r.wc) + 9, y: yy + h / 2 + 4, fill: 'var(--text-2)', 'font-size': 12.5 });
     tot.textContent = r.ml + r.wc; svg.append(tot);
   });
-  const tb = document.querySelector('#t1 tbody');
-  tb.innerHTML = rows.map(r => `<tr><td>${LABEL[r.estado]}</td><td>${r.ml}</td><td>${r.wc}</td><td>${r.ml + r.wc}</td></tr>`).join('');
+  document.querySelector('#t1 tbody').innerHTML =
+    rows.map(r => `<tr><td>${esc(LABEL[r.estado] || r.estado)}${r.fuera_del_modelo ? ' ⚠' : ''}</td>`
+      + `<td>${r.ml}</td><td>${r.wc}</td><td>${r.ml + r.wc}</td></tr>`).join('');
+
+  const t1 = document.getElementById('t1');
+  t1.parentNode.querySelectorAll('.nota-estados').forEach(n => n.remove());
+  const fuera = rows.filter(r => r.fuera_del_modelo);
+  if (fuera.length) {
+    const n = document.createElement('div');
+    n.className = 'nota alerta nota-estados';
+    n.innerHTML = `<strong>Estados ajenos al modelo canónico.</strong> `
+      + fuera.map(r => `<code>${esc(r.estado)}</code>`).join(', ')
+      + ` no pertenece${fuera.length === 1 ? '' : 'n'} a los siete estados del §3.2. `
+      + `Se grafica${fuera.length === 1 ? '' : 'n'} igual, porque descartarlo${fuera.length === 1 ? '' : 's'} `
+      + `haría que las barras no sumaran el total de pedidos. Revisar si es un estado nuevo del modelo `
+      + `o un valor crudo de la plataforma que el normalizador dejó pasar.`;
+    t1.parentNode.insertBefore(n, t1.nextSibling);
+  }
 }
 
+// --- Latencia, un panel por modo de despacho ---------------------------------
 function chartLatencia(d) {
-  const L0 = d.latencia, bins = L0.bins.filter(b => b.count > 0 || b.from < L0.p95 + 300);
-  const svg = document.getElementById('c2');
-  const W = 820, H = 288, L = 44, R = 16, T = 58, B = 42;
+  const cont = document.getElementById('lat-panels');
+  cont.replaceChildren();
+  const filas = [];
+  for (const modo of ['live', 'simulate']) {
+    const L0 = (d.latencia || {})[modo];
+    if (!L0) continue;
+    const sec = document.createElement('div');
+    sec.className = 'subcard';
+    sec.innerHTML = `<h3>${MODO[modo]}</h3>`
+      + `<p class="sub" style="margin-bottom:8px">mediana ${fmt(L0.mediana)} ms · p90 ${fmt(L0.p90)} ms · `
+      + `p95 ${fmt(L0.p95)} ms · ${fmt(L0.n)} pedidos</p>`
+      + `<div class="chart-scroll"><svg role="img" aria-label="Histograma de latencia, ${MODO[modo]}"></svg></div>`;
+    cont.append(sec);
+    dibujarHistograma(sec.querySelector('svg'), L0, modo);
+    for (const b of L0.bins.filter(b => b.count)) filas.push([MODO[modo], b]);
+  }
+  document.querySelector('#t2 tbody').innerHTML = filas
+    .map(([m, b]) => `<tr><td>${esc(m)}</td><td>${fmt(b.from)} – ${fmt(b.to)}</td><td>${b.count}</td></tr>`).join('');
+}
+
+function dibujarHistograma(svg, L0, modo) {
+  const bins = L0.bins.filter(b => b.count > 0);
+  if (!bins.length) return;
+  const W = 820, H = 250, L = 44, R = 16, T = 54, B = 42;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('width', W); svg.setAttribute('height', H);
   svg.replaceChildren();
   const pw = W - L - R, ph = H - T - B;
@@ -357,44 +654,230 @@ function chartLatencia(d) {
     t.textContent = c; svg.append(t);
   }
   bins.forEach(b => {
-    if (!b.count) return;
     const x0 = X(b.from), w = X(b.to) - x0 - 2, y = Y(b.count);
     const r = el('rect', { x: x0 + 1, y, width: Math.max(w, 1), height: T + ph - y, fill: 'var(--s1)', rx: 4 });
     r.addEventListener('mousemove', e => showTip(e, `<b>${fmt(b.from)}–${fmt(b.to)} ms</b><br>${b.count} pedidos`));
     r.addEventListener('mouseleave', hideTip);
+    drillable(r, `${fmt(b.from)}–${fmt(b.to)} ms`, MODO[modo],
+              p => p.dispatch_mode === modo && p.e2e_ms != null && p.e2e_ms >= b.from && p.e2e_ms < b.to);
     svg.append(r);
   });
   [['Mediana', L0.mediana, 0], ['p90', L0.p90, 1], ['p95', L0.p95, 2]].forEach(([name, v, i]) => {
-    const x = X(v), yTop = T + 4 + i * 17;
-    svg.append(el('line', { x1: x, x2: x, y1: yTop - 12, y2: T + ph, stroke: 'var(--text-1)',
+    if (v < lo || v > hi) return;
+    const x = X(v), yTop = T + 2 + i * 16;
+    svg.append(el('line', { x1: x, x2: x, y1: yTop - 11, y2: T + ph, stroke: 'var(--text-1)',
                             'stroke-width': i === 0 ? 2 : 1.5, 'stroke-dasharray': i === 0 ? '' : '4 3' }));
     const t = el('text', { x: x + 6, y: yTop, fill: 'var(--text-2)', 'font-size': 11.5 });
     t.textContent = `${name} ${fmt(v)} ms`; svg.append(t);
   });
-  for (let v = 1000; v <= hi; v += 250) {
+  const paso = (hi - lo) > 2000 ? 500 : 250;
+  for (let v = Math.ceil(lo / paso) * paso; v <= hi; v += paso) {
     const t = el('text', { x: X(v), y: H - 16, fill: 'var(--text-3)', 'font-size': 11, 'text-anchor': 'middle' });
     t.textContent = fmt(v); svg.append(t);
   }
   const ax = el('text', { x: L + pw / 2, y: H - 2, fill: 'var(--text-3)', 'font-size': 11.5, 'text-anchor': 'middle' });
   ax.textContent = 'milisegundos de extremo a extremo'; svg.append(ax);
-  document.querySelector('#t2 tbody').innerHTML =
-    bins.filter(b => b.count).map(b => `<tr><td>${fmt(b.from)} – ${fmt(b.to)}</td><td>${b.count}</td></tr>`).join('');
 }
 
+// --- Validador ---------------------------------------------------------------
+function validador(d) {
+  const v = d.validador || {};
+  document.getElementById('val-kpis').innerHTML = [
+    ['Evaluados', fmt(v.evaluados), 'mensajes que llegaron al validador', ''],
+    ['Aprobados en 1er intento', fmt(v.aprobados_primer_intento),
+      v.evaluados ? dec(v.aprobados_primer_intento / v.evaluados * 100) + ' % del total' : '', 'ok'],
+    ['Con segunda pasada', fmt(v.con_segunda_pasada), 'reintento del §4.3.1', v.con_segunda_pasada ? '' : ''],
+    ['Rechazos', fmt((v.rechazos || []).length), 'derivaron a la plantilla de respaldo',
+      (v.rechazos || []).length ? 'warn' : 'ok'],
+  ].map(([l, val, s, cls]) =>
+    `<div class="kpi${cls ? ' ' + cls : ''}"><div class="lab">${esc(l)}</div><div class="val">${val}</div><div class="sub">${esc(s)}</div></div>`).join('');
+
+  const cont = document.getElementById('val-detalle');
+  const rechazos = v.rechazos || [];
+  if (!rechazos.length) { cont.innerHTML = '<div class="nota">Ningún mensaje fue rechazado por el validador.</div>'; return; }
+
+  const filas = rechazos.map(r => {
+    const reglas = (r.reglas || []).map(x => `${x.intento ? 'intento ' + esc(x.intento) + ': ' : ''}${esc(x.regla)} — ${esc(x.detalle)}`).join('<br>') || '—';
+    return `<tr><td>#${esc(r.external_id)}</td><td>${esc(r.channel)}</td><td>${esc(LABEL[r.status] || r.status)}</td>` +
+           `<td style="text-align:left">${reglas}</td><td>${r.degrado_a_plantilla ? 'sí' : 'no'}</td></tr>`;
+  }).join('');
+
+  // Regla 1 por subcadena: un identificador corto puede aparecer dentro de un
+  // monto o de una medida. Cuando el identificador tiene pocos dígitos, el
+  // rechazo merece revisarse antes de leerse como acierto del control.
+  const cortos = rechazos.filter(r => String(r.external_id).length <= 3);
+  cont.innerHTML =
+    `<table><thead><tr><th>Pedido</th><th>Canal</th><th>Estado</th><th>Regla incumplida</th><th>Degradó</th></tr></thead>`
+    + `<tbody>${filas}</tbody></table>`
+    + (cortos.length
+      ? `<div class="nota alerta"><strong>Falso positivo de la regla 1.</strong> `
+        + `${cortos.length === 1 ? 'El rechazo corresponde a un pedido cuyo identificador externo es' : 'Hay rechazos de pedidos cuyos identificadores externos son'} `
+        + `<code>${cortos.map(r => esc(r.external_id)).join('</code>, <code>')}</code>. `
+        + `En la versión evaluada la regla 1 comparaba por subcadena (<code>msg.includes(id)</code>), y el «70» `
+        + `estaba dentro de la medida del producto (175/70 R13): el contexto que recibe el modelo no incluye el `
+        + `identificador externo, así que no pudo citarlo (§5.4). El reintento previsto tampoco se ejecutó, por `
+        + `el error que registra el segundo intento. Un límite de palabra (<code>\\b</code>) no alcanza, porque la barra `
+        + `cuenta como límite: la corrección de la versión 1.4 exige que el identificador no esté pegado a letras, `
+        + `dígitos, barras ni separadores decimales, y reemplaza <code>fetch</code> por el cliente HTTP de n8n.</div>`
+      : '');
+}
+
+// Anclaje leído del agregado publicado (out/anclaje-resultado.txt). No se
+// recalcula acá: la entrada del analizador no está versionada, y el tablero lo
+// declara en lugar de presentar como computado algo que está citando.
+function anclajePublicado(a, cont) {
+  const attrs = a.por_atributo || [];
+  const max = Math.max(...attrs.map(x => Math.max(x.declarado, x.verificado)), 1);
+  const ic = a.ic ? `IC 95 % [${dec(a.ic.low)} ; ${dec(a.ic.high)}]` : '';
+
+  const par = (f) => {
+    const brecha = f.declarado - f.verificado;
+    // Un atributo que el modelo nunca declaró ni citó no se dibuja como dos
+    // barras de ancho cero: se dice. Que total_amount y source_created_at estén
+    // en cero es un resultado —el modelo se ancla en el producto, no en el
+    // monto ni en la fecha— y no un hueco del gráfico.
+    if (!f.declarado && !f.verificado) {
+      return `<div style="display:flex;justify-content:space-between;font-size:12.5px;`
+        + `margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--grid)">`
+        + `<span style="color:var(--text-2)">${esc(f.atributo)}</span>`
+        + `<span style="color:var(--text-2)">nunca declarado ni citado</span></div>`;
+    }
+    const barra = (v, color) => `<span style="background:var(--grid);border-radius:3px;height:12px;display:block;overflow:hidden">`
+      + `<span style="display:block;height:100%;width:${(v / max) * 100}%;background:${color};border-radius:3px"></span></span>`;
+    return `<div style="margin-bottom:12px">`
+      + `<div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:5px">`
+      + `<span style="color:var(--text-1)">${esc(f.atributo)}</span>`
+      + `<span style="color:var(--text-2);font-variant-numeric:tabular-nums">`
+      + `${fmt(f.verificado)} en el texto · ${fmt(f.declarado)} declarado`
+      + (brecha ? ` · <strong>${fmt(brecha)} de brecha</strong>` : '') + `</span></div>`
+      + `<div style="display:grid;grid-template-columns:1fr;gap:3px">`
+      + barra(f.verificado, 'var(--s1)') + barra(f.declarado, 'var(--s2)') + `</div></div>`;
+  };
+
+  const noAnclables = (a.declarados_no_anclables || [])
+    .map(x => `<code>${esc(x.atributo)}</code> (${fmt(x.declarado)})`).join(', ');
+
+  cont.innerHTML =
+    `<div class="kpis" style="margin:0 0 16px">
+       <div class="kpi ok"><div class="lab">Cita al menos un atributo</div><div class="val">${dec(a.pct)} %</div>
+         <div class="sub">${fmt(a.con_al_menos_uno)} de ${fmt(a.evaluados)} mensajes · ${esc(ic)}</div></div>
+       <div class="kpi${a.mensajes_con_declaracion_ausente ? ' warn' : ''}">
+         <div class="lab">Declaran y no citan</div>
+         <div class="val">${fmt(a.mensajes_con_declaracion_ausente)}</div>
+         <div class="sub">de ${fmt(a.mensajes_base)} mensajes</div></div>
+     </div>`
+    + `<div class="subcard"><h3>Verificado en el texto contra declarado por el modelo</h3>`
+    + `<div style="font-size:12px;color:var(--text-2);margin-bottom:12px">`
+    + `<span style="display:inline-block;width:9px;height:9px;background:var(--s1);border-radius:2px"></span> presente en el texto &nbsp; `
+    + `<span style="display:inline-block;width:9px;height:9px;background:var(--s2);border-radius:2px"></span> declarado por el modelo</div>`
+    + attrs.map(par).join('')
+    + `</div>`
+    + `<div class="nota"><strong>Denominador.</strong> ${esc(a.denominador)}. `
+      + `Calculado sobre los mensajes despachados valdría cien por ciento por construcción y mediría la compuerta, `
+      + `no la calidad.`
+      + (noAnclables ? ` El modelo declara además ${noAnclables}, que no constituye anclaje verificable: `
+          + `es el estado del pedido, no un atributo de su contenido.` : '')
+      + ` La regla 2 del validador acepta lo que el modelo declara sin comprobarlo contra el texto, de modo que `
+      + `la brecha entre ambas columnas es medible y acá se informa.</div>`
+    + `<div class="nota alerta"><strong>Procedencia.</strong> ${esc(a.procedencia)}. `
+      + `${esc(a.limitacion)}. El resto de las cifras de este tablero se regeneran desde `
+      + `<code>out/corrida-v2.csv</code>; ésta se recalcula con `
+      + `<code>python scripts/analizar-anclaje.py out/anclaje-crudo-anon.csv</code>.</div>`;
+}
+
+// --- Anclaje contextual -------------------------------------------------------
+function anclaje(d) {
+  const a = d.anclaje || {}, cont = document.getElementById('anclaje');
+  // Un agregado que no corresponde a esta corrida no se muestra con una
+  // salvedad: no se muestra. Publicar el número igual, aunque se aclare, es
+  // cómo la figura llegó a mostrar las cifras de otra corrida.
+  if (a.desactualizado) {
+    cont.innerHTML = `<div class="nota alerta"><strong>Indicador desactualizado, no se publica.</strong> `
+      + `<code>out/anclaje-resultado.txt</code> evaluó ${fmt(a.evaluados_en_el_agregado)} mensajes y esta `
+      + `corrida generó ${fmt(a.generados_en_la_corrida)}: el agregado corresponde a otra corrida. `
+      + `El indicador vuelve a aparecer regenerándolo con <code>sql/export-anclaje.sql</code> y `
+      + `<code>scripts/analizar-anclaje.py</code>, o recalculándolo desde la base con `
+      + `<code>--from-db</code>.</div>`;
+    return;
+  }
+  if (!a.disponible) {
+    cont.innerHTML = `<div class="nota alerta"><strong>No computable desde esta fuente.</strong> `
+      + `${esc(a.motivo || '')}. El indicador requiere el texto de cada mensaje y el contexto del pedido; `
+      + `la evidencia publicada de la corrida registra latencias, costo y estado del despacho, pero no `
+      + `<code>message_text</code>. Regenerar el tablero con <code>--from-db</code> sobre la base de la corrida, `
+      + `o incorporar el texto a la evidencia publicada, habilita este indicador.</div>`;
+    return;
+  }
+  const dist = a.distribucion || [], porAttr = a.por_atributo || [];
+  const maxD = Math.max(...dist.map(x => x.mensajes), 1);
+  const maxA = Math.max(...porAttr.map(x => x.mensajes), 1);
+
+  const barras = (filas, max, etiqueta, color) => filas.map(f => {
+    const w = (f.mensajes / max) * 100;
+    return `<div style="display:grid;grid-template-columns:190px 1fr 56px;gap:10px;align-items:center;font-size:12.5px;margin-bottom:6px">`
+      + `<span style="color:var(--text-2)">${esc(etiqueta(f))}</span>`
+      + `<span style="background:var(--grid);border-radius:4px;height:15px;overflow:hidden">`
+      + `<span style="display:block;height:100%;width:${w}%;background:${color};border-radius:4px"></span></span>`
+      + `<span style="text-align:right;font-variant-numeric:tabular-nums">${fmt(f.mensajes)}</span></div>`;
+  }).join('');
+
+  // El agregado publicado trae un desglose más rico que el recálculo desde la
+  // base: por cada atributo, cuántos mensajes lo citan en el texto contra
+  // cuántos el modelo declaró haber citado. Esa distancia es la que mide la
+  // brecha de la regla 2 del validador, y merece verse barra contra barra.
+  if (a.origen === 'publicado') { anclajePublicado(a, cont); return; }
+
+  cont.innerHTML =
+    `<div class="kpis" style="margin:0 0 16px">
+       <div class="kpi ok"><div class="lab">Cita al menos un atributo</div><div class="val">${dec(a.pct)} %</div>
+         <div class="sub">${fmt(a.con_al_menos_uno)} de ${fmt(a.evaluados)} mensajes</div></div>
+       <div class="kpi"><div class="lab">Atributos por mensaje</div><div class="val">${dec(a.promedio_por_mensaje, 2)}</div>
+         <div class="sub">promedio verificado en el texto</div></div>
+       <div class="kpi${a.declarados_no_presentes ? ' warn' : ''}"><div class="lab">Declarados sin aparecer</div>
+         <div class="val">${fmt(a.declarados_no_presentes)}</div>
+         <div class="sub">de ${fmt(a.total_declarados)} declaraciones del modelo</div></div>
+     </div>`
+    + `<div class="subcard"><h3>Cuántos atributos cita cada mensaje</h3>`
+    + barras(dist, maxD, f => `${f.atributos} atributo${f.atributos === 1 ? '' : 's'}`, 'var(--s1)')
+    + `</div>`
+    + (porAttr.length ? `<div class="subcard"><h3>Cuáles se citan</h3>`
+        + barras(porAttr, maxA, f => f.atributo, 'var(--s2)') + `</div>` : '')
+    + `<div class="nota"><strong>Denominador.</strong> ${esc(a.denominador)}. `
+      + `Calculado sobre los mensajes despachados valdría cien por ciento por construcción y mediría la compuerta, `
+      + `no la calidad. La columna «declarados sin aparecer» contrasta lo que el modelo dice haber citado contra `
+      + `lo que el texto contiene: la regla 2 del validador acepta la declaración sin comprobarla, de modo que la `
+      + `brecha entre ambas es medible y aquí se informa.</div>`;
+}
+
+// --- Orquestación -------------------------------------------------------------
 function render(d) {
+  const k = d.kpi || {};
+  hidratarPedidos(d);
   document.getElementById('src').textContent =
-    `Corrida ${d.meta.corrida} · ${fmt(d.meta.n_webhooks)} webhooks recibidos · fuente: ${d.meta.fuente}`;
-  kpis(d); chartEstados(d); chartLatencia(d);
-  document.getElementById('foot').textContent =
-    `Latencia calculada sobre ${d.latencia.n} pedidos despachados · media ${fmt(d.latencia.media)} ms · ` +
-    `mínimo ${fmt(d.latencia.min)} ms · máximo ${fmt(d.latencia.max)} ms.`;
+    `Corrida ${d.meta.corrida} · ${k.webhooks_emitidos ? fmt(k.webhooks_emitidos) + ' webhooks emitidos · ' : ''}`
+    + `fuente: ${d.meta.fuente}`
+    + (d.meta.reproducible_sin_base ? ' · regenerable sin base de datos' : '');
+  for (const [nombre, fn] of [['kpis', kpis], ['ack', chartAck], ['h2', chartH2], ['estados', chartEstados],
+                              ['latencia', chartLatencia], ['validador', validador], ['anclaje', anclaje]]) {
+    try { fn(d); } catch (err) { console.error('[' + nombre + ']', err); }
+  }
+  const total = Object.values(d.latencia || {}).reduce((s, l) => s + l.n, 0);
+  document.getElementById('foot').textContent = total
+    ? `Latencia calculada sobre ${fmt(total)} pedidos despachados. Generado el ${(d.meta.generado_en || '').slice(0, 19).replace('T', ' ')}.`
+    : '';
 }
 
 const embedded = JSON.parse(document.getElementById('fallback-data').textContent);
-fetch('dashboard-data.json')
-  .then(r => r.ok ? r.json() : Promise.reject())
-  .then(render)
-  .catch(() => render(embedded));
+// Abierto con doble clic (file://) el navegador bloquea fetch: se usan
+// directamente los datos embebidos y la consola queda limpia.
+if (location.protocol.startsWith('http')) {
+  fetch('dashboard-data.json')
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(render)
+    .catch(() => render(embedded));
+} else {
+  render(embedded);
+}
 </script>
 </body>
 </html>
