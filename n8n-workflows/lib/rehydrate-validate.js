@@ -1,5 +1,7 @@
 // =============================================================================
 // rehydrate-validate.js  (B3 · TFI corregido §4.3.1)
+// v1.4 (corrida de verificación): regla 1 por token aislado, regla 2 con
+// verificación de anclaje en el texto, y reintento con el cliente HTTP de n8n.
 // -----------------------------------------------------------------------------
 // Pegar en un nodo "Code" (modo: "Run Once for Each Item") ubicado ENTRE
 // Parse LLM Response y Use Fallback?
@@ -48,8 +50,65 @@ function rehydrate(msg, fullName) {
     return msg.replace(SALUDO_TOKEN_RX, saludo);
 }
 
+// --- v1.4 · helpers de las reglas 1 y 2 -------------------------------------
+// Regla 1: un identificador cuenta solo como token aislado. La version
+// evaluada comparaba por subcadena y un identificador de dos cifras coincidia
+// con la medida de un producto ("70" dentro de "175/70"): el unico rechazo de
+// la corrida v2 (pedido WC-16) fue ese falso positivo.
+function escRx(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+function contieneComoToken(msg, id) {
+    const rx = new RegExp('(?<![\\p{L}\\p{N}/]|\\p{N}[.,])' + escRx(id) + '(?![\\p{L}\\p{N}/]|[.,]\\p{N})', 'u');
+    return rx.test(msg);
+}
+
+// Regla 2: anclaje verificable. Los criterios son los de
+// scripts/analizar-anclaje.py (indicador de la seccion 3.3), de modo que la
+// compuerta y el indicador miden lo mismo.
+const ANCLABLES = ['primary_product_name', 'total_amount', 'items_count', 'source_created_at'];
+const GENERICOS = new Set(['de', 'del', 'la', 'el', 'los', 'las', 'un', 'una', 'y', 'con', 'para', 'por',
+    'neumatico', 'neumaticos', 'cubierta', 'cubiertas']);
+const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto',
+    'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const NUMEROS = { 2: 'dos', 3: 'tres', 4: 'cuatro', 5: 'cinco', 6: 'seis', 7: 'siete', 8: 'ocho', 9: 'nueve', 10: 'diez' };
+function normTxt(s) { return String(s || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase(); }
+function citaProducto(m, nombre) {
+    const toks = normTxt(nombre).split(/[^\p{L}\p{N}_/]+/u).filter(t => t.length >= 3 && !GENERICOS.has(t));
+    if (!toks.length) return false;
+    const hits = toks.filter(t => m.includes(t)).length;
+    return hits >= Math.min(2, toks.length);
+}
+function citaMonto(msg, total) {
+    const entero = Math.trunc(Number(total));
+    if (!entero) return false;
+    const obj = String(entero);
+    return (String(msg).match(/[\d.,]{2,}/g) || []).some(b => {
+        const d = b.replace(/\D/g, '');
+        return d && (d === obj || d.startsWith(obj) || obj.startsWith(d)) && d.length >= Math.max(3, obj.length - 2);
+    });
+}
+function citaConteo(m, n) {
+    const k = Number(n);
+    if (!(k > 1) || !NUMEROS[k]) return false;
+    return new RegExp('\\b(' + k + '|' + NUMEROS[k] + ')\\b').test(m);
+}
+function citaFecha(m, iso) {
+    const f = /(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ''));
+    if (!f) return false;
+    const mes = Number(f[2]), dia = Number(f[3]);
+    return new RegExp('\\b' + dia + '\\b[^\\d]{0,12}(' + MESES[mes - 1] + '|0?' + mes + ')\\b').test(m)
+        || (new RegExp('\\b' + MESES[mes - 1] + '\\b').test(m) && new RegExp('\\b' + dia + '\\b').test(m));
+}
+function atributosCitados(msg, ctx) {
+    const m = normTxt(msg), out = [];
+    if (ctx.primary_product_name && citaProducto(m, ctx.primary_product_name)) out.push('primary_product_name');
+    if (ctx.total_amount != null && citaMonto(msg, ctx.total_amount)) out.push('total_amount');
+    if (ctx.items_count != null && citaConteo(m, ctx.items_count)) out.push('items_count');
+    if (ctx.source_created_at && citaFecha(m, ctx.source_created_at)) out.push('source_created_at');
+    return out;
+}
+
 // --- Las siete reglas del validador -----------------------------------------
-function runValidator(rehydratedMsg, atributosUsados, canonical) {
+function runValidator(rehydratedMsg, atributosUsados, canonical, contexto) {
     const failures = [];
     const msg = String(rehydratedMsg || '');
     const status = canonical.order.status;
@@ -61,7 +120,7 @@ function runValidator(rehydratedMsg, atributosUsados, canonical) {
         canonical.order.external_id,
     ].filter(Boolean).map(String);
     for (const id of idsPresentes) {
-        if (msg.includes(id)) {
+        if (contieneComoToken(msg, id)) {
             failures.push({ regla: 'sin_identificadores_internos', detalle: `contiene '${id}'` });
         }
     }
@@ -75,6 +134,19 @@ function runValidator(rehydratedMsg, atributosUsados, canonical) {
         .filter(a => !VALID_CTX_KEYS.has(a));
     if (undeclared.length) {
         failures.push({ regla: 'atributos_declarados_valen', detalle: `no válidos: ${undeclared.join(',')}` });
+    }
+
+    // Regla 2 (v1.4) — anclaje verificable: el texto debe citar al menos un
+    // atributo del pedido, y todo atributo anclable que el modelo declare
+    // haber citado tiene que aparecer efectivamente en el texto.
+    const ctx = contexto || {};
+    const citados = atributosCitados(msg, ctx);
+    if (!citados.length) {
+        failures.push({ regla: 'anclaje_verificable', detalle: 'el texto no cita ningún atributo del pedido' });
+    }
+    const noCitados = (atributosUsados || []).filter(a => ANCLABLES.includes(a) && !citados.includes(a));
+    if (noCitados.length) {
+        failures.push({ regla: 'atributos_declarados_citados', detalle: `declarados y no citados: ${noCitados.join(',')}` });
     }
 
     // Regla 3 — consistencia estado→contenido (mapeo del prompt v2)
@@ -119,7 +191,7 @@ function runValidator(rehydratedMsg, atributosUsados, canonical) {
 }
 
 // --- Reintento LLM sin seed (para variar la salida) -------------------------
-async function retryLLM(messages) {
+async function retryLLM(messages, http) {
     const apiKey = ($env && $env.OPENAI_API_KEY) || '';
     if (!apiKey) throw new Error('OPENAI_API_KEY no disponible en el nodo');
     const body = {
@@ -131,16 +203,21 @@ async function retryLLM(messages) {
         // Deliberadamente sin `seed` — reintentar con seed idéntico produce
         // la misma respuesta y el validador vuelve a fallar por el mismo motivo.
     };
-    const resp = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify(body),
-    });
-    const data = await resp.json();
-    if (!resp.ok) throw new Error(`retry openai ${resp.status}: ${JSON.stringify(data).slice(0,200)}`);
+    // v1.4: los nodos Code de n8n no exponen fetch; la version evaluada fallaba
+    // con "fetch is not defined" y degradaba sin reintentar. Se usa el cliente
+    // HTTP del propio n8n (this.helpers.httpRequest), que lanza ante no-2xx.
+    const url = 'https://api.openai.com/v1/chat/completions';
+    const headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` };
+    let data;
+    if (typeof http === 'function') {
+        data = await http({ method: 'POST', url, headers, body, json: true, timeout: 20000 });
+    } else if (typeof fetch === 'function') {
+        const resp = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
+        data = await resp.json();
+        if (!resp.ok) throw new Error(`retry openai ${resp.status}: ${JSON.stringify(data).slice(0,200)}`);
+    } else {
+        throw new Error('no hay cliente HTTP disponible en el nodo');
+    }
     const text = data?.choices?.[0]?.message?.content || '';
     const usage = data?.usage || {};
     return { text, usage };
@@ -163,11 +240,28 @@ if (parsed.use_fallback) {
 const canonical = $('Route to canonical').item.json;
 const fullName = canonical.customer.full_name;
 
+// v1.4: contexto que recibió el modelo (para la regla 2) y cliente HTTP de n8n
+// (para el reintento). Ambos se capturan acá porque `this` no llega a las
+// funciones auxiliares.
+const sentContext = ($('Build LLM prompt').item.json.sent_context) || {};
+const http = (this && this.helpers && typeof this.helpers.httpRequest === 'function')
+    ? this.helpers.httpRequest.bind(this.helpers) : null;
+
 // --- Intento 1 ---------------------------------------------------------------
 let attemptText = parsed.message_text;
 let attemptAtributos = parsed.atributos_usados || [];
 let rehydrated = rehydrate(attemptText, fullName);
-let failures = runValidator(rehydrated, attemptAtributos, canonical);
+let failures = runValidator(rehydrated, attemptAtributos, canonical, sentContext);
+
+// Instrumentación de la corrida de verificación: fuerza un rechazo en el
+// primer intento para los external_id listados en la variable de entorno
+// TFI_FORZAR_RECHAZO, para ejercitar el reintento de forma controlada.
+// En operación la variable no existe y este bloque no hace nada.
+let forzar = [];
+try { forzar = String(($env && $env.TFI_FORZAR_RECHAZO) || '').split(',').map(s => s.trim()).filter(Boolean); } catch (e) { forzar = []; }
+if (forzar.includes(String(canonical.order.external_id))) {
+    failures.push({ regla: 'prueba_forzada', detalle: 'rechazo inducido por TFI_FORZAR_RECHAZO' });
+}
 
 let validator_passes = 1;
 const validator_failures = [];
@@ -193,7 +287,7 @@ if (failures.length > 0) {
 
     let retry;
     try {
-        retry = await retryLLM(messagesRetry);
+        retry = await retryLLM(messagesRetry, http);
     } catch (err) {
         // El reintento falló por red/auth — degradamos a plantilla registrando
         // el fallo del validator más el del retry.
@@ -235,7 +329,7 @@ if (failures.length > 0) {
     attemptText = retryParsed.mensaje;
     attemptAtributos = Array.isArray(retryParsed.atributos_usados) ? retryParsed.atributos_usados : [];
     rehydrated = rehydrate(attemptText, fullName);
-    failures = runValidator(rehydrated, attemptAtributos, canonical);
+    failures = runValidator(rehydrated, attemptAtributos, canonical, sentContext);
 
     if (failures.length > 0) {
         validator_failures.push({ intento: 2, fallas: failures });

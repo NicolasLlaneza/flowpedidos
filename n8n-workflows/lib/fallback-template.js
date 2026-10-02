@@ -87,10 +87,14 @@ return {
         model: null,
         prompt_version: null,
 
-        // Sin tokens ni costo porque no fue llamada externa
+        // v1.4 (NM-08): se conservan los tokens, el costo y la latencia de las
+        // llamadas al modelo hechas antes de degradar. La versión evaluada los
+        // sobrescribía con cero, y el costo de la llamada rechazada se perdía.
         usage: { prompt_tokens: null, completion_tokens: null },
-        cost_usd: 0,
-        latency_ms: 0,
+        prompt_tokens: ((input.prompt_tokens || 0) + (input.extra_prompt_tokens || 0)) || null,
+        completion_tokens: ((input.completion_tokens || 0) + (input.extra_completion_tokens || 0)) || null,
+        cost_usd: Number(((input.cost_usd || 0) + (input.extra_cost_usd || 0)).toFixed(6)),
+        latency_ms: input.latency_ms || 0,
 
         // Output con la misma shape que devolvería el LLM, así el INSERT
         // posterior es uniforme y no requiere branching

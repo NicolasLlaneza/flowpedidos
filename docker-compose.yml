@@ -80,6 +80,11 @@ services:
       # validate (§4.3.1). El nodo LangChain OpenAI dejó de utilizarse porque
       # no expone `usage` en su output.
       OPENAI_API_KEY: ${OPENAI_API_KEY}
+
+      # v1.4 · solo para la corrida de verificación: external_id (separados por
+      # coma) cuyo primer intento se rechaza a propósito para ejercitar el
+      # reintento. Vacía en operación normal.
+      TFI_FORZAR_RECHAZO: ${TFI_FORZAR_RECHAZO:-}
     volumes:
       - n8n_data:/home/node/.n8n
       - ./n8n-workflows:/workflows

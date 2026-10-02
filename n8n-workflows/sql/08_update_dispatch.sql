@@ -1,32 +1,27 @@
 -- =============================================================================
--- 08_update_dispatch.sql
+-- 08_update_dispatch.sql  (v1.4)
 -- -----------------------------------------------------------------------------
--- Pegar en un nodo "Postgres" (Operation: "Execute Query") DESPUÉS del
--- HTTP Request a Meta Cloud API (tanto en el path OK como en el de error).
---
--- Cierra el ciclo de la notificación: marca si fue enviada o falló.
+-- Nodo "Update dispatch" (Postgres, Execute Query), después del envío a Meta
+-- o de su simulación. Cierra el ciclo de la notificación y, desde v1.4,
+-- guarda el cuerpo exacto que se envió (dispatched_body), de modo que el
+-- mensaje despachado queda acreditado y no solo el texto generado (NA-06).
+-- Requiere sql/05_dispatched_body.sql.
 -- =============================================================================
 
 UPDATE tfi.ai_notifications
 SET
-    message_status = $2,
-    sent_at        = CASE WHEN $2 = 'sent' THEN now() ELSE sent_at END,
-    -- v1.3 (§3.3): dispatched_at es el anclaje de la métrica de eficiencia
-    -- operativa. Se llena EN LA MISMA EJECUCIÓN que emitió el pedido, así
-    -- orders.received_at → ai_notifications.dispatched_at se mide sobre
-    -- una sola corrida sin depender de la ejecución posterior de otro flujo.
-    dispatched_at  = CASE WHEN $2 = 'sent' THEN now() ELSE dispatched_at END,
-    wa_message_id  = NULLIF($3::text, 'null'),
-    error_message  = NULLIF($4::text, 'null')
+    message_status  = $2,
+    sent_at         = CASE WHEN $2 = 'sent' THEN now() ELSE sent_at END,
+    dispatched_at   = CASE WHEN $2 = 'sent' THEN now() ELSE dispatched_at END,
+    wa_message_id   = NULLIF($3::text, 'null'),
+    error_message   = NULLIF($4::text, 'null'),
+    dispatched_body = COALESCE(NULLIF($5::text, 'null'), dispatched_body)
 WHERE id = NULLIF($1::text, 'null')::uuid
 RETURNING id, message_status, sent_at, dispatched_at, wa_message_id;
 
--- Parámetros:
---   $1 = {{ $json.notification_id }}
---   $2 = 'sent'   cuando Meta respondió 200 con messages[0].id
---        'failed' en cualquier otro caso
---   $3 = {{ $json.wa_message_id || null }}
---          → Meta responde: { messages: [{ id: "wamid.xxx" }] }
---          → Extraer con: {{ $json.messages?.[0]?.id ?? null }}
---   $4 = {{ $json.error_reason || null }}
---          → Completar solo en path de error; null en path feliz
+-- Parámetros (arreglo, para que las comas del cuerpo no partan los valores):
+--   $1 = id de la notificación (Insert ai_notification)
+--   $2 = 'sent' | 'failed'
+--   $3 = wamid devuelto por Meta, o null
+--   $4 = motivo del error, o null
+--   $5 = meta_body.text.body armado por Build WA payload
