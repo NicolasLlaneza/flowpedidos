@@ -83,3 +83,7 @@ scripts/panel/ronda-3/respuestas-r3.csv
 scripts/panel/ronda-3/mapa-evaluadores-r3.csv
 # exportaciones de Google Forms (llevan correos)
 scripts/panel/ronda-3/*.zip
+
+# notas de trabajo locales
+RELEVAMIENTO*.txt
+dashboard-y-correcciones-*.zip
