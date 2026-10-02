@@ -1,0 +1,49 @@
+=== Ronda 3 · N_final = 9 evaluadores ===
+Estado de la ronda segun la regla 2: PRINCIPAL
+
+=== Acuerdo entre evaluadores ===
+  ICC(2,9) acuerdo absoluto, promedio  <- principal          +0.631 [+0.357; +0.830]
+  ICC(2,1) acuerdo absoluto, individual                      +0.160 [+0.058; +0.352]
+  ICC(3,1) consistencia, individual (comparable con R1 y R2) +0.251 [+0.112; +0.478]
+  alfa de Krippendorff ordinal, valores crudos: +0.068
+
+=== H3 · contraste principal, todos los evaluadores (k=9) ===
+Media modelo 4.583 · plantilla 3.759
+Mann-Whitney U=72.0, p exacto = 0.000054 · delta de Cliff +1.000
+Wilcoxon pareado por estado: 6 de 6 a favor del modelo, W+=21.0, p exacto=0.0312
+
+Por criterio (media modelo / plantilla / delta de Cliff):
+  Claridad                   4.64 / 3.76 / +1.000
+  Adecuación del tono        4.65 / 3.91 / +1.000
+  Relevancia contextual      4.42 / 3.09 / +1.000
+  Corrección lingüística     4.63 / 4.28 / +0.861
+
+=== Conjetura de origen (verificacion del enmascaramiento) ===
+  brazo template: 36/54 aciertos entre respuestas comprometidas (66.7 %), 0 «No sé»
+  brazo llm     : 38/106 aciertos entre respuestas comprometidas (35.8 %), 2 «No sé»
+  global: 74/160 = 46.2 % · binomial exacta contra 1/3, cola superior: p = 0.0004703
+  Enmascaramiento: SOSTENIDO
+
+=== Veredicto sobre H3 (regla 3.5 de REGLAS-DECISION-R3.md) ===
+VALIDADA: diferencia significativa a favor del modelo con el origen enmascarado.
+
+=== Sensibilidad 1 · solo evaluadores con acierto <= 50% (k=5) ===
+Media modelo 4.729 · plantilla 3.617
+Mann-Whitney U=72.0, p exacto = 0.000108 · delta de Cliff +1.000
+
+=== Sensibilidad 2 · sin evaluadores con participacion previa (k=3) ===
+Media modelo 4.944 · plantilla 4.722
+Mann-Whitney U=66.5, p asintotico = 0.002516 · delta de Cliff +0.847
+
+Participacion previa declarada: 6 de 9
+
+=== Detalle por evaluador (seudonimo, acierto de origen, desvio de nivel) ===
+  E1   acierto  22.2 %  desvio +0.61
+  E2   acierto  68.8 %  desvio +0.23  (participacion previa)
+  E3   acierto  27.8 %  desvio -0.35  (participacion previa)
+  E4   acierto  88.9 %  desvio +0.39
+  E5   acierto  11.1 %  desvio -0.64  (participacion previa)
+  E6   acierto 100.0 %  desvio +0.16  (participacion previa)
+  E7   acierto  33.3 %  desvio +0.69
+  E8   acierto  11.1 %  desvio -0.06  (participacion previa)
+  E9   acierto  55.6 %  desvio -1.03  (participacion previa)

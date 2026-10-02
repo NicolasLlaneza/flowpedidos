@@ -1,0 +1,41 @@
+=== Ronda 3 · N_final = 5 evaluadores ===
+Estado de la ronda segun la regla 2: COMPLEMENTARIA (sin inferencia)
+
+=== Acuerdo entre evaluadores ===
+  ICC(2,5) acuerdo absoluto, promedio  <- principal          +0.541 [+0.175; +0.793]
+  ICC(2,1) acuerdo absoluto, individual                      +0.191 [+0.041; +0.433]
+  ICC(3,1) consistencia, individual (comparable con R1 y R2) +0.254 [+0.068; +0.519]
+  alfa de Krippendorff ordinal, valores crudos: +0.094
+
+=== H3 · contraste principal, todos los evaluadores (k=5) ===
+Media modelo 4.692 · plantilla 3.683
+Mann-Whitney U=72.0, p exacto = 0.000108 · delta de Cliff +1.000
+Wilcoxon pareado por estado: 6 de 6 a favor del modelo, W+=21.0, p exacto=0.0312
+
+Por criterio (media modelo / plantilla / delta de Cliff):
+  Claridad                   4.67 / 3.53 / +1.000
+  Adecuación del tono        4.72 / 4.07 / +0.861
+  Relevancia contextual      4.72 / 2.80 / +1.000
+  Corrección lingüística     4.67 / 4.33 / +0.556
+
+=== Conjetura de origen (verificacion del enmascaramiento) ===
+  brazo template: 17/30 aciertos entre respuestas comprometidas (56.7 %), 0 «No sé»
+  brazo llm     : 21/58 aciertos entre respuestas comprometidas (36.2 %), 2 «No sé»
+  global: 38/88 = 43.2 % · binomial exacta contra 1/3, cola superior: p = 0.03421
+  Enmascaramiento: SOSTENIDO
+
+=== Veredicto sobre H3 (regla 3.5 de REGLAS-DECISION-R3.md) ===
+Ronda complementaria: se reporta sin juicio de contrastacion.
+
+=== Sensibilidad 1 · solo evaluadores con acierto <= 50% (k=3) ===
+Media modelo 4.611 · plantilla 3.319
+Mann-Whitney U=72.0, p exacto = 0.000108 · delta de Cliff +1.000
+
+Participacion previa declarada: 3 de 5
+
+=== Detalle por evaluador (seudonimo, acierto de origen, desvio de nivel) ===
+  E1   acierto  22.2 %  desvio +0.56
+  E2   acierto  68.8 %  desvio +0.19  (participacion previa)
+  E3   acierto  27.8 %  desvio -0.40  (participacion previa)
+  E4   acierto  88.9 %  desvio +0.34
+  E5   acierto  11.1 %  desvio -0.69  (participacion previa)
